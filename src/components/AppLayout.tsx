@@ -38,7 +38,7 @@ const AppLayout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B1F3A]">
+    <div className="min-h-screen bg-brand-ivory text-brand-ink">
       {!isAdmin && <Navbar />}
       <main>{renderPage()}</main>
       {!isAdmin && <Footer />}

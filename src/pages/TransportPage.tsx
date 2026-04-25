@@ -64,21 +64,21 @@ const TransportPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#0B1F3A]">
+    <div className="bg-brand-ivory">
       {/* Hero */}
       <section className="relative pt-20 overflow-hidden">
         <div className="h-[500px] relative">
           <img src="https://d64gsuwffb70l.cloudfront.net/69ad7b9650a26a8c1a6eecd1_1772977387826_06abad98.jpg" alt="Maritime cargo logistics" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3A] via-[#0B1F3A]/70 to-[#0B1F3A]/30" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A]/90 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-brand-ivory via-brand-ivory to-brand-ivory" />
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-ivory to-transparent" />
         </div>
         <div className="absolute inset-0 flex items-center">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-20">
-            <span className="text-[#C8A44D] text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">Transport & Logistics</span>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4 leading-tight">
-              Golden <span className="bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent">Transport</span>
+            <span className="text-brand-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">Transport & Logistics</span>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-brand-ink mb-4 leading-tight">
+              Golden <span className="italic text-brand-accent">Transport</span>
             </h1>
-            <p className="text-xl text-white/60 max-w-2xl leading-relaxed">
+            <p className="text-xl text-brand-ink-2 max-w-2xl leading-relaxed">
               Comprehensive logistics solutions spanning air, sea, and land. We move your cargo safely, efficiently, and on time — anywhere in the world.
             </p>
           </div>
@@ -89,24 +89,24 @@ const TransportPage: React.FC = () => {
       <section className="py-24" ref={ref}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="text-[#C8A44D] text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">Our Capabilities</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Logistics Services</h2>
+            <span className="text-brand-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">Our Capabilities</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-brand-ink mb-6">Logistics Services</h2>
           </div>
           <div className="space-y-8">
             {transportServices.map((service, i) => (
-              <div key={i} className={`grid grid-cols-1 lg:grid-cols-2 gap-8 items-center p-6 md:p-8 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-[#C8A44D]/20 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: `${i * 100}ms` }}>
+              <div key={i} className={`grid grid-cols-1 lg:grid-cols-2 gap-8 items-center p-6 md:p-8 rounded-2xl bg-brand-paper border border-brand-hair hover:border-brand-accent/30 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: `${i * 100}ms` }}>
                 <div className={`${i % 2 === 1 ? 'lg:order-2' : ''}`}>
                   <div className="rounded-xl overflow-hidden h-64">
                     <img src={service.image} alt={service.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                   </div>
                 </div>
                 <div className={`${i % 2 === 1 ? 'lg:order-1' : ''}`}>
-                  <div className="w-14 h-14 rounded-xl bg-[#C8A44D]/10 flex items-center justify-center text-[#C8A44D] mb-4">{service.icon}</div>
-                  <h3 className="text-2xl font-bold text-white mb-3">{service.title}</h3>
-                  <p className="text-white/60 leading-relaxed mb-6">{service.desc}</p>
+                  <div className="w-14 h-14 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent mb-4">{service.icon}</div>
+                  <h3 className="text-2xl font-bold text-brand-ink mb-3">{service.title}</h3>
+                  <p className="text-brand-ink-2 leading-relaxed mb-6">{service.desc}</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {service.features.map((f, j) => (
-                      <div key={j} className="flex items-center gap-2 text-white/50 text-sm"><Check size={14} className="text-[#C8A44D] flex-shrink-0" />{f}</div>
+                      <div key={j} className="flex items-center gap-2 text-brand-mute text-sm"><Check size={14} className="text-brand-accent flex-shrink-0" />{f}</div>
                     ))}
                   </div>
                 </div>
@@ -117,28 +117,28 @@ const TransportPage: React.FC = () => {
       </section>
 
       {/* Shipment Request Form */}
-      <section className="py-24 bg-[#0a1a30]">
+      <section className="py-24 bg-brand-stone">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <span className="text-[#C8A44D] text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">Get Started</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Shipment Request</h2>
-            <p className="text-white/50 text-lg">Submit your shipment details and our logistics team will provide a customized quote.</p>
+            <span className="text-brand-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">Get Started</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-brand-ink mb-6">Shipment Request</h2>
+            <p className="text-brand-mute text-lg">Submit your shipment details and our logistics team will provide a customized quote.</p>
           </div>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-white/70 text-sm font-medium mb-2">Full Name</label>
-              <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Enter your full name" className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#C8A44D]/50 focus:bg-white/[0.08] transition-all" required />
+              <label className="block text-brand-ink-2 text-sm font-medium mb-2">Full Name</label>
+              <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Enter your full name" className="w-full px-5 py-4 bg-brand-paper border border-brand-hair rounded-xl text-brand-ink placeholder-brand-mute focus:outline-none focus:border-brand-accent/30 focus:bg-brand-paper transition-all" required />
             </div>
             <div>
-              <label className="block text-white/70 text-sm font-medium mb-2">Email Address</label>
-              <input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="Enter your email address" className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#C8A44D]/50 focus:bg-white/[0.08] transition-all" required />
+              <label className="block text-brand-ink-2 text-sm font-medium mb-2">Email Address</label>
+              <input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="Enter your email address" className="w-full px-5 py-4 bg-brand-paper border border-brand-hair rounded-xl text-brand-ink placeholder-brand-mute focus:outline-none focus:border-brand-accent/30 focus:bg-brand-paper transition-all" required />
             </div>
             <div>
-              <label className="block text-white/70 text-sm font-medium mb-2">Shipment Details</label>
-              <textarea value={formData.details} onChange={(e) => setFormData({ ...formData, details: e.target.value })} placeholder="Describe your shipment requirements (origin, destination, cargo type, weight, timeline, etc.)" rows={6} className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#C8A44D]/50 focus:bg-white/[0.08] transition-all resize-none" required />
+              <label className="block text-brand-ink-2 text-sm font-medium mb-2">Shipment Details</label>
+              <textarea value={formData.details} onChange={(e) => setFormData({ ...formData, details: e.target.value })} placeholder="Describe your shipment requirements (origin, destination, cargo type, weight, timeline, etc.)" rows={6} className="w-full px-5 py-4 bg-brand-paper border border-brand-hair rounded-xl text-brand-ink placeholder-brand-mute focus:outline-none focus:border-brand-accent/30 focus:bg-brand-paper transition-all resize-none" required />
             </div>
-            <button type="submit" disabled={isSubmitting} className="w-full flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] text-[#0B1F3A] font-semibold rounded-xl hover:shadow-xl hover:shadow-[#C8A44D]/25 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed">
-              {isSubmitting ? <div className="w-5 h-5 border-2 border-[#0B1F3A]/30 border-t-[#0B1F3A] rounded-full animate-spin" /> : submitted ? <><Check size={18} /> Request Submitted</> : <><Send size={18} /> Submit Shipment Request</>}
+            <button type="submit" disabled={isSubmitting} className="w-full flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-brand-ink to-brand-ink text-brand-ivory font-semibold rounded-xl hover:shadow-xl hover:shadow-black/5 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed">
+              {isSubmitting ? <div className="w-5 h-5 border-2 border-brand-ink/30 border-t-brand-ink rounded-full animate-spin" /> : submitted ? <><Check size={18} /> Request Submitted</> : <><Send size={18} /> Submit Shipment Request</>}
             </button>
           </form>
         </div>

@@ -1,30 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  ArrowRight,
-  Target,
-  Eye,
-  Shield,
-  Lightbulb,
-  Users,
-  Leaf,
-  Gem,
-  Network,
-  Layers,
-  Globe2,
-} from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import {
   Eyebrow,
   SectionHeader,
   PrimaryCta,
   SecondaryCta,
   TertiaryCta,
+  Container,
+  Section,
 } from '@/components/section-primitives';
 import { globalStats } from '@/data/servicesPage';
 
-// -----------------------------------------------------------------------------
-// Multidisciplinary collaboration model — how the firm staffs engagements.
-// -----------------------------------------------------------------------------
 const collaborationModel = [
   {
     name: 'Single accountable lead',
@@ -48,30 +35,23 @@ const collaborationModel = [
   },
 ];
 
-// -----------------------------------------------------------------------------
-// Leadership credibility signals — institutional positioning, not bios.
-// -----------------------------------------------------------------------------
 const leadershipCommitments = [
   {
-    icon: <Shield size={18} />,
     name: 'Regulatory awareness',
     description:
       'Engagements are scoped with the regulatory and compliance posture of each client jurisdiction in mind.',
   },
   {
-    icon: <Network size={18} />,
     name: 'Multidisciplinary by structure',
     description:
       'Sixteen disciplines across five pillars under one firm — not a federation of independent specialists.',
   },
   {
-    icon: <Globe2 size={18} />,
     name: 'International delivery posture',
     description:
       'Teams structured for cross-border engagements, time-zone coverage, and local regulatory complexity.',
   },
   {
-    icon: <Leaf size={18} />,
     name: 'Sustainability integrated',
     description:
       'ESG, environmental, and resilience standards embedded into delivery rather than retrofitted at the end.',
@@ -80,27 +60,22 @@ const leadershipCommitments = [
 
 const values = [
   {
-    icon: <Gem size={20} />,
     title: 'Excellence',
     desc: 'We hold every deliverable to a standard that reflects the institutional weight of the engagement.',
   },
   {
-    icon: <Shield size={20} />,
     title: 'Integrity',
     desc: 'We operate transparently and decline work where independence or quality would be compromised.',
   },
   {
-    icon: <Lightbulb size={20} />,
     title: 'Innovation',
     desc: 'We pair rigorous analysis with practical engineering to bring novel solutions to bear on hard problems.',
   },
   {
-    icon: <Users size={20} />,
     title: 'Collaboration',
     desc: 'We work as one firm — across disciplines, geographies, and with client teams as joint operators.',
   },
   {
-    icon: <Leaf size={20} />,
     title: 'Sustainability',
     desc: 'We deliver outcomes that are durable for the institution, the community, and the environment.',
   },
@@ -108,88 +83,85 @@ const values = [
 
 const AboutPage: React.FC = () => {
   return (
-    <div className="bg-[#0B1F3A]">
-      {/* ============================================================
-           Hero — institutional positioning
-         ============================================================ */}
-      <section className="relative pt-32 pb-24 md:pt-40 md:pb-32 overflow-hidden border-b border-white/[0.06]">
-        <div className="absolute -top-20 left-0 w-[34rem] h-[34rem] bg-[#C8A44D]/[0.06] rounded-full blur-3xl pointer-events-none" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Eyebrow>About the Firm</Eyebrow>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.05] tracking-tight max-w-5xl">
+    <div>
+      {/* Hero */}
+      <section className="bg-brand-ivory pt-[120px] md:pt-[140px] pb-20 md:pb-28">
+        <Container size="wide">
+          <Eyebrow index="01">About the Firm</Eyebrow>
+          <h1 className="mt-7 font-display text-[40px] sm:text-[52px] md:text-[64px] lg:text-[76px] font-medium leading-[0.98] tracking-[-0.02em] text-brand-ink max-w-5xl">
             A multidisciplinary consulting and engineering firm built for{' '}
-            <span className="bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent">
+            <span className="italic text-brand-accent">
               institutional transformation
             </span>
             .
           </h1>
-          <p className="mt-8 max-w-3xl text-lg md:text-xl text-white/65 leading-relaxed">
+          <p className="mt-8 max-w-3xl text-[18px] md:text-[20px] leading-[1.55] text-brand-ink-2">
             Founded in 2003, Golden Dimensions Ltd unites finance, engineering,
             technology, healthcare, education, sustainability, and strategic
             consulting under one governance and quality framework — supporting
             public and private institutions across more than fifty countries.
           </p>
-        </div>
+        </Container>
       </section>
 
-      {/* ============================================================
-           Organisational scale indicators
-         ============================================================ */}
-      <section className="py-20 md:py-24 border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-white/[0.06] border border-white/[0.06] rounded-2xl overflow-hidden">
+      {/* Scale indicators */}
+      <section className="bg-brand-ivory border-t border-brand-hair">
+        <Container size="wide">
+          <div className="py-14 md:py-20 grid grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
             {globalStats.map((stat) => (
-              <div key={stat.label} className="bg-[#0B1F3A] p-8 md:p-10">
-                <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent leading-none">
-                  {stat.value}
+              <div key={stat.label}>
+                <div className="font-display text-[44px] md:text-[56px] font-medium leading-none text-brand-ink tracking-tight">
+                  {stat.value.replace('+', '')}
+                  {stat.value.includes('+') && (
+                    <span className="text-brand-accent">+</span>
+                  )}
                 </div>
-                <div className="mt-3 text-white/55 text-sm tracking-wide">
+                <div className="mt-3 text-[13px] tracking-wide text-brand-mute">
                   {stat.label}
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* ============================================================
-           Mission & Vision
-         ============================================================ */}
-      <section className="py-24 md:py-32 bg-[#0a1a30] border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Mission & Vision */}
+      <Section tone="paper" divided>
+        <Container>
           <SectionHeader
             eyebrow="Mission & Vision"
+            index="02"
             title={
               <>
                 What we exist to do, and where we{' '}
-                <span className="text-[#C8A44D]">intend to lead</span>.
+                <span className="italic text-brand-accent">intend to lead</span>.
               </>
             }
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/[0.06] border border-white/[0.06] rounded-2xl overflow-hidden">
-            <div className="bg-[#0B1F3A] p-10 md:p-12">
-              <div className="w-12 h-12 rounded-md bg-[#C8A44D]/10 border border-[#C8A44D]/20 flex items-center justify-center text-[#C8A44D] mb-6">
-                <Target size={20} />
+          <div className="grid grid-cols-1 md:grid-cols-2 border-t border-l border-brand-hair">
+            <div className="border-r border-b border-brand-hair p-10 md:p-12">
+              <div className="font-mono-tab text-[10px] tracking-widest text-brand-accent mb-6">
+                MISSION
               </div>
-              <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight mb-4">
-                Mission
+              <h3 className="font-display text-[24px] md:text-[28px] font-medium tracking-tight text-brand-ink leading-tight">
+                Materially improve how institutions operate.
               </h3>
-              <p className="text-white/60 leading-relaxed">
-                To deliver multidisciplinary consulting and engineering capability
-                that materially improves how institutions operate — combining
-                strategic insight, engineering rigour, and technology delivery
-                into outcomes our clients can stand behind.
+              <p className="mt-5 text-[16px] leading-[1.65] text-brand-ink-2">
+                To deliver multidisciplinary consulting and engineering
+                capability that materially improves how institutions operate —
+                combining strategic insight, engineering rigour, and technology
+                delivery into outcomes our clients can stand behind.
               </p>
             </div>
-            <div className="bg-[#0B1F3A] p-10 md:p-12">
-              <div className="w-12 h-12 rounded-md bg-[#C8A44D]/10 border border-[#C8A44D]/20 flex items-center justify-center text-[#C8A44D] mb-6">
-                <Eye size={20} />
+            <div className="border-r border-b border-brand-hair p-10 md:p-12">
+              <div className="font-mono-tab text-[10px] tracking-widest text-brand-accent mb-6">
+                VISION
               </div>
-              <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight mb-4">
-                Vision
+              <h3 className="font-display text-[24px] md:text-[28px] font-medium tracking-tight text-brand-ink leading-tight">
+                The multidisciplinary firm of choice for complex transformation.
               </h3>
-              <p className="text-white/60 leading-relaxed">
+              <p className="mt-5 text-[16px] leading-[1.65] text-brand-ink-2">
                 To be the multidisciplinary firm of choice for institutions
                 undertaking complex, regulated transformation — recognised for
                 the breadth of our capability, the integrity of our delivery,
@@ -197,197 +169,193 @@ const AboutPage: React.FC = () => {
               </p>
             </div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* ============================================================
-           Multidisciplinary collaboration model
-         ============================================================ */}
-      <section className="py-24 md:py-32 border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Collaboration model */}
+      <Section tone="ivory">
+        <Container>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             <div className="lg:col-span-5">
-              <Eyebrow>Collaboration Model</Eyebrow>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-[1.1] tracking-tight">
+              <Eyebrow index="03">Collaboration Model</Eyebrow>
+              <h2 className="mt-7 font-display text-[28px] md:text-[40px] lg:text-[44px] font-medium leading-[1.05] tracking-[-0.015em] text-brand-ink">
                 One firm.{' '}
-                <span className="text-[#C8A44D]">One accountable team</span>{' '}
+                <span className="italic text-brand-accent">
+                  One accountable team
+                </span>{' '}
                 per engagement.
               </h2>
-              <p className="mt-6 text-white/60 text-base md:text-lg leading-relaxed">
+              <p className="mt-7 max-w-xl text-[16.5px] leading-[1.65] text-brand-ink-2">
                 We do not subcontract delivery to a federation of independent
                 specialists. Strategy, engineering, technology, and operations
-                are staffed jointly from day one, under one accountable lead and
-                a shared quality framework.
+                are staffed jointly from day one, under one accountable lead
+                and a shared quality framework.
               </p>
-              <div className="mt-8">
+              <div className="mt-9">
                 <Link
                   to="/services"
-                  className="inline-flex items-center gap-2 text-[#C8A44D] font-semibold hover:gap-3 transition-all"
+                  className="group inline-flex items-center gap-2 text-[14px] font-medium tracking-tight text-brand-ink border-b border-brand-ink pb-1 hover:text-brand-accent hover:border-brand-accent transition-colors"
                 >
-                  See our capability pillars <ArrowRight size={16} />
+                  See our capability pillars
+                  <ArrowRight
+                    size={14}
+                    className="group-hover:translate-x-0.5 transition-transform"
+                  />
                 </Link>
               </div>
             </div>
 
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/[0.06] border border-white/[0.06] rounded-2xl overflow-hidden">
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 border-t border-l border-brand-hair">
               {collaborationModel.map((item, idx) => (
-                <div key={item.name} className="bg-[#0B1F3A] p-7">
-                  <span className="text-[#C8A44D]/70 text-xs font-mono tracking-widest">
+                <div
+                  key={item.name}
+                  className="border-r border-b border-brand-hair p-7 bg-brand-paper"
+                >
+                  <span className="font-mono-tab text-[10px] tracking-widest text-brand-accent">
                     {String(idx + 1).padStart(2, '0')}
                   </span>
-                  <h3 className="mt-3 text-base font-semibold text-white tracking-tight">
+                  <h3 className="mt-3 font-display text-[18px] md:text-[20px] font-medium tracking-tight text-brand-ink">
                     {item.name}
                   </h3>
-                  <p className="mt-2 text-white/55 text-sm leading-relaxed">
+                  <p className="mt-2 text-[14px] leading-[1.6] text-brand-ink-2">
                     {item.description}
                   </p>
                 </div>
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* ============================================================
-           Leadership commitments (institutional credibility, not bios)
-         ============================================================ */}
-      <section className="py-24 md:py-32 bg-[#0a1a30] border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Leadership commitments */}
+      <Section tone="paper" divided>
+        <Container>
           <SectionHeader
             eyebrow="Leadership Commitments"
+            index="04"
             title={
               <>
                 The standards our leadership{' '}
-                <span className="text-[#C8A44D]">holds the firm to</span>.
+                <span className="italic text-brand-accent">
+                  holds the firm to
+                </span>
+                .
               </>
             }
             intro="Beyond service delivery, our leadership team commits to a small set of institutional standards that govern how we engage."
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {leadershipCommitments.map((item) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-t border-l border-brand-hair">
+            {leadershipCommitments.map((item, idx) => (
               <div
                 key={item.name}
-                className="p-7 rounded-xl bg-white/[0.025] border border-white/[0.06]"
+                className="border-r border-b border-brand-hair p-7 md:p-8"
               >
-                <div className="w-11 h-11 rounded-md bg-[#C8A44D]/10 border border-[#C8A44D]/20 flex items-center justify-center text-[#C8A44D] mb-5">
-                  {item.icon}
+                <div className="font-mono-tab text-[10px] tracking-widest text-brand-accent mb-5">
+                  {String(idx + 1).padStart(2, '0')}
                 </div>
-                <h3 className="text-base md:text-lg font-semibold text-white tracking-tight">
+                <h3 className="font-display text-[18px] md:text-[20px] font-medium tracking-tight text-brand-ink">
                   {item.name}
                 </h3>
-                <p className="mt-2 text-white/55 text-sm leading-relaxed">
+                <p className="mt-3 text-[14px] leading-[1.6] text-brand-ink-2">
                   {item.description}
                 </p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* ============================================================
-           Story (image + narrative)
-         ============================================================ */}
-      <section className="py-24 md:py-32 border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <div className="relative order-2 lg:order-1">
-              <div className="rounded-2xl overflow-hidden">
+      {/* Story */}
+      <Section tone="ink">
+        <Container>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            <div className="lg:col-span-5 order-2 lg:order-1">
+              <div className="aspect-[4/5] overflow-hidden">
                 <img
                   src="https://d64gsuwffb70l.cloudfront.net/69ad7b9650a26a8c1a6eecd1_1772977411881_74b98593.jpg"
                   alt="International team collaboration"
-                  className="w-full h-[480px] object-cover"
+                  className="w-full h-full object-cover grayscale-[20%]"
                 />
               </div>
-              <div className="absolute -top-5 -left-5 hidden md:flex items-center gap-3 bg-[#0B1F3A] border border-[#C8A44D]/20 rounded-xl px-5 py-4 shadow-xl">
-                <Layers size={18} className="text-[#C8A44D]" />
-                <div>
-                  <div className="text-white text-sm font-semibold tracking-tight">
-                    Sixteen integrated disciplines
-                  </div>
-                  <div className="text-white/50 text-xs">
-                    Five capability pillars
-                  </div>
-                </div>
-              </div>
             </div>
-
-            <div className="order-1 lg:order-2">
-              <Eyebrow>Our Story</Eyebrow>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-[1.1] tracking-tight">
+            <div className="lg:col-span-7 order-1 lg:order-2">
+              <Eyebrow tone="dark" index="05">
+                Our Story
+              </Eyebrow>
+              <h2 className="mt-7 font-display text-[32px] md:text-[44px] lg:text-[52px] font-medium leading-[1.05] tracking-[-0.015em] text-brand-on-dark">
                 Two decades of multidisciplinary practice.
               </h2>
-              <p className="mt-6 text-white/60 leading-relaxed">
-                Golden Dimensions Ltd was founded in 2003 to address a gap that
-                had become structural in professional services: institutions
-                facing complex transformation needed strategy, engineering, and
-                technology delivered as a single capability, not as separate
-                vendor tracks.
-              </p>
-              <p className="mt-4 text-white/60 leading-relaxed">
-                Twenty years on, that thesis is the firm's operating model.
-                Today we deploy more than 200 multidisciplinary professionals
-                across over 50 countries, supporting both public and private
-                sector institutions through complex, regulated programmes.
-              </p>
+              <div className="mt-7 space-y-4 text-[16.5px] leading-[1.65] text-brand-on-dark-2 max-w-2xl">
+                <p>
+                  Golden Dimensions Ltd was founded in 2003 to address a gap
+                  that had become structural in professional services:
+                  institutions facing complex transformation needed strategy,
+                  engineering, and technology delivered as a single capability,
+                  not as separate vendor tracks.
+                </p>
+                <p>
+                  Twenty years on, that thesis is the firm's operating model.
+                  Today we deploy more than 200 multidisciplinary professionals
+                  across over 50 countries, supporting both public and private
+                  sector institutions through complex, regulated programmes.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* ============================================================
-           Core values
-         ============================================================ */}
-      <section className="py-24 md:py-32 bg-[#0a1a30] border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Core values */}
+      <Section tone="paper" divided>
+        <Container>
           <SectionHeader
             eyebrow="Core Values"
+            index="06"
             title={
               <>
                 Five principles that guide every{' '}
-                <span className="text-[#C8A44D]">engagement</span>.
+                <span className="italic text-brand-accent">engagement</span>.
               </>
             }
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-px bg-white/[0.06] border border-white/[0.06] rounded-2xl overflow-hidden">
-            {values.map((value) => (
-              <div key={value.title} className="bg-[#0B1F3A] p-7">
-                <div className="w-11 h-11 rounded-md bg-[#C8A44D]/10 border border-[#C8A44D]/20 flex items-center justify-center text-[#C8A44D] mb-5">
-                  {value.icon}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 border-t border-l border-brand-hair">
+            {values.map((value, idx) => (
+              <div
+                key={value.title}
+                className="border-r border-b border-brand-hair p-7"
+              >
+                <div className="font-mono-tab text-[10px] tracking-widest text-brand-accent mb-5">
+                  {String(idx + 1).padStart(2, '0')}
                 </div>
-                <h3 className="text-base font-semibold text-white tracking-tight mb-2">
+                <h3 className="font-display text-[18px] font-medium tracking-tight text-brand-ink">
                   {value.title}
                 </h3>
-                <p className="text-white/55 text-sm leading-relaxed">{value.desc}</p>
+                <p className="mt-2 text-[13.5px] leading-[1.6] text-brand-ink-2">
+                  {value.desc}
+                </p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* ============================================================
-           CTA
-         ============================================================ */}
-      <section className="py-24 md:py-32">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="border border-white/[0.08] rounded-2xl p-10 md:p-14 bg-gradient-to-br from-white/[0.02] to-transparent">
-            <Eyebrow>Engage With Us</Eyebrow>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-[1.1] tracking-tight max-w-3xl">
-              Discuss how multidisciplinary delivery applies to your{' '}
-              <span className="bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent">
-                next mandate
-              </span>
-              .
-            </h2>
-            <div className="mt-9 flex flex-col sm:flex-row sm:items-center gap-4">
-              <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
-              <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
-              <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
-            </div>
+      {/* CTA */}
+      <Section tone="ivory">
+        <Container size="narrow">
+          <Eyebrow index="07">Engage With Us</Eyebrow>
+          <h2 className="mt-8 font-display text-[32px] md:text-[48px] lg:text-[56px] font-medium leading-[1.05] tracking-[-0.015em] text-brand-ink">
+            Discuss how multidisciplinary delivery applies to your{' '}
+            <span className="italic text-brand-accent">next mandate</span>.
+          </h2>
+          <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-4">
+            <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+            <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
+            <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
     </div>
   );
 };

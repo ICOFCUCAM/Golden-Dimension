@@ -64,18 +64,18 @@ const LegalPage: React.FC = () => {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <div className="bg-[#0B1F3A]">
+    <div className="bg-brand-ivory">
       {/* Hero */}
       <section className="relative pt-32 pb-16 overflow-hidden">
-        <div className="absolute top-20 left-0 w-96 h-96 bg-[#C8A44D]/5 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-0 w-96 h-96 bg-brand-accent/10 rounded-full blur-3xl" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <span className="text-[#C8A44D] text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">
+          <span className="text-brand-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">
             Legal Advisory
           </span>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            Legal <span className="bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent">Issues</span>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-brand-ink mb-6 leading-tight">
+            Legal <span className="italic text-brand-accent">Issues</span>
           </h1>
-          <p className="text-xl text-white/60 max-w-3xl leading-relaxed">
+          <p className="text-xl text-brand-ink-2 max-w-3xl leading-relaxed">
             Expert legal guidance, compliance updates, and regulatory advisory services to protect and empower your business.
           </p>
         </div>
@@ -85,16 +85,16 @@ const LegalPage: React.FC = () => {
       <section className="py-16" ref={ref}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Legal Advisory Services</h2>
-            <p className="text-white/50">Comprehensive legal support across all areas of business law.</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-ink mb-4">Legal Advisory Services</h2>
+            <p className="text-brand-mute">Comprehensive legal support across all areas of business law.</p>
           </div>
 
           <div className="space-y-4">
             {legalTopics.map((topic, i) => (
               <div
                 key={i}
-                className={`rounded-2xl bg-white/[0.03] border border-white/[0.06] overflow-hidden transition-all duration-500 ${
-                  expandedTopic === i ? 'border-[#C8A44D]/30' : 'hover:border-white/10'
+                className={`rounded-2xl bg-brand-paper border border-brand-hair overflow-hidden transition-all duration-500 ${
+                  expandedTopic === i ? 'border-brand-accent/30' : 'hover:border-brand-hair'
                 } ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                 style={{ transitionDelay: `${i * 80}ms` }}
               >
@@ -102,14 +102,14 @@ const LegalPage: React.FC = () => {
                   onClick={() => setExpandedTopic(expandedTopic === i ? null : i)}
                   className="w-full flex items-center gap-4 p-6 text-left"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-[#C8A44D]/10 flex items-center justify-center text-[#C8A44D] flex-shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent flex-shrink-0">
                     {topic.icon}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-bold text-white mb-1">{topic.title}</h3>
-                    <p className="text-white/40 text-sm">{topic.summary}</p>
+                    <h3 className="text-lg font-bold text-brand-ink mb-1">{topic.title}</h3>
+                    <p className="text-brand-mute text-sm">{topic.summary}</p>
                   </div>
-                  <div className="text-[#C8A44D] flex-shrink-0">
+                  <div className="text-brand-accent flex-shrink-0">
                     {expandedTopic === i ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                   </div>
                 </button>
@@ -119,10 +119,10 @@ const LegalPage: React.FC = () => {
                   }`}
                 >
                   <div className="px-6 pb-6 pl-[88px]">
-                    <p className="text-white/60 leading-relaxed">{topic.content}</p>
+                    <p className="text-brand-ink-2 leading-relaxed">{topic.content}</p>
                     <Link
                       to="/contact"
-                      className="inline-flex items-center gap-2 mt-4 text-[#C8A44D] text-sm font-medium hover:gap-3 transition-all"
+                      className="inline-flex items-center gap-2 mt-4 text-brand-accent text-sm font-medium hover:gap-3 transition-all"
                     >
                       Get Legal Advice <ArrowRight size={14} />
                     </Link>
@@ -135,14 +135,14 @@ const LegalPage: React.FC = () => {
       </section>
 
       {/* Recent Legal Updates */}
-      <section className="py-24 bg-[#0a1a30]">
+      <section className="py-24 bg-brand-stone">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <span className="text-[#C8A44D] text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">
+            <span className="text-brand-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">
               Regulatory Updates
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Recent Legal Developments</h2>
-            <p className="text-white/50 max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-ink mb-4">Recent Legal Developments</h2>
+            <p className="text-brand-mute max-w-2xl mx-auto">
               Stay informed about the latest regulatory changes and legal developments that may affect your business.
             </p>
           </div>
@@ -151,13 +151,13 @@ const LegalPage: React.FC = () => {
             {recentUpdates.map((update, i) => (
               <div
                 key={i}
-                className="p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-[#C8A44D]/20 transition-all duration-300 group cursor-pointer"
+                className="p-6 rounded-2xl bg-brand-paper border border-brand-hair hover:border-brand-accent/30 transition-all duration-300 group cursor-pointer"
               >
-                <span className="text-[#C8A44D] text-sm font-medium">{update.date}</span>
-                <h3 className="text-lg font-bold text-white mt-2 mb-3 group-hover:text-[#C8A44D] transition-colors">
+                <span className="text-brand-accent text-sm font-medium">{update.date}</span>
+                <h3 className="text-lg font-bold text-brand-ink mt-2 mb-3 group-hover:text-brand-accent transition-colors">
                   {update.title}
                 </h3>
-                <p className="text-white/40 text-sm leading-relaxed">{update.desc}</p>
+                <p className="text-brand-mute text-sm leading-relaxed">{update.desc}</p>
               </div>
             ))}
           </div>
@@ -167,15 +167,15 @@ const LegalPage: React.FC = () => {
       {/* CTA */}
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-brand-ink mb-6">
             Need Legal Guidance?
           </h2>
-          <p className="text-white/60 text-lg mb-8">
+          <p className="text-brand-ink-2 text-lg mb-8">
             Our legal experts are ready to help you navigate complex regulatory landscapes and protect your business interests.
           </p>
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] text-[#0B1F3A] font-semibold rounded-lg hover:shadow-xl hover:shadow-[#C8A44D]/25 transition-all duration-300"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-brand-ink to-brand-ink text-brand-ivory font-semibold rounded-lg hover:shadow-xl hover:shadow-black/5 transition-all duration-300"
           >
             Contact Our Legal Team <ArrowRight size={18} />
           </Link>

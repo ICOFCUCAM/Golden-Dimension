@@ -1,63 +1,41 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Users,
-  Clock,
-  Globe2,
-  Layers,
-  Code2,
-  Radio,
-  BarChart3,
-  Palette,
-} from 'lucide-react';
-import ServiceIcon from '@/components/ServiceIcon';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import {
   Eyebrow,
   SectionHeader,
   PrimaryCta,
   SecondaryCta,
   TertiaryCta,
+  Container,
+  Section,
 } from '@/components/section-primitives';
-import {
-  pillars,
-  industries,
-  methodology,
-  globalStats,
-} from '@/data/servicesPage';
+import { pillars, industries, methodology } from '@/data/servicesPage';
 import { useScrollAnimation, useCountUp } from '@/hooks/useScrollAnimation';
 
 // -----------------------------------------------------------------------------
-// Stat tile (count-up on scroll-into-view)
+// Stat — minimal editorial metric: serif numeral + thin label.
 // -----------------------------------------------------------------------------
-const StatTile: React.FC<{
+const Stat: React.FC<{
   value: number;
   suffix: string;
   label: string;
-  icon: React.ReactNode;
-}> = ({ value, suffix, label, icon }) => {
+}> = ({ value, suffix, label }) => {
   const { ref, isVisible } = useScrollAnimation(0.2);
   const count = useCountUp(value, 1800, isVisible);
   return (
-    <div ref={ref} className="bg-[#0B1F3A] p-8 md:p-10">
-      <div className="w-10 h-10 rounded-md bg-[#C8A44D]/10 border border-[#C8A44D]/20 flex items-center justify-center text-[#C8A44D] mb-6">
-        {icon}
-      </div>
-      <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent leading-none">
+    <div ref={ref} className="py-2">
+      <div className="font-display text-[44px] md:text-[56px] font-medium leading-none text-brand-ink tracking-tight">
         {count}
-        {suffix}
+        <span className="text-brand-accent">{suffix}</span>
       </div>
-      <div className="mt-3 text-white/55 text-sm tracking-wide">{label}</div>
+      <div className="mt-3 text-[13px] tracking-wide text-brand-mute">
+        {label}
+      </div>
     </div>
   );
 };
 
-// -----------------------------------------------------------------------------
-// Engagement-model framing (replaces partner-logo carousel — no real logos
-// to show, but consulting firms communicate the same idea via engagement
-// shapes the firm offers).
-// -----------------------------------------------------------------------------
 const engagementModels = [
   {
     name: 'Advisory',
@@ -81,39 +59,29 @@ const engagementModels = [
   },
 ];
 
-// -----------------------------------------------------------------------------
-// Technology capability layer
-// -----------------------------------------------------------------------------
 const technologyCapabilities = [
   {
     name: 'Software & Platforms',
-    icon: <Code2 size={20} />,
     description:
       'Custom software, integrations, and enterprise web platforms engineered for production scale.',
   },
   {
     name: 'Networks & Telecom',
-    icon: <Radio size={20} />,
     description:
       'Fixed, mobile, and enterprise network systems with secure end-to-end delivery.',
   },
   {
     name: 'Data & Analytics',
-    icon: <BarChart3 size={20} />,
     description:
       'Decision-support data systems, reporting, and analytics for institutional operations.',
   },
   {
     name: 'Digital Experience',
-    icon: <Palette size={20} />,
     description:
       'UX, product design, and brand systems engineered for consistency at scale.',
   },
 ];
 
-// -----------------------------------------------------------------------------
-// Regions (global footprint)
-// -----------------------------------------------------------------------------
 const regions = [
   'United Kingdom & Ireland',
   'European Union',
@@ -128,442 +96,494 @@ const regions = [
 // =============================================================================
 const HomePage: React.FC = () => {
   return (
-    <div className="bg-[#0B1F3A]">
-      {/* ==============================================================
-           1 — Hero: capability positioning
-         ============================================================== */}
-      <section className="relative min-h-[92vh] flex items-center overflow-hidden border-b border-white/[0.06]">
-        <div className="absolute inset-0">
-          <img
-            src="https://d64gsuwffb70l.cloudfront.net/69ad7b9650a26a8c1a6eecd1_1772977155989_8f3386e4.jpg"
-            alt="Global professionals collaborating"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A]/95 via-[#0B1F3A]/85 to-[#0B1F3A]/55" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3A] via-transparent to-transparent" />
-        </div>
+    <div className="bg-brand-ivory">
+      {/* ============================================================
+           1 — Hero (editorial split)
+         ============================================================ */}
+      <section className="relative bg-brand-ivory pt-[120px] md:pt-[140px] pb-20 md:pb-28">
+        <Container size="wide">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-end">
+            <div className="lg:col-span-7">
+              <Eyebrow index="01">Multidisciplinary Consulting & Engineering</Eyebrow>
+              <h1 className="mt-7 font-display text-[40px] sm:text-[52px] md:text-[64px] lg:text-[76px] font-medium leading-[0.98] tracking-[-0.02em] text-brand-ink">
+                Integrated capability for institutions, enterprises, and{' '}
+                <span className="italic text-brand-accent">governments</span>{' '}
+                worldwide.
+              </h1>
+              <p className="mt-8 max-w-2xl text-[18px] md:text-[20px] leading-[1.55] text-brand-ink-2">
+                Golden Dimensions Ltd brings strategy, engineering, technology,
+                and human-capital expertise into a single delivery framework —
+                supporting transformation across finance, infrastructure,
+                healthcare, education, and digital systems since 2003.
+              </p>
+              <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-4">
+                <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+                <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
+                <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
+              </div>
+            </div>
 
-        <div className="absolute -top-10 right-0 w-[34rem] h-[34rem] bg-[#C8A44D]/[0.08] rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-40 w-full">
-          <Eyebrow>Established 2003 — Multidisciplinary Consulting</Eyebrow>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.05] tracking-tight max-w-5xl">
-            Integrated consulting and engineering capabilities for{' '}
-            <span className="bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent">
-              institutions, enterprises, and governments
-            </span>{' '}
-            worldwide.
-          </h1>
-          <p className="mt-8 max-w-3xl text-lg md:text-xl text-white/65 leading-relaxed">
-            Golden Dimensions Ltd unites strategy, engineering, technology, and
-            human-capital expertise into a single delivery framework — supporting
-            multidisciplinary transformation across finance, infrastructure,
-            healthcare, education, and digital systems.
-          </p>
-
-          <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-4">
-            <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
-            <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
-            <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
+            <div className="lg:col-span-5">
+              <div className="relative">
+                <div className="aspect-[4/5] overflow-hidden">
+                  <img
+                    src="https://d64gsuwffb70l.cloudfront.net/69ad7b9650a26a8c1a6eecd1_1772977155989_8f3386e4.jpg"
+                    alt="Multidisciplinary professionals collaborating"
+                    className="w-full h-full object-cover grayscale-[25%]"
+                  />
+                </div>
+                <div className="absolute -bottom-px -left-px bg-brand-ivory pr-6 pt-6">
+                  <div className="font-display text-[44px] md:text-[56px] font-medium leading-none text-brand-ink">
+                    50<span className="text-brand-accent">+</span>
+                  </div>
+                  <div className="mt-2 text-[12px] tracking-wide text-brand-mute uppercase">
+                    Countries served
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* ==============================================================
-           2 — Global credibility metrics
-         ============================================================== */}
-      <section className="py-20 md:py-24 border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-white/[0.06] border border-white/[0.06] rounded-2xl overflow-hidden">
-            <StatTile value={200} suffix="+" label="Professionals worldwide" icon={<Users size={18} />} />
-            <StatTile value={20} suffix="+" label="Years of consulting practice" icon={<Clock size={18} />} />
-            <StatTile value={50} suffix="+" label="Countries served" icon={<Globe2 size={18} />} />
-            <StatTile value={16} suffix="" label="Integrated service disciplines" icon={<Layers size={18} />} />
+      {/* ============================================================
+           2 — Credibility metrics band
+         ============================================================ */}
+      <section className="bg-brand-ivory border-t border-brand-hair">
+        <Container size="wide">
+          <div className="py-14 md:py-20 grid grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
+            <Stat value={200} suffix="+" label="Professionals worldwide" />
+            <Stat value={20} suffix="+" label="Years of consulting practice" />
+            <Stat value={50} suffix="+" label="Countries served" />
+            <Stat value={16} suffix="" label="Integrated service disciplines" />
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* ==============================================================
-           3 — Capability pillars overview
-         ============================================================== */}
-      <section className="py-24 md:py-32 bg-[#0a1a30] border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ============================================================
+           3 — Capability pillars (editorial list)
+         ============================================================ */}
+      <Section tone="paper" divided>
+        <Container>
           <SectionHeader
             eyebrow="Capabilities"
+            index="02"
             title={
               <>
                 Five consulting pillars,{' '}
-                <span className="text-[#C8A44D]">one delivery framework</span>.
+                <span className="italic text-brand-accent">one delivery framework</span>.
               </>
             }
             intro="Every engagement is staffed across the pillars relevant to the client's transformation agenda — strategy, engineering, technology, institutional development, and enterprise support, working as one team."
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/[0.06] border border-white/[0.06] rounded-2xl overflow-hidden">
+          <div className="border-t border-brand-hair">
             {pillars.map((pillar) => (
               <Link
                 key={pillar.id}
                 to="/services#pillars"
-                className="group bg-[#0B1F3A] p-8 md:p-10 hover:bg-white/[0.025] transition-colors flex flex-col"
+                className="group grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 py-8 md:py-10 border-b border-brand-hair hover:bg-brand-ivory/60 transition-colors"
               >
-                <span className="text-[#C8A44D]/70 text-xs font-mono tracking-widest mb-4">
+                <div className="md:col-span-1 font-mono-tab text-[11px] tracking-widest text-brand-mute pt-2">
                   {pillar.index}
-                </span>
-                <h3 className="text-lg md:text-xl font-semibold text-white tracking-tight leading-snug group-hover:text-[#C8A44D] transition-colors">
-                  {pillar.name}
-                </h3>
-                <p className="mt-3 text-white/50 text-sm leading-relaxed flex-1">
-                  {pillar.tagline}
-                </p>
-                <span className="mt-6 inline-flex items-center gap-1.5 text-[#C8A44D] text-xs font-semibold uppercase tracking-[0.18em] opacity-70 group-hover:opacity-100 transition-opacity">
-                  Explore Pillar <ArrowRight size={12} />
-                </span>
+                </div>
+                <div className="md:col-span-4">
+                  <h3 className="font-display text-[24px] md:text-[28px] font-medium leading-tight tracking-tight text-brand-ink group-hover:text-brand-accent transition-colors">
+                    {pillar.name}
+                  </h3>
+                </div>
+                <div className="md:col-span-6">
+                  <p className="text-[15.5px] leading-[1.65] text-brand-ink-2">
+                    {pillar.tagline}
+                  </p>
+                </div>
+                <div className="md:col-span-1 flex md:justify-end items-start pt-2">
+                  <ArrowUpRight
+                    size={18}
+                    className="text-brand-mute group-hover:text-brand-accent group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all"
+                  />
+                </div>
               </Link>
             ))}
-            {/* Trailing tile to balance grid + push to capabilities page */}
+          </div>
+
+          <div className="mt-12">
             <Link
               to="/services"
-              className="group bg-gradient-to-br from-[#C8A44D]/10 via-[#C8A44D]/5 to-transparent p-8 md:p-10 flex flex-col justify-between hover:from-[#C8A44D]/15 transition-colors"
+              className="group inline-flex items-center gap-2.5 text-[14px] font-medium tracking-tight text-brand-ink border-b border-brand-ink hover:text-brand-accent hover:border-brand-accent transition-colors pb-1"
             >
-              <div>
-                <span className="text-[#C8A44D]/70 text-xs font-mono tracking-widest mb-4 block">
-                  06
-                </span>
-                <h3 className="text-lg md:text-xl font-semibold text-white tracking-tight leading-snug">
-                  Explore the full Capability Model
-                </h3>
-                <p className="mt-3 text-white/55 text-sm leading-relaxed">
-                  Six-layer model spanning Strategy, Engineering, Technology,
-                  Operations, Sustainability, and Human Capital Development.
-                </p>
-              </div>
-              <span className="mt-6 inline-flex items-center gap-2 text-[#C8A44D] font-semibold text-sm">
-                View Capabilities <ArrowRight size={14} />
-              </span>
+              Explore the full Capability Model
+              <ArrowRight
+                size={15}
+                className="group-hover:translate-x-0.5 transition-transform"
+              />
             </Link>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* ==============================================================
-           4 — Industries served
-         ============================================================== */}
-      <section className="py-24 md:py-32 border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-14 md:mb-20">
-            <div className="max-w-3xl">
-              <Eyebrow>Industries</Eyebrow>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-[1.1] tracking-tight">
+      {/* ============================================================
+           4 — Industries (transformation narratives, alternating)
+         ============================================================ */}
+      <Section tone="ivory">
+        <Container>
+          <SectionHeader
+            eyebrow="Industries"
+            index="03"
+            title={
+              <>
                 Sector authority across{' '}
-                <span className="text-[#C8A44D]">regulated industries</span>.
-              </h2>
-            </div>
-            <Link
-              to="/industries"
-              className="inline-flex items-center gap-2 text-[#C8A44D] font-semibold text-sm hover:gap-3 transition-all"
-            >
-              View all industries <ArrowRight size={14} />
-            </Link>
-          </div>
+                <span className="italic text-brand-accent">regulated industries</span>.
+              </>
+            }
+            intro="Each pillar combines differently per sector — financial, engineering, technology, and human-capital capabilities tuned to that industry's operating reality."
+          />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {industries.map((industry) => (
+          <div className="space-y-6">
+            {industries.slice(0, 3).map((industry, idx) => (
               <Link
                 key={industry.id}
                 to="/industries"
-                className="group p-7 rounded-xl bg-white/[0.025] border border-white/[0.06] hover:border-[#C8A44D]/30 transition-colors"
+                className="group block bg-brand-paper border border-brand-hair p-8 md:p-10 hover:border-brand-ink transition-colors"
               >
-                <div className="flex items-start gap-5">
-                  <div className="w-11 h-11 rounded-md bg-[#C8A44D]/10 border border-[#C8A44D]/20 flex items-center justify-center text-[#C8A44D] shrink-0">
-                    <ServiceIcon icon={industry.icon} size={18} />
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-start">
+                  <div className="md:col-span-1 font-mono-tab text-[11px] tracking-widest text-brand-mute pt-2">
+                    {String(idx + 1).padStart(2, '0')}
                   </div>
-                  <div>
-                    <h3 className="text-base md:text-lg font-semibold text-white tracking-tight leading-snug group-hover:text-[#C8A44D] transition-colors">
+                  <div className="md:col-span-4">
+                    <h3 className="font-display text-[22px] md:text-[26px] font-medium leading-tight tracking-tight text-brand-ink group-hover:text-brand-accent transition-colors">
                       {industry.name}
                     </h3>
-                    <p className="mt-2 text-white/55 text-sm leading-relaxed">
+                  </div>
+                  <div className="md:col-span-6">
+                    <p className="text-[15px] leading-[1.65] text-brand-ink-2">
                       {industry.description}
                     </p>
+                  </div>
+                  <div className="md:col-span-1 flex md:justify-end items-start pt-2">
+                    <ArrowUpRight
+                      size={18}
+                      className="text-brand-mute group-hover:text-brand-accent transition-colors"
+                    />
                   </div>
                 </div>
               </Link>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* ==============================================================
-           5 — Technology capability layer
-         ============================================================== */}
-      <section className="py-24 md:py-32 bg-[#0a1a30] border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mt-10 flex justify-end">
+            <Link
+              to="/industries"
+              className="group inline-flex items-center gap-2 text-[14px] font-medium tracking-tight text-brand-ink hover:text-brand-accent transition-colors"
+            >
+              View all industries
+              <ArrowRight
+                size={15}
+                className="group-hover:translate-x-0.5 transition-transform"
+              />
+            </Link>
+          </div>
+        </Container>
+      </Section>
+
+      {/* ============================================================
+           5 — Technology capability layer (rule grid)
+         ============================================================ */}
+      <Section tone="paper" divided>
+        <Container>
           <SectionHeader
             eyebrow="Technology Capability"
+            index="04"
             title={
               <>
                 Engineering the digital systems that{' '}
-                <span className="text-[#C8A44D]">institutions depend on</span>.
+                <span className="italic text-brand-accent">institutions depend on</span>.
               </>
             }
             intro="A dedicated technology practice — software, networks, data, and digital experience — embedded across every transformation programme."
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {technologyCapabilities.map((cap) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-t border-l border-brand-hair">
+            {technologyCapabilities.map((cap, idx) => (
               <div
                 key={cap.name}
-                className="p-7 rounded-xl bg-white/[0.025] border border-white/[0.06]"
+                className="border-r border-b border-brand-hair p-7 md:p-8"
               >
-                <div className="w-11 h-11 rounded-md bg-[#C8A44D]/10 border border-[#C8A44D]/20 flex items-center justify-center text-[#C8A44D] mb-5">
-                  {cap.icon}
+                <div className="font-mono-tab text-[10px] tracking-widest text-brand-accent mb-5">
+                  {String(idx + 1).padStart(2, '0')}
                 </div>
-                <h3 className="text-base md:text-lg font-semibold text-white tracking-tight leading-snug">
+                <h3 className="font-display text-[20px] md:text-[22px] font-medium tracking-tight text-brand-ink">
                   {cap.name}
                 </h3>
-                <p className="mt-2 text-white/55 text-sm leading-relaxed">
+                <p className="mt-3 text-[14.5px] leading-[1.6] text-brand-ink-2">
                   {cap.description}
                 </p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* ==============================================================
-           6 — Delivery methodology
-         ============================================================== */}
-      <section className="py-24 md:py-32 border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ============================================================
+           6 — Delivery methodology (axis flow)
+         ============================================================ */}
+      <Section tone="ivory">
+        <Container>
           <SectionHeader
             eyebrow="How We Deliver"
+            index="05"
             title={
               <>
                 A six-phase methodology spanning the full{' '}
-                <span className="text-[#C8A44D]">transformation lifecycle</span>.
+                <span className="italic text-brand-accent">transformation lifecycle</span>.
               </>
             }
             intro="From early-stage diagnostics to long-term operational support, our delivery framework is built for institutional accountability and measurable outcomes."
           />
 
           <div className="relative">
-            <div className="hidden lg:block absolute top-7 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C8A44D]/30 to-transparent" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 lg:gap-4">
+            <div className="hidden lg:block absolute top-7 left-0 right-0 h-px bg-brand-hair-strong" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-6">
               {methodology.map((phase) => (
-                <div key={phase.index} className="relative">
-                  <div className="flex lg:flex-col items-start gap-4 lg:gap-5">
-                    <div className="relative z-10 w-14 h-14 shrink-0 rounded-full border border-[#C8A44D]/30 bg-[#0B1F3A] text-[#C8A44D] font-mono text-sm flex items-center justify-center">
-                      {phase.index}
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-base font-semibold text-white tracking-tight">
-                        {phase.name}
-                      </h3>
-                      <p className="mt-2 text-white/50 text-sm leading-relaxed">
-                        {phase.description}
-                      </p>
-                    </div>
+                <div key={phase.index} className="flex lg:flex-col items-start gap-5">
+                  <div className="relative z-10 w-14 h-14 shrink-0 border border-brand-ink bg-brand-ivory text-brand-ink font-mono-tab text-[13px] flex items-center justify-center">
+                    {phase.index}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-display text-[18px] font-medium tracking-tight text-brand-ink leading-tight">
+                      {phase.name}
+                    </h3>
+                    <p className="mt-2 text-[13.5px] leading-[1.6] text-brand-ink-2">
+                      {phase.description}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* ==============================================================
-           7 — Leadership positioning
-         ============================================================== */}
-      <section className="py-24 md:py-32 bg-[#0a1a30] border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ============================================================
+           7 — Leadership positioning (editorial split)
+         ============================================================ */}
+      <Section tone="paper" divided>
+        <Container>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            <div className="lg:col-span-5 relative">
-              <div className="rounded-2xl overflow-hidden">
+            <div className="lg:col-span-5 order-2 lg:order-1">
+              <div className="aspect-[4/5] overflow-hidden">
                 <img
                   src="https://d64gsuwffb70l.cloudfront.net/69ad7b9650a26a8c1a6eecd1_1772977411881_74b98593.jpg"
                   alt="International team collaboration"
-                  className="w-full h-[440px] object-cover"
+                  className="w-full h-full object-cover grayscale-[20%]"
                 />
-              </div>
-              <div className="absolute -bottom-5 -right-5 hidden md:block bg-[#0B1F3A] border border-[#C8A44D]/20 rounded-xl px-6 py-5 shadow-xl">
-                <div className="text-3xl font-bold bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent leading-none">
-                  20+
-                </div>
-                <div className="mt-1 text-white/60 text-xs tracking-wide">
-                  Years of multidisciplinary practice
-                </div>
               </div>
             </div>
 
-            <div className="lg:col-span-7">
-              <Eyebrow>The Firm</Eyebrow>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-[1.1] tracking-tight">
+            <div className="lg:col-span-7 order-1 lg:order-2">
+              <Eyebrow index="06">The Firm</Eyebrow>
+              <h2 className="mt-7 font-display text-[32px] md:text-[44px] lg:text-[52px] font-medium leading-[1.05] tracking-[-0.015em] text-brand-ink">
                 Multidisciplinary by design.{' '}
-                <span className="text-[#C8A44D]">Institutional in delivery.</span>
+                <span className="italic text-brand-accent">
+                  Institutional in delivery.
+                </span>
               </h2>
-              <p className="mt-6 text-white/60 text-base md:text-lg leading-relaxed">
-                Founded in 2003, Golden Dimensions Ltd was structured from day
-                one as a multidisciplinary firm — finance, engineering,
-                technology, healthcare, education, and sustainability under one
-                governance and quality framework.
-              </p>
-              <p className="mt-4 text-white/60 text-base md:text-lg leading-relaxed">
-                That structure is what allows us to staff complex,
-                cross-disciplinary mandates without subcontracting the most
-                important parts of delivery — and to remain accountable for the
-                outcome end to end.
-              </p>
-              <div className="mt-8">
+              <div className="mt-7 space-y-4 text-[16.5px] leading-[1.65] text-brand-ink-2 max-w-2xl">
+                <p>
+                  Founded in 2003, Golden Dimensions Ltd was structured from
+                  day one as a multidisciplinary firm — finance, engineering,
+                  technology, healthcare, education, and sustainability under
+                  one governance and quality framework.
+                </p>
+                <p>
+                  That structure is what allows us to staff complex,
+                  cross-disciplinary mandates without subcontracting the most
+                  important parts of delivery — and to remain accountable for
+                  the outcome end to end.
+                </p>
+              </div>
+              <div className="mt-9">
                 <Link
                   to="/about"
-                  className="inline-flex items-center gap-2 text-[#C8A44D] font-semibold hover:gap-3 transition-all"
+                  className="group inline-flex items-center gap-2 text-[14px] font-medium tracking-tight text-brand-ink border-b border-brand-ink hover:text-brand-accent hover:border-brand-accent transition-colors pb-1"
                 >
-                  About the firm <ArrowRight size={16} />
+                  About the firm
+                  <ArrowRight
+                    size={15}
+                    className="group-hover:translate-x-0.5 transition-transform"
+                  />
                 </Link>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* ==============================================================
-           8 — Global footprint
-         ============================================================== */}
-      <section className="py-24 md:py-32 border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ============================================================
+           8 — Global footprint (the dark band)
+         ============================================================ */}
+      <Section tone="ink" id="footprint">
+        <Container>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
             <div className="lg:col-span-5">
-              <Eyebrow>Global Footprint</Eyebrow>
-              <h2 className="text-3xl md:text-4xl font-bold text-white leading-[1.1] tracking-tight">
+              <Eyebrow tone="dark" index="07">
+                Global Footprint
+              </Eyebrow>
+              <h2 className="mt-7 font-display text-[32px] md:text-[44px] lg:text-[52px] font-medium leading-[1.05] tracking-[-0.015em] text-brand-on-dark">
                 Serving organisations across{' '}
-                <span className="text-[#C8A44D]">50+ countries</span> — public
-                and private institutions, since 2003.
+                <span className="italic text-brand-accent-soft">50+ countries</span>{' '}
+                — public and private institutions, since 2003.
               </h2>
-              <p className="mt-6 text-white/55 text-base md:text-lg leading-relaxed">
-                Our delivery teams are structured for international engagements,
+              <p className="mt-7 max-w-xl text-[16.5px] leading-[1.65] text-brand-on-dark-2">
+                Delivery teams structured for international engagements,
                 regulatory complexity, and long-horizon institutional outcomes
                 across these regions.
               </p>
+              <div className="mt-9 flex flex-col sm:flex-row gap-4">
+                <PrimaryCta to="/contact" tone="dark">
+                  Request Consultation
+                </PrimaryCta>
+                <SecondaryCta to="/industries" tone="dark">
+                  View Industries Served
+                </SecondaryCta>
+              </div>
             </div>
 
             <div className="lg:col-span-7">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/[0.06] border border-white/[0.06] rounded-2xl overflow-hidden">
-                {regions.map((region) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 border-t border-l border-white/10">
+                {regions.map((region, idx) => (
                   <div
                     key={region}
-                    className="bg-[#0B1F3A] p-6 flex items-center gap-4"
+                    className="border-r border-b border-white/10 p-6 flex items-baseline gap-4"
                   >
-                    <Globe2 size={16} className="text-[#C8A44D] shrink-0" />
-                    <span className="text-white/80 text-sm tracking-wide">
+                    <span className="font-mono-tab text-[10px] tracking-widest text-brand-accent-soft">
+                      {String(idx + 1).padStart(2, '0')}
+                    </span>
+                    <span className="text-[14.5px] tracking-tight text-brand-on-dark">
                       {region}
                     </span>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-6 grid grid-cols-2 gap-px bg-white/[0.06] border border-white/[0.06] rounded-2xl overflow-hidden">
-                {globalStats.slice(0, 2).map((stat) => (
-                  <div key={stat.label} className="bg-[#0B1F3A] p-6 md:p-8">
-                    <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent leading-none">
-                      {stat.value}
-                    </div>
-                    <div className="mt-2 text-white/55 text-sm tracking-wide">
-                      {stat.label}
-                    </div>
+              <div className="mt-8 grid grid-cols-3 gap-x-8">
+                <div>
+                  <div className="font-display text-[36px] md:text-[44px] font-medium leading-none text-brand-on-dark">
+                    50<span className="text-brand-accent-soft">+</span>
                   </div>
-                ))}
+                  <div className="mt-2 text-[12px] tracking-wide text-brand-on-dark-2 uppercase">
+                    Countries
+                  </div>
+                </div>
+                <div>
+                  <div className="font-display text-[36px] md:text-[44px] font-medium leading-none text-brand-on-dark">
+                    200<span className="text-brand-accent-soft">+</span>
+                  </div>
+                  <div className="mt-2 text-[12px] tracking-wide text-brand-on-dark-2 uppercase">
+                    Professionals
+                  </div>
+                </div>
+                <div>
+                  <div className="font-display text-[36px] md:text-[44px] font-medium leading-none text-brand-on-dark">
+                    20<span className="text-brand-accent-soft">+</span>
+                  </div>
+                  <div className="mt-2 text-[12px] tracking-wide text-brand-on-dark-2 uppercase">
+                    Years
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* ==============================================================
-           9 — Engagement models (replaces partner-logo carousel)
-         ============================================================== */}
-      <section className="py-24 md:py-32 bg-[#0a1a30] border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ============================================================
+           9 — Engagement models (rule grid 2x2)
+         ============================================================ */}
+      <Section tone="paper">
+        <Container>
           <SectionHeader
             eyebrow="Engagement Models"
+            index="08"
             title={
               <>
                 Four ways institutions{' '}
-                <span className="text-[#C8A44D]">engage with us</span>.
+                <span className="italic text-brand-accent">engage with us</span>.
               </>
             }
             intro="From short advisory mandates through multi-year programme delivery, our engagement models scale to the complexity and time horizon of each transformation."
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/[0.06] border border-white/[0.06] rounded-2xl overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2 border-t border-l border-brand-hair">
             {engagementModels.map((model, idx) => (
-              <div key={model.name} className="bg-[#0B1F3A] p-8 md:p-10">
-                <span className="text-[#C8A44D]/70 text-xs font-mono tracking-widest">
+              <div
+                key={model.name}
+                className="border-r border-b border-brand-hair p-8 md:p-10"
+              >
+                <div className="font-mono-tab text-[10px] tracking-widest text-brand-accent mb-5">
                   {String(idx + 1).padStart(2, '0')}
-                </span>
-                <h3 className="mt-3 text-lg font-semibold text-white tracking-tight">
+                </div>
+                <h3 className="font-display text-[22px] md:text-[26px] font-medium tracking-tight text-brand-ink">
                   {model.name}
                 </h3>
-                <p className="mt-3 text-white/55 text-sm leading-relaxed">
+                <p className="mt-3 text-[15.5px] leading-[1.6] text-brand-ink-2 max-w-md">
                   {model.description}
                 </p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* ==============================================================
-           10 — Case capability signal (positioning quote)
-         ============================================================== */}
-      <section className="py-24 md:py-32 border-b border-white/[0.06]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Eyebrow>Practitioner Perspective</Eyebrow>
-          <blockquote className="text-2xl md:text-3xl lg:text-4xl text-white font-semibold leading-[1.25] tracking-tight">
+      {/* ============================================================
+           10 — Practitioner perspective (editorial pull-quote)
+         ============================================================ */}
+      <Section tone="ivory">
+        <Container size="narrow">
+          <Eyebrow index="09">Practitioner Perspective</Eyebrow>
+          <blockquote className="mt-8 font-display text-[28px] md:text-[40px] lg:text-[44px] font-medium leading-[1.18] tracking-[-0.015em] text-brand-ink">
             "Multidisciplinary delivery is not a marketing claim — it's an
             operating choice. We staff every mandate so that strategy,
             engineering, technology, and operations are{' '}
-            <span className="text-[#C8A44D]">in the same room from day one</span>."
+            <span className="italic text-brand-accent">in the same room</span>{' '}
+            from day one."
           </blockquote>
           <div className="mt-10 flex items-center gap-4">
-            <div className="w-10 h-px bg-[#C8A44D]" />
+            <div className="w-10 h-px bg-brand-ink" />
             <div>
-              <div className="text-white font-semibold tracking-tight">
+              <div className="text-[14px] font-medium tracking-tight text-brand-ink">
                 Leadership Team
               </div>
-              <div className="text-white/40 text-sm">
-                Golden Dimensions Ltd — Established 2003
+              <div className="text-[13px] text-brand-mute">
+                Golden Dimensions Ltd · Established 2003
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* ==============================================================
-           11 — Final CTA hierarchy
-         ============================================================== */}
-      <section className="py-24 md:py-32 bg-[#0a1a30]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="border border-white/[0.08] rounded-2xl p-10 md:p-14 bg-gradient-to-br from-white/[0.02] to-transparent">
-            <Eyebrow>Engage With Us</Eyebrow>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-[1.1] tracking-tight max-w-3xl">
-              Bring multidisciplinary capability to your next{' '}
-              <span className="bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent">
-                transformation programme
-              </span>
-              .
-            </h2>
-            <p className="mt-5 max-w-2xl text-white/60 text-lg leading-relaxed">
-              Tell us about the institutional outcome you're working toward —
-              we'll assemble the right combination of strategy, engineering,
-              technology, and operations expertise around it.
-            </p>
-            <div className="mt-9 flex flex-col sm:flex-row sm:items-center gap-4">
-              <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
-              <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
-              <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
-            </div>
+      {/* ============================================================
+           11 — Final CTA
+         ============================================================ */}
+      <Section tone="paper" divided>
+        <Container size="narrow">
+          <Eyebrow index="10">Engage With Us</Eyebrow>
+          <h2 className="mt-8 font-display text-[32px] md:text-[48px] lg:text-[56px] font-medium leading-[1.05] tracking-[-0.015em] text-brand-ink">
+            Bring multidisciplinary capability to your next{' '}
+            <span className="italic text-brand-accent">transformation programme</span>.
+          </h2>
+          <p className="mt-7 max-w-2xl text-[17px] leading-[1.6] text-brand-ink-2">
+            Tell us about the institutional outcome you're working toward —
+            we'll assemble the right combination of strategy, engineering,
+            technology, and operations expertise around it.
+          </p>
+          <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-4">
+            <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+            <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
+            <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
     </div>
   );
 };

@@ -20,48 +20,48 @@ const AdminLogin: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#0B1F3A] min-h-screen pt-24 pb-16 flex items-start justify-center">
+    <div className="bg-brand-ivory min-h-screen pt-24 pb-16 flex items-start justify-center">
       <div className="w-full max-w-md mx-auto px-4 sm:px-6">
         <Link
           to="/"
-          className="inline-flex items-center gap-1 text-white/40 hover:text-[#C8A44D] text-sm mb-6 transition-colors"
+          className="inline-flex items-center gap-1 text-brand-mute hover:text-brand-accent text-sm mb-6 transition-colors"
         >
           <ArrowLeft size={14} /> Back to Site
         </Link>
 
-        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-8">
+        <div className="rounded-2xl border border-brand-hair bg-brand-paper p-8">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2.5 rounded-lg bg-[#C8A44D]/10 text-[#C8A44D]">
+            <div className="p-2.5 rounded-lg bg-brand-accent/10 text-brand-accent">
               <Lock size={20} />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-white">Admin Sign In</h1>
-              <p className="text-white/40 text-sm">Authorized personnel only</p>
+              <h1 className="text-xl font-bold text-brand-ink">Admin Sign In</h1>
+              <p className="text-brand-mute text-sm">Authorized personnel only</p>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-white/60 text-sm mb-1.5">Email</label>
+              <label className="block text-brand-ink-2 text-sm mb-1.5">Email</label>
               <input
                 type="email"
                 required
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white placeholder:text-white/30 focus:outline-none focus:border-[#C8A44D]/50 transition-colors"
+                className="w-full px-4 py-2.5 rounded-lg bg-brand-paper border border-brand-hair text-brand-ink placeholder:text-brand-mute focus:outline-none focus:border-brand-accent/30 transition-colors"
                 placeholder="you@example.com"
               />
             </div>
             <div>
-              <label className="block text-white/60 text-sm mb-1.5">Password</label>
+              <label className="block text-brand-ink-2 text-sm mb-1.5">Password</label>
               <input
                 type="password"
                 required
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white placeholder:text-white/30 focus:outline-none focus:border-[#C8A44D]/50 transition-colors"
+                className="w-full px-4 py-2.5 rounded-lg bg-brand-paper border border-brand-hair text-brand-ink placeholder:text-brand-mute focus:outline-none focus:border-brand-accent/30 transition-colors"
                 placeholder="••••••••"
               />
             </div>
@@ -75,14 +75,14 @@ const AdminLogin: React.FC = () => {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[#C8A44D] text-[#0B1F3A] font-medium hover:bg-[#E8C96D] transition-colors disabled:opacity-60"
+              className="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-brand-accent text-brand-ivory font-medium hover:bg-brand-accent-hover transition-colors disabled:opacity-60"
             >
               {submitting ? <Loader2 size={16} className="animate-spin" /> : null}
               {submitting ? 'Signing in…' : 'Sign In'}
             </button>
           </form>
 
-          <p className="text-white/30 text-xs mt-6">
+          <p className="text-brand-mute text-xs mt-6">
             Create the admin user in your Supabase dashboard under Authentication → Users.
           </p>
         </div>

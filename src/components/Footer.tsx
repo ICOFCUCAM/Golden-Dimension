@@ -12,13 +12,6 @@ import {
 } from 'lucide-react';
 import { pillars, industries } from '@/data/servicesPage';
 
-// =============================================================================
-// Consulting-grade footer information architecture:
-//   1. Engagement CTA banner
-//   2. Capability columns (Capabilities · Industries · Firm · Contact)
-//   3. Global presence + bottom legal bar
-// =============================================================================
-
 const firmLinks = [
   { label: 'About the Firm', path: '/about' },
   { label: 'How We Deliver', path: '/services#methodology' },
@@ -29,60 +22,56 @@ const firmLinks = [
 ];
 
 const Footer: React.FC = () => {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   return (
-    <footer className="bg-[#0B1F3A] relative overflow-hidden border-t border-white/[0.06]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
-        {/* ----------------------------------------------------------------
-             1. Engagement CTA banner
-           ---------------------------------------------------------------- */}
-        <div className="rounded-2xl border border-[#C8A44D]/20 bg-gradient-to-r from-[#C8A44D]/[0.08] via-[#C8A44D]/[0.04] to-transparent p-8 md:p-10 mb-16 md:mb-20">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <div className="max-w-2xl">
-              <span className="block text-[#C8A44D] text-xs font-semibold uppercase tracking-[0.24em] mb-3">
+    <footer className="bg-brand-ink text-brand-on-dark border-t border-white/10">
+      <div className="max-w-[88rem] mx-auto px-6 lg:px-10 pt-20 md:pt-24 pb-12">
+        {/* Engagement banner */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 pb-16 mb-16 border-b border-white/10">
+          <div className="lg:col-span-7">
+            <span className="block text-brand-accent-soft text-[11px] font-medium uppercase tracking-[0.22em] mb-5">
+              <span className="inline-flex items-center gap-3">
+                <span className="block h-px w-6 bg-current opacity-50" />
                 Engage With Us
               </span>
-              <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight leading-tight">
-                Discuss your next transformation with our multidisciplinary
-                team.
-              </h3>
-            </div>
+            </span>
+            <h3 className="font-display text-[28px] md:text-[40px] font-medium leading-[1.08] text-brand-on-dark max-w-2xl">
+              Discuss your next transformation with our multidisciplinary team.
+            </h3>
+          </div>
+          <div className="lg:col-span-5 flex lg:justify-end items-end">
             <Link
               to="/contact"
-              className="shrink-0 inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] text-[#0B1F3A] font-semibold rounded-md hover:shadow-lg hover:shadow-[#C8A44D]/25 transition-all"
+              className="group inline-flex items-center gap-2.5 px-7 py-3.5 bg-brand-on-dark text-brand-ink text-[14px] font-medium tracking-tight hover:bg-white transition-colors"
             >
-              Request Consultation <ArrowUpRight size={16} />
+              Request Consultation
+              <ArrowUpRight size={15} />
             </Link>
           </div>
         </div>
 
-        {/* ----------------------------------------------------------------
-             2. Capability columns
-           ---------------------------------------------------------------- */}
+        {/* Capability columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 mb-16">
-          {/* Brand */}
           <div className="lg:col-span-3">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="w-10 h-10 rounded-md bg-gradient-to-br from-[#C8A44D] to-[#E8C96D] flex items-center justify-center">
-                <span className="text-[#0B1F3A] font-bold text-base">GD</span>
+            <Link to="/" className="inline-flex items-center gap-3">
+              <div className="w-9 h-9 bg-brand-ivory text-brand-ink flex items-center justify-center font-display font-semibold text-[15px]">
+                GD
               </div>
-              <div>
-                <span className="block text-white font-semibold text-base tracking-tight">
+              <div className="leading-none">
+                <span className="block font-display font-medium text-[16px] text-brand-on-dark tracking-tight">
                   Golden Dimensions
                 </span>
-                <span className="block text-[#C8A44D] text-[10px] tracking-[0.24em] uppercase">
+                <span className="block mt-1 text-[10px] tracking-[0.22em] uppercase text-brand-on-dark-2">
                   Ltd · Established 2003
                 </span>
               </div>
-            </div>
-            <p className="text-white/50 text-sm leading-relaxed mb-6 max-w-sm">
+            </Link>
+            <p className="mt-6 max-w-sm text-[14px] leading-[1.6] text-brand-on-dark-2">
               Multidisciplinary consulting and engineering capability for
               institutions, enterprises, and governments worldwide.
             </p>
-            <div className="flex space-x-2">
+            <div className="mt-6 flex gap-2">
               {[
                 { Icon: Linkedin, label: 'LinkedIn' },
                 { Icon: Twitter, label: 'Twitter' },
@@ -93,27 +82,26 @@ const Footer: React.FC = () => {
                   href="#"
                   onClick={(e) => e.preventDefault()}
                   aria-label={label}
-                  className="w-10 h-10 rounded-md bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-white/55 hover:bg-[#C8A44D]/10 hover:text-[#C8A44D] hover:border-[#C8A44D]/30 transition-all"
+                  className="w-9 h-9 border border-white/15 flex items-center justify-center text-brand-on-dark-2 hover:border-brand-accent-soft hover:text-brand-accent-soft transition-colors"
                 >
-                  <Icon size={16} />
+                  <Icon size={15} />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Capabilities */}
           <div className="lg:col-span-3">
-            <h4 className="text-[#C8A44D] font-semibold text-[11px] uppercase tracking-[0.24em] mb-6">
+            <h4 className="text-brand-accent-soft text-[10px] font-medium uppercase tracking-[0.24em] mb-6">
               Capabilities
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-3.5">
               {pillars.map((pillar) => (
                 <li key={pillar.id}>
                   <Link
                     to="/services#pillars"
-                    className="text-white/55 hover:text-[#C8A44D] transition-colors text-sm leading-snug flex items-start gap-2"
+                    className="text-[13.5px] leading-snug text-brand-on-dark-2 hover:text-brand-on-dark transition-colors flex items-start gap-3"
                   >
-                    <span className="text-[#C8A44D]/50 font-mono text-[10px] mt-1">
+                    <span className="font-mono-tab text-[10px] text-brand-accent-soft mt-1 shrink-0">
                       {pillar.index}
                     </span>
                     <span>{pillar.name}</span>
@@ -123,25 +111,24 @@ const Footer: React.FC = () => {
               <li>
                 <Link
                   to="/services"
-                  className="text-[#C8A44D] hover:underline text-xs font-semibold uppercase tracking-[0.18em] inline-flex items-center gap-1"
+                  className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-accent-soft hover:underline inline-flex items-center gap-1.5"
                 >
-                  View all capabilities <ArrowUpRight size={12} />
+                  All capabilities <ArrowUpRight size={11} />
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Industries */}
           <div className="lg:col-span-3">
-            <h4 className="text-[#C8A44D] font-semibold text-[11px] uppercase tracking-[0.24em] mb-6">
+            <h4 className="text-brand-accent-soft text-[10px] font-medium uppercase tracking-[0.24em] mb-6">
               Industries
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-3.5">
               {industries.map((industry) => (
                 <li key={industry.id}>
                   <Link
                     to="/industries"
-                    className="text-white/55 hover:text-[#C8A44D] transition-colors text-sm leading-snug"
+                    className="text-[13.5px] leading-snug text-brand-on-dark-2 hover:text-brand-on-dark transition-colors"
                   >
                     {industry.name}
                   </Link>
@@ -150,18 +137,17 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Firm + Contact (stacked on the right column) */}
           <div className="lg:col-span-3 space-y-10">
             <div>
-              <h4 className="text-[#C8A44D] font-semibold text-[11px] uppercase tracking-[0.24em] mb-6">
+              <h4 className="text-brand-accent-soft text-[10px] font-medium uppercase tracking-[0.24em] mb-6">
                 The Firm
               </h4>
-              <ul className="space-y-3">
+              <ul className="space-y-3.5">
                 {firmLinks.map((link) => (
                   <li key={link.path}>
                     <Link
                       to={link.path}
-                      className="text-white/55 hover:text-[#C8A44D] transition-colors text-sm"
+                      className="text-[13.5px] text-brand-on-dark-2 hover:text-brand-on-dark transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -171,14 +157,14 @@ const Footer: React.FC = () => {
             </div>
 
             <div>
-              <h4 className="text-[#C8A44D] font-semibold text-[11px] uppercase tracking-[0.24em] mb-6">
+              <h4 className="text-brand-accent-soft text-[10px] font-medium uppercase tracking-[0.24em] mb-6">
                 Contact
               </h4>
-              <ul className="space-y-4">
+              <ul className="space-y-3.5">
                 <li>
                   <a
                     href="mailto:admin@golden-dimensions.org"
-                    className="flex items-start gap-3 text-white/55 hover:text-[#C8A44D] transition-colors text-sm"
+                    className="flex items-start gap-3 text-[13.5px] text-brand-on-dark-2 hover:text-brand-on-dark transition-colors"
                   >
                     <Mail size={14} className="mt-0.5 shrink-0" />
                     admin@golden-dimensions.org
@@ -187,14 +173,14 @@ const Footer: React.FC = () => {
                 <li>
                   <a
                     href="tel:+442012345678"
-                    className="flex items-start gap-3 text-white/55 hover:text-[#C8A44D] transition-colors text-sm"
+                    className="flex items-start gap-3 text-[13.5px] text-brand-on-dark-2 hover:text-brand-on-dark transition-colors"
                   >
                     <Phone size={14} className="mt-0.5 shrink-0" />
                     +44 20 1234 5678
                   </a>
                 </li>
                 <li>
-                  <div className="flex items-start gap-3 text-white/55 text-sm">
+                  <div className="flex items-start gap-3 text-[13.5px] text-brand-on-dark-2">
                     <MapPin size={14} className="mt-0.5 shrink-0" />
                     <span>
                       Golden Dimensions Ltd
@@ -208,58 +194,52 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* ----------------------------------------------------------------
-             3. Global presence signals
-           ---------------------------------------------------------------- */}
-        <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 md:p-8 mb-12">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <Globe2 size={18} className="text-[#C8A44D]" />
-              <span className="text-white/70 text-sm tracking-wide">
-                Serving organisations across{' '}
-                <span className="text-white font-semibold">50+ countries</span>{' '}
-                · Public and private sector institutions · Multidisciplinary
-                consulting since 2003
-              </span>
-            </div>
-            <Link
-              to="/about"
-              className="text-[#C8A44D] text-xs font-semibold uppercase tracking-[0.2em] hover:underline inline-flex items-center gap-1 shrink-0"
-            >
-              About the firm <ArrowUpRight size={12} />
-            </Link>
+        {/* Global presence row */}
+        <div className="border-t border-b border-white/10 py-6 mb-10 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <div className="flex items-center gap-3 text-[13px] text-brand-on-dark-2">
+            <Globe2 size={16} className="text-brand-accent-soft" />
+            <span>
+              Serving organisations across{' '}
+              <span className="text-brand-on-dark font-medium">50+ countries</span> ·
+              Public and private sector institutions · Multidisciplinary consulting
+              since 2003
+            </span>
           </div>
+          <Link
+            to="/about"
+            className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-accent-soft hover:underline inline-flex items-center gap-1.5 shrink-0"
+          >
+            About the firm <ArrowUpRight size={11} />
+          </Link>
         </div>
 
-        {/* ----------------------------------------------------------------
-             Bottom legal bar
-           ---------------------------------------------------------------- */}
-        <div className="border-t border-white/[0.06] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-white/40 text-xs tracking-wide">
+        {/* Legal bar */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-brand-on-dark-2 text-[12px] tracking-wide">
             © {new Date().getFullYear()} Golden Dimensions Ltd · Registered in
             the United Kingdom · All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <Link
               to="/legal"
-              className="text-white/40 hover:text-[#C8A44D] text-xs transition-colors"
+              className="text-brand-on-dark-2 hover:text-brand-on-dark text-[12px] transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
               to="/legal"
-              className="text-white/40 hover:text-[#C8A44D] text-xs transition-colors"
+              className="text-brand-on-dark-2 hover:text-brand-on-dark text-[12px] transition-colors"
             >
               Terms of Service
             </Link>
             <button
               onClick={scrollToTop}
-              className="w-9 h-9 rounded-md bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-white/50 hover:bg-[#C8A44D]/10 hover:text-[#C8A44D] hover:border-[#C8A44D]/30 transition-all"
+              className="w-9 h-9 border border-white/15 flex items-center justify-center text-brand-on-dark-2 hover:border-brand-accent-soft hover:text-brand-accent-soft transition-colors"
               aria-label="Scroll to top"
             >
               <svg
-                width="14"
-                height="14"
+                width="13"
+                height="13"
                 viewBox="0 0 16 16"
                 fill="none"
                 stroke="currentColor"

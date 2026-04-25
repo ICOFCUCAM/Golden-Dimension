@@ -1,90 +1,81 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  /* ============================================================
+     Editorial engineering-consulting design system.
+     Light "ivory" primary surface, near-black ink text,
+     restrained deep teal accent, serif display + sans body.
+     HSL values are kept aligned with shadcn's token system so the
+     UI components in components/ui still work correctly.
+     ============================================================ */
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222.2 84% 4.9%;
+    /* Primary surfaces */
+    --background: 38 32% 94%;          /* #F4F1EA  ivory */
+    --foreground: 214 18% 8%;          /* #101317  ink */
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 214 18% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 214 18% 8%;
 
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
+    /* Brand primary = engineering teal */
+    --primary: 178 67% 18%;            /* #0F4C4A */
+    --primary-foreground: 38 32% 94%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 38 24% 90%;           /* slightly warmer ivory */
+    --secondary-foreground: 214 18% 8%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 38 22% 90%;
+    --muted-foreground: 218 6% 45%;    /* #6B7079 */
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 178 30% 92%;             /* very pale teal tint */
+    --accent-foreground: 178 67% 14%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 70% 42%;
+    --destructive-foreground: 38 32% 94%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221 83% 53%;
+    --border: 40 23% 87%;              /* #E4E0D6  hairline */
+    --input: 40 23% 87%;
+    --ring: 178 67% 18%;
 
-    --radius: 0.5rem;
+    --radius: 0.25rem;
 
-    --sidebar-background: 220 23% 95%;
-    --sidebar-foreground: 215 25% 27%;
-    --sidebar-primary: 221 83% 53%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 14% 90%;
-    --sidebar-accent-foreground: 215 25% 27%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 221 83% 53%;
+    /* Sidebar (kept for shadcn components) */
+    --sidebar-background: 38 32% 94%;
+    --sidebar-foreground: 214 18% 8%;
+    --sidebar-primary: 178 67% 18%;
+    --sidebar-primary-foreground: 38 32% 94%;
+    --sidebar-accent: 38 24% 90%;
+    --sidebar-accent-foreground: 214 18% 8%;
+    --sidebar-border: 40 23% 87%;
+    --sidebar-ring: 178 67% 18%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
-
-    --sidebar-background: 215 28% 17%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 217.2 91.2% 59.8%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 25% 27%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 215 25% 27%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --background: 214 18% 8%;
+    --foreground: 38 32% 94%;
+    --card: 214 18% 10%;
+    --card-foreground: 38 32% 94%;
+    --popover: 214 18% 10%;
+    --popover-foreground: 38 32% 94%;
+    --primary: 175 30% 72%;
+    --primary-foreground: 214 18% 8%;
+    --secondary: 214 12% 18%;
+    --secondary-foreground: 38 32% 94%;
+    --muted: 214 12% 18%;
+    --muted-foreground: 218 9% 65%;
+    --accent: 214 12% 18%;
+    --accent-foreground: 38 32% 94%;
+    --destructive: 0 62.8% 38%;
+    --destructive-foreground: 38 32% 94%;
+    --border: 214 12% 18%;
+    --input: 214 12% 18%;
+    --ring: 175 30% 72%;
   }
 }
 
@@ -93,74 +84,89 @@
     @apply border-border;
   }
 
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
   body {
     @apply font-sans;
-    background-color: #0B1F3A;
-    color: #FFFFFF;
+    background-color: #F4F1EA;
+    color: #101317;
+    font-feature-settings: 'ss01', 'cv11';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Editorial display headings use the serif by default. */
+  h1, h2, h3 {
+    font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+    font-feature-settings: 'ss01';
+    letter-spacing: -0.015em;
   }
 
   pre, code {
     @apply font-mono;
   }
+
+  /* Better default selection on light background */
+  ::selection {
+    background-color: #0F4C4A;
+    color: #F4F1EA;
+  }
 }
 
+/* ------------------------------------------------------------
+   Custom utility classes for the new editorial system
+   ------------------------------------------------------------ */
 
-/* Custom animations */
+@layer utilities {
+  /* Editorial display heading — overrides the default serif */
+  .font-display {
+    font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+    font-feature-settings: 'ss01';
+    letter-spacing: -0.015em;
+  }
+
+  .font-mono-tab {
+    font-family: 'JetBrains Mono', monospace;
+    font-feature-settings: 'tnum';
+  }
+
+  /* Hairline rule used across editorial layouts */
+  .rule-hair {
+    background-color: #E4E0D6;
+  }
+}
+
+/* ------------------------------------------------------------
+   Scrollbar
+   ------------------------------------------------------------ */
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #F4F1EA; }
+::-webkit-scrollbar-thumb { background: #C9C3B3; border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: #0F4C4A; }
+
+/* ------------------------------------------------------------
+   Animations (kept minimal)
+   ------------------------------------------------------------ */
+
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-  animation: fade-in 0.8s ease-out forwards;
+  animation: fade-in 0.6s ease-out forwards;
 }
 
-.animate-fade-in-up {
-  animation: fade-in-up 1s ease-out forwards;
-}
+html { scroll-behavior: smooth; }
 
-.animate-shimmer {
-  background: linear-gradient(90deg, transparent, rgba(200, 164, 77, 0.1), transparent);
-  background-size: 200% 100%;
-  animation: shimmer 3s infinite;
-}
+/* ------------------------------------------------------------
+   Line clamp utilities (kept; used in some legacy components)
+   ------------------------------------------------------------ */
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0B1F3A;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #C8A44D40;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #C8A44D80;
-}
-
-/* Line clamp utility */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -175,32 +181,21 @@ html {
   overflow: hidden;
 }
 
-.markdown-editor {
-  @apply font-mono text-base leading-relaxed;
-}
+/* ------------------------------------------------------------
+   Markdown editor / preview (legacy — left intact)
+   ------------------------------------------------------------ */
 
-.markdown-preview {
-  @apply prose max-w-none prose-blue dark:prose-invert;
-}
-
-.markdown-preview pre {
-  @apply bg-secondary p-4 rounded-md overflow-x-auto;
-}
-
-.markdown-preview code {
-  @apply text-sm font-mono text-primary;
-}
-
+.markdown-editor { @apply font-mono text-base leading-relaxed; }
+.markdown-preview { @apply prose max-w-none; }
+.markdown-preview pre { @apply bg-secondary p-4 rounded-md overflow-x-auto; }
+.markdown-preview code { @apply text-sm font-mono text-primary; }
 .markdown-preview h1,
 .markdown-preview h2,
 .markdown-preview h3,
 .markdown-preview h4,
 .markdown-preview h5,
 .markdown-preview h6 {
-  @apply font-sans font-semibold text-foreground;
+  @apply font-display font-semibold text-foreground;
 }
-
 .markdown-preview ul,
-.markdown-preview ol {
-  @apply my-4 ml-6;
-}
+.markdown-preview ol { @apply my-4 ml-6; }
