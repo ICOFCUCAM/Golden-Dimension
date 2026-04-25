@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import {
-  Eyebrow,
+  TechnicalLabel,
   SectionHeader,
   PrimaryCta,
   SecondaryCta,
@@ -18,23 +18,22 @@ const IndustriesPage: React.FC = () => {
   return (
     <div>
       {/* Hero */}
-      <section className="bg-brand-ivory pt-[120px] md:pt-[140px] pb-20 md:pb-28">
+      <section className="bg-brand-ivory pt-[140px] md:pt-[160px] pb-20 md:pb-28 border-b border-brand-hair">
         <Container size="wide">
-          <Eyebrow index="01">Industries</Eyebrow>
-          <h1 className="mt-7 font-display text-[40px] sm:text-[52px] md:text-[64px] lg:text-[76px] font-medium leading-[0.98] tracking-[-0.02em] text-brand-ink max-w-5xl">
+          <TechnicalLabel index="01">Industries</TechnicalLabel>
+          <h1 className="mt-8 font-display text-[40px] sm:text-[52px] md:text-[64px] lg:text-[76px] font-semibold leading-[0.98] tracking-[-0.03em] text-brand-ink max-w-5xl">
             Multidisciplinary capability,{' '}
-            <span className="italic text-brand-accent">
+            <span className="font-editorial italic font-medium text-brand-accent">
               applied across regulated sectors
-            </span>
-            .
+            </span>.
           </h1>
-          <p className="mt-8 max-w-3xl text-[18px] md:text-[20px] leading-[1.55] text-brand-ink-2">
+          <p className="mt-8 max-w-3xl text-[17px] md:text-[19px] leading-[1.55] text-brand-ink-2">
             We assemble the right combination of strategy, engineering,
             technology, and human-capital expertise around each sector's
             operating reality — supporting public and private institutions
             through complex transformation programmes.
           </p>
-          <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-3">
             <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
             <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
             <TertiaryCta to="#sectors">Jump to Sectors</TertiaryCta>
@@ -42,8 +41,8 @@ const IndustriesPage: React.FC = () => {
         </Container>
       </section>
 
-      {/* Sector narratives — alternating editorial blocks */}
-      <Section tone="paper" divided id="sectors">
+      {/* Sector narratives */}
+      <Section tone="paper" id="sectors">
         <Container>
           <SectionHeader
             eyebrow="Sectors We Serve"
@@ -51,48 +50,39 @@ const IndustriesPage: React.FC = () => {
             title={
               <>
                 Six regulated sectors where{' '}
-                <span className="italic text-brand-accent">
+                <span className="font-editorial italic font-medium text-brand-accent">
                   multidisciplinary capability
                 </span>{' '}
                 drives outcomes.
               </>
             }
-            intro="Each engagement is staffed from across our pillars — so financial, engineering, technology, and operations specialists deliver as a single team."
+            intro="Each engagement is staffed from across our pillars — financial, engineering, technology, and operations specialists deliver as a single team."
           />
 
-          <div>
+          <div className="border-t border-brand-hair-strong">
             {industries.map((industry, idx) => (
               <article
                 key={industry.id}
-                className={`grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 py-14 md:py-20 ${
-                  idx > 0 ? 'border-t border-brand-hair' : ''
-                }`}
+                className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 py-14 md:py-20 border-b border-brand-hair"
               >
-                <div
-                  className={`lg:col-span-5 ${
-                    idx % 2 === 1 ? 'lg:col-start-8 lg:row-start-1' : ''
-                  }`}
-                >
-                  <div className="font-mono-tab text-[11px] tracking-widest text-brand-mute mb-6">
-                    {String(idx + 1).padStart(2, '0')} / SECTOR
-                  </div>
-                  <h2 className="font-display text-[28px] md:text-[40px] lg:text-[44px] font-medium leading-[1.05] tracking-[-0.015em] text-brand-ink">
+                <div className="lg:col-span-1 label-technical text-brand-accent">
+                  S.{String(idx + 1).padStart(2, '0')}
+                </div>
+
+                <div className="lg:col-span-4">
+                  <h2 className="font-display text-[26px] md:text-[36px] lg:text-[42px] font-semibold leading-[1.05] tracking-[-0.025em] text-brand-ink">
                     {industry.name}
                   </h2>
                 </div>
 
-                <div
-                  className={`lg:col-span-7 ${
-                    idx % 2 === 1 ? 'lg:col-start-1 lg:row-start-1' : ''
-                  }`}
-                >
-                  <p className="text-[17px] md:text-[18px] leading-[1.65] text-brand-ink-2">
+                <div className="lg:col-span-7">
+                  <p className="text-[16px] md:text-[17px] leading-[1.65] text-brand-ink-2 max-w-2xl">
                     {industry.summary}
                   </p>
 
                   <div className="mt-8">
-                    <span className="block text-brand-accent text-[10px] font-medium uppercase tracking-[0.24em] mb-4">
-                      Capability Pillars Engaged
+                    <span className="block label-technical text-brand-mute mb-4">
+                      <span className="text-brand-accent">→</span> Capability pillars engaged
                     </span>
                     <div className="flex flex-wrap gap-2">
                       {industry.pillars.map((pid) => {
@@ -117,13 +107,10 @@ const IndustriesPage: React.FC = () => {
                   <div className="mt-8">
                     <Link
                       to="/contact"
-                      className="group inline-flex items-center gap-2 text-[14px] font-medium tracking-tight text-brand-ink border-b border-brand-ink pb-1 hover:text-brand-accent hover:border-brand-accent transition-colors"
+                      className="group inline-flex items-center gap-2 text-[13px] font-medium tracking-[-0.01em] text-brand-ink border-b border-brand-ink pb-1 hover:text-brand-accent hover:border-brand-accent transition-colors"
                     >
                       Discuss a {industry.name.toLowerCase()} engagement
-                      <ArrowRight
-                        size={14}
-                        className="group-hover:translate-x-0.5 transition-transform"
-                      />
+                      <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
                     </Link>
                   </div>
                 </div>
@@ -133,19 +120,19 @@ const IndustriesPage: React.FC = () => {
         </Container>
       </Section>
 
-      {/* Cross-sector capability framework */}
+      {/* Cross-sector capability */}
       <Section tone="ivory">
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             <div className="lg:col-span-5">
-              <Eyebrow index="03">Cross-Sector Capability</Eyebrow>
-              <h2 className="mt-7 font-display text-[28px] md:text-[40px] lg:text-[44px] font-medium leading-[1.05] tracking-[-0.015em] text-brand-ink">
-                One firm. Five capability pillars.{' '}
-                <span className="italic text-brand-accent">
+              <TechnicalLabel index="03">Cross-Sector Capability</TechnicalLabel>
+              <h2 className="mt-8 font-display text-[28px] md:text-[40px] lg:text-[44px] font-semibold leading-[1.05] tracking-[-0.025em] text-brand-ink">
+                One firm. Five pillars.{' '}
+                <span className="font-editorial italic font-medium text-brand-accent">
                   Engaged differently per sector.
                 </span>
               </h2>
-              <p className="mt-7 max-w-xl text-[16.5px] leading-[1.65] text-brand-ink-2">
+              <p className="mt-7 max-w-xl text-[15.5px] leading-[1.65] text-brand-ink-2">
                 Our pillars converge differently for each industry — combining
                 the engineering, technology, financial, and human-capital
                 capabilities most relevant to that sector's operating reality.
@@ -153,31 +140,28 @@ const IndustriesPage: React.FC = () => {
               <div className="mt-9">
                 <Link
                   to="/services"
-                  className="group inline-flex items-center gap-2 text-[14px] font-medium tracking-tight text-brand-ink border-b border-brand-ink pb-1 hover:text-brand-accent hover:border-brand-accent transition-colors"
+                  className="group inline-flex items-center gap-2 text-[13px] font-medium tracking-[-0.01em] text-brand-ink border-b border-brand-ink pb-1 hover:text-brand-accent hover:border-brand-accent transition-colors"
                 >
-                  Explore the full Capability Model
-                  <ArrowRight
-                    size={14}
-                    className="group-hover:translate-x-0.5 transition-transform"
-                  />
+                  Open the full Capability Model
+                  <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </div>
             </div>
 
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 border-t border-l border-brand-hair">
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 border-t border-l border-brand-hair-strong">
               {pillars.map((pillar) => (
                 <Link
                   key={pillar.id}
                   to="/services#pillars"
-                  className="group border-r border-b border-brand-hair p-7 bg-brand-paper hover:bg-brand-stone transition-colors"
+                  className="group border-r border-b border-brand-hair-strong p-7 bg-brand-paper hover:bg-brand-stone transition-colors"
                 >
-                  <span className="font-mono-tab text-[10px] tracking-widest text-brand-accent">
+                  <span className="label-technical text-brand-accent">
                     {pillar.index}
                   </span>
-                  <h3 className="mt-3 font-display text-[18px] md:text-[20px] font-medium tracking-tight text-brand-ink">
+                  <h3 className="mt-3 font-display text-[18px] md:text-[19px] font-semibold tracking-[-0.025em] text-brand-ink">
                     {pillar.name}
                   </h3>
-                  <p className="mt-2 text-[13.5px] leading-[1.6] text-brand-ink-2 line-clamp-2">
+                  <p className="mt-2 text-[12.5px] leading-[1.6] text-brand-ink-2 line-clamp-2">
                     {pillar.tagline}
                   </p>
                   <ArrowUpRight
@@ -194,28 +178,21 @@ const IndustriesPage: React.FC = () => {
       {/* Final CTA */}
       <Section tone="ink">
         <Container size="narrow">
-          <Eyebrow tone="dark" index="04">
-            Engage With Us
-          </Eyebrow>
-          <h2 className="mt-8 font-display text-[32px] md:text-[48px] lg:text-[56px] font-medium leading-[1.05] tracking-[-0.015em] text-brand-on-dark">
+          <TechnicalLabel index="04" tone="dark">Engage With Us</TechnicalLabel>
+          <h2 className="mt-8 font-display text-[32px] md:text-[48px] lg:text-[56px] font-semibold leading-[1.04] tracking-[-0.03em] text-brand-on-dark">
             Discuss a sector-specific{' '}
-            <span className="italic text-brand-accent-soft">
+            <span className="font-editorial italic font-medium text-brand-accent-soft">
               transformation programme
-            </span>
-            .
+            </span>.
           </h2>
-          <p className="mt-7 max-w-2xl text-[17px] leading-[1.65] text-brand-on-dark-2">
+          <p className="mt-7 max-w-2xl text-[16px] leading-[1.65] text-brand-on-dark-2">
             We'll assemble the right combination of strategy, engineering,
             technology, and operations expertise around the institutional
             outcome you're working toward.
           </p>
-          <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-4">
-            <PrimaryCta to="/contact" tone="dark">
-              Request Consultation
-            </PrimaryCta>
-            <SecondaryCta to="/services" tone="dark">
-              Explore Capabilities
-            </SecondaryCta>
+          <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-3">
+            <PrimaryCta to="/contact" tone="dark">Request Consultation</PrimaryCta>
+            <SecondaryCta to="/services" tone="dark">Explore Capabilities</SecondaryCta>
           </div>
         </Container>
       </Section>

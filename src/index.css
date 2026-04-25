@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,76 +6,75 @@
 
 @layer base {
   /* ============================================================
-     Editorial engineering-consulting design system.
-     Light "ivory" primary surface, near-black ink text,
-     restrained deep teal accent, serif display + sans body.
-     HSL values are kept aligned with shadcn's token system so the
-     UI components in components/ui still work correctly.
+     Infrastructure Platform Consulting — design system v3.
+     Off-white canvas, near-black ink, single rust signal accent.
+     Typography: Plus Jakarta Sans (display + UI), IBM Plex Serif
+     (selective editorial moments), JetBrains Mono (technical labels
+     and numerals).
+     HSL tokens kept aligned with shadcn so library components in
+     components/ui still render coherently.
      ============================================================ */
   :root {
-    /* Primary surfaces */
-    --background: 38 32% 94%;          /* #F4F1EA  ivory */
-    --foreground: 214 18% 8%;          /* #101317  ink */
+    --background: 60 19% 97%;            /* #FAFAF7 canvas */
+    --foreground: 240 6% 5%;             /* #0A0A0B ink */
 
     --card: 0 0% 100%;
-    --card-foreground: 214 18% 8%;
+    --card-foreground: 240 6% 5%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 214 18% 8%;
+    --popover-foreground: 240 6% 5%;
 
-    /* Brand primary = engineering teal */
-    --primary: 178 67% 18%;            /* #0F4C4A */
-    --primary-foreground: 38 32% 94%;
+    --primary: 18 80% 42%;               /* #C24914 signal */
+    --primary-foreground: 60 19% 97%;
 
-    --secondary: 38 24% 90%;           /* slightly warmer ivory */
-    --secondary-foreground: 214 18% 8%;
+    --secondary: 50 17% 92%;             /* #EFEDE7 recess */
+    --secondary-foreground: 240 6% 5%;
 
-    --muted: 38 22% 90%;
-    --muted-foreground: 218 6% 45%;    /* #6B7079 */
+    --muted: 50 17% 92%;
+    --muted-foreground: 222 4% 47%;      /* #74757B */
 
-    --accent: 178 30% 92%;             /* very pale teal tint */
-    --accent-foreground: 178 67% 14%;
+    --accent: 18 88% 96%;                /* #F8E7DD pale wash */
+    --accent-foreground: 18 80% 32%;
 
     --destructive: 0 70% 42%;
-    --destructive-foreground: 38 32% 94%;
+    --destructive-foreground: 60 19% 97%;
 
-    --border: 40 23% 87%;              /* #E4E0D6  hairline */
-    --input: 40 23% 87%;
-    --ring: 178 67% 18%;
+    --border: 47 15% 86%;                /* #E2E0DA hairline */
+    --input: 47 15% 86%;
+    --ring: 18 80% 42%;
 
-    --radius: 0.25rem;
+    --radius: 0;                          /* sharp corners by default */
 
-    /* Sidebar (kept for shadcn components) */
-    --sidebar-background: 38 32% 94%;
-    --sidebar-foreground: 214 18% 8%;
-    --sidebar-primary: 178 67% 18%;
-    --sidebar-primary-foreground: 38 32% 94%;
-    --sidebar-accent: 38 24% 90%;
-    --sidebar-accent-foreground: 214 18% 8%;
-    --sidebar-border: 40 23% 87%;
-    --sidebar-ring: 178 67% 18%;
+    --sidebar-background: 60 19% 97%;
+    --sidebar-foreground: 240 6% 5%;
+    --sidebar-primary: 18 80% 42%;
+    --sidebar-primary-foreground: 60 19% 97%;
+    --sidebar-accent: 50 17% 92%;
+    --sidebar-accent-foreground: 240 6% 5%;
+    --sidebar-border: 47 15% 86%;
+    --sidebar-ring: 18 80% 42%;
   }
 
   .dark {
-    --background: 214 18% 8%;
-    --foreground: 38 32% 94%;
-    --card: 214 18% 10%;
-    --card-foreground: 38 32% 94%;
-    --popover: 214 18% 10%;
-    --popover-foreground: 38 32% 94%;
-    --primary: 175 30% 72%;
-    --primary-foreground: 214 18% 8%;
-    --secondary: 214 12% 18%;
-    --secondary-foreground: 38 32% 94%;
-    --muted: 214 12% 18%;
-    --muted-foreground: 218 9% 65%;
-    --accent: 214 12% 18%;
-    --accent-foreground: 38 32% 94%;
+    --background: 240 6% 5%;
+    --foreground: 60 19% 97%;
+    --card: 240 6% 8%;
+    --card-foreground: 60 19% 97%;
+    --popover: 240 6% 8%;
+    --popover-foreground: 60 19% 97%;
+    --primary: 18 78% 58%;
+    --primary-foreground: 240 6% 5%;
+    --secondary: 240 5% 14%;
+    --secondary-foreground: 60 19% 97%;
+    --muted: 240 5% 14%;
+    --muted-foreground: 222 6% 65%;
+    --accent: 240 5% 14%;
+    --accent-foreground: 60 19% 97%;
     --destructive: 0 62.8% 38%;
-    --destructive-foreground: 38 32% 94%;
-    --border: 214 12% 18%;
-    --input: 214 12% 18%;
-    --ring: 175 30% 72%;
+    --destructive-foreground: 60 19% 97%;
+    --border: 240 5% 14%;
+    --input: 240 5% 14%;
+    --ring: 18 78% 58%;
   }
 }
 
@@ -87,55 +86,60 @@
   html {
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
   }
 
   body {
-    @apply font-sans;
-    background-color: #F4F1EA;
-    color: #101317;
-    font-feature-settings: 'ss01', 'cv11';
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background-color: #FAFAF7;
+    color: #0A0A0B;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-variant-ligatures: contextual;
   }
 
-  /* Editorial display headings use the serif by default. */
+  /* Display headings default to Plus Jakarta Sans (tight, modern).
+     Selective .font-editorial class opts into IBM Plex Serif for
+     the few editorial moments where serif weight is desired. */
   h1, h2, h3 {
-    font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
-    font-feature-settings: 'ss01';
-    letter-spacing: -0.015em;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    letter-spacing: -0.025em;
+    font-weight: 600;
   }
 
   pre, code {
-    @apply font-mono;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
   }
 
-  /* Better default selection on light background */
   ::selection {
-    background-color: #0F4C4A;
-    color: #F4F1EA;
+    background-color: #0A0A0B;
+    color: #FAFAF7;
   }
 }
 
-/* ------------------------------------------------------------
-   Custom utility classes for the new editorial system
-   ------------------------------------------------------------ */
-
 @layer utilities {
-  /* Editorial display heading — overrides the default serif */
-  .font-display {
-    font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+  /* IBM Plex Serif used for editorial pull-quotes and selective
+     accent phrases. Italic Plex Serif paired with the rust signal
+     reads as institutional + engineered. */
+  .font-editorial {
+    font-family: 'IBM Plex Serif', Georgia, serif;
+    letter-spacing: -0.01em;
     font-feature-settings: 'ss01';
-    letter-spacing: -0.015em;
   }
 
   .font-mono-tab {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
     font-feature-settings: 'tnum';
   }
 
-  /* Hairline rule used across editorial layouts */
-  .rule-hair {
-    background-color: #E4E0D6;
+  /* Technical micro-label — used for section markers like §01 / SECTOR */
+  .label-technical {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
   }
 }
 
@@ -144,27 +148,27 @@
    ------------------------------------------------------------ */
 
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: #F4F1EA; }
-::-webkit-scrollbar-thumb { background: #C9C3B3; border-radius: 0; }
-::-webkit-scrollbar-thumb:hover { background: #0F4C4A; }
+::-webkit-scrollbar-track { background: #FAFAF7; }
+::-webkit-scrollbar-thumb { background: #BCB8AB; border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: #0A0A0B; }
 
 /* ------------------------------------------------------------
    Animations (kept minimal)
    ------------------------------------------------------------ */
 
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-  animation: fade-in 0.6s ease-out forwards;
+  animation: fade-in 0.5s ease-out forwards;
 }
 
 html { scroll-behavior: smooth; }
 
 /* ------------------------------------------------------------
-   Line clamp utilities (kept; used in some legacy components)
+   Line clamp utilities
    ------------------------------------------------------------ */
 
 .line-clamp-2 {
@@ -182,7 +186,7 @@ html { scroll-behavior: smooth; }
 }
 
 /* ------------------------------------------------------------
-   Markdown editor / preview (legacy — left intact)
+   Markdown editor / preview (legacy, untouched)
    ------------------------------------------------------------ */
 
 .markdown-editor { @apply font-mono text-base leading-relaxed; }
@@ -195,7 +199,9 @@ html { scroll-behavior: smooth; }
 .markdown-preview h4,
 .markdown-preview h5,
 .markdown-preview h6 {
-  @apply font-display font-semibold text-foreground;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 .markdown-preview ul,
 .markdown-preview ol { @apply my-4 ml-6; }

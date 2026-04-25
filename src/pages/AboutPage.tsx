@@ -2,13 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import {
-  Eyebrow,
+  TechnicalLabel,
   SectionHeader,
   PrimaryCta,
   SecondaryCta,
   TertiaryCta,
   Container,
   Section,
+  Metric,
 } from '@/components/section-primitives';
 import { globalStats } from '@/data/servicesPage';
 
@@ -59,43 +60,27 @@ const leadershipCommitments = [
 ];
 
 const values = [
-  {
-    title: 'Excellence',
-    desc: 'We hold every deliverable to a standard that reflects the institutional weight of the engagement.',
-  },
-  {
-    title: 'Integrity',
-    desc: 'We operate transparently and decline work where independence or quality would be compromised.',
-  },
-  {
-    title: 'Innovation',
-    desc: 'We pair rigorous analysis with practical engineering to bring novel solutions to bear on hard problems.',
-  },
-  {
-    title: 'Collaboration',
-    desc: 'We work as one firm — across disciplines, geographies, and with client teams as joint operators.',
-  },
-  {
-    title: 'Sustainability',
-    desc: 'We deliver outcomes that are durable for the institution, the community, and the environment.',
-  },
+  { title: 'Excellence',     desc: 'We hold every deliverable to a standard that reflects the institutional weight of the engagement.' },
+  { title: 'Integrity',      desc: 'We operate transparently and decline work where independence or quality would be compromised.' },
+  { title: 'Innovation',     desc: 'We pair rigorous analysis with practical engineering to bring novel solutions to bear on hard problems.' },
+  { title: 'Collaboration',  desc: 'We work as one firm — across disciplines, geographies, and with client teams as joint operators.' },
+  { title: 'Sustainability', desc: 'We deliver outcomes that are durable for the institution, the community, and the environment.' },
 ];
 
 const AboutPage: React.FC = () => {
   return (
     <div>
       {/* Hero */}
-      <section className="bg-brand-ivory pt-[120px] md:pt-[140px] pb-20 md:pb-28">
+      <section className="bg-brand-ivory pt-[140px] md:pt-[160px] pb-20 md:pb-28 border-b border-brand-hair">
         <Container size="wide">
-          <Eyebrow index="01">About the Firm</Eyebrow>
-          <h1 className="mt-7 font-display text-[40px] sm:text-[52px] md:text-[64px] lg:text-[76px] font-medium leading-[0.98] tracking-[-0.02em] text-brand-ink max-w-5xl">
+          <TechnicalLabel index="01">About the Firm</TechnicalLabel>
+          <h1 className="mt-8 font-display text-[40px] sm:text-[52px] md:text-[64px] lg:text-[76px] font-semibold leading-[0.98] tracking-[-0.03em] text-brand-ink max-w-5xl">
             A multidisciplinary consulting and engineering firm built for{' '}
-            <span className="italic text-brand-accent">
+            <span className="font-editorial italic font-medium text-brand-accent">
               institutional transformation
-            </span>
-            .
+            </span>.
           </h1>
-          <p className="mt-8 max-w-3xl text-[18px] md:text-[20px] leading-[1.55] text-brand-ink-2">
+          <p className="mt-8 max-w-3xl text-[17px] md:text-[19px] leading-[1.55] text-brand-ink-2">
             Founded in 2003, Golden Dimensions Ltd unites finance, engineering,
             technology, healthcare, education, sustainability, and strategic
             consulting under one governance and quality framework — supporting
@@ -105,28 +90,18 @@ const AboutPage: React.FC = () => {
       </section>
 
       {/* Scale indicators */}
-      <section className="bg-brand-ivory border-t border-brand-hair">
+      <section className="bg-brand-ivory border-b border-brand-hair">
         <Container size="wide">
           <div className="py-14 md:py-20 grid grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
             {globalStats.map((stat) => (
-              <div key={stat.label}>
-                <div className="font-display text-[44px] md:text-[56px] font-medium leading-none text-brand-ink tracking-tight">
-                  {stat.value.replace('+', '')}
-                  {stat.value.includes('+') && (
-                    <span className="text-brand-accent">+</span>
-                  )}
-                </div>
-                <div className="mt-3 text-[13px] tracking-wide text-brand-mute">
-                  {stat.label}
-                </div>
-              </div>
+              <Metric key={stat.label} value={stat.value} label={stat.label} />
             ))}
           </div>
         </Container>
       </section>
 
       {/* Mission & Vision */}
-      <Section tone="paper" divided>
+      <Section tone="paper">
         <Container>
           <SectionHeader
             eyebrow="Mission & Vision"
@@ -134,34 +109,30 @@ const AboutPage: React.FC = () => {
             title={
               <>
                 What we exist to do, and where we{' '}
-                <span className="italic text-brand-accent">intend to lead</span>.
+                <span className="font-editorial italic font-medium text-brand-accent">intend to lead</span>.
               </>
             }
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 border-t border-l border-brand-hair">
-            <div className="border-r border-b border-brand-hair p-10 md:p-12">
-              <div className="font-mono-tab text-[10px] tracking-widest text-brand-accent mb-6">
-                MISSION
-              </div>
-              <h3 className="font-display text-[24px] md:text-[28px] font-medium tracking-tight text-brand-ink leading-tight">
+          <div className="grid grid-cols-1 md:grid-cols-2 border-t border-l border-brand-hair-strong">
+            <div className="border-r border-b border-brand-hair-strong p-10 md:p-12 bg-brand-paper">
+              <div className="label-technical text-brand-accent mb-6">M.01 · MISSION</div>
+              <h3 className="font-display text-[22px] md:text-[26px] font-semibold tracking-[-0.025em] text-brand-ink leading-tight">
                 Materially improve how institutions operate.
               </h3>
-              <p className="mt-5 text-[16px] leading-[1.65] text-brand-ink-2">
+              <p className="mt-5 text-[15px] leading-[1.65] text-brand-ink-2">
                 To deliver multidisciplinary consulting and engineering
                 capability that materially improves how institutions operate —
                 combining strategic insight, engineering rigour, and technology
                 delivery into outcomes our clients can stand behind.
               </p>
             </div>
-            <div className="border-r border-b border-brand-hair p-10 md:p-12">
-              <div className="font-mono-tab text-[10px] tracking-widest text-brand-accent mb-6">
-                VISION
-              </div>
-              <h3 className="font-display text-[24px] md:text-[28px] font-medium tracking-tight text-brand-ink leading-tight">
+            <div className="border-r border-b border-brand-hair-strong p-10 md:p-12 bg-brand-paper">
+              <div className="label-technical text-brand-accent mb-6">V.01 · VISION</div>
+              <h3 className="font-display text-[22px] md:text-[26px] font-semibold tracking-[-0.025em] text-brand-ink leading-tight">
                 The multidisciplinary firm of choice for complex transformation.
               </h3>
-              <p className="mt-5 text-[16px] leading-[1.65] text-brand-ink-2">
+              <p className="mt-5 text-[15px] leading-[1.65] text-brand-ink-2">
                 To be the multidisciplinary firm of choice for institutions
                 undertaking complex, regulated transformation — recognised for
                 the breadth of our capability, the integrity of our delivery,
@@ -173,19 +144,19 @@ const AboutPage: React.FC = () => {
       </Section>
 
       {/* Collaboration model */}
-      <Section tone="ivory">
+      <Section tone="ivory" divided>
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             <div className="lg:col-span-5">
-              <Eyebrow index="03">Collaboration Model</Eyebrow>
-              <h2 className="mt-7 font-display text-[28px] md:text-[40px] lg:text-[44px] font-medium leading-[1.05] tracking-[-0.015em] text-brand-ink">
+              <TechnicalLabel index="03">Collaboration Model</TechnicalLabel>
+              <h2 className="mt-8 font-display text-[28px] md:text-[40px] lg:text-[44px] font-semibold leading-[1.05] tracking-[-0.025em] text-brand-ink">
                 One firm.{' '}
-                <span className="italic text-brand-accent">
+                <span className="font-editorial italic font-medium text-brand-accent">
                   One accountable team
                 </span>{' '}
                 per engagement.
               </h2>
-              <p className="mt-7 max-w-xl text-[16.5px] leading-[1.65] text-brand-ink-2">
+              <p className="mt-7 max-w-xl text-[15.5px] leading-[1.65] text-brand-ink-2">
                 We do not subcontract delivery to a federation of independent
                 specialists. Strategy, engineering, technology, and operations
                 are staffed jointly from day one, under one accountable lead
@@ -194,30 +165,27 @@ const AboutPage: React.FC = () => {
               <div className="mt-9">
                 <Link
                   to="/services"
-                  className="group inline-flex items-center gap-2 text-[14px] font-medium tracking-tight text-brand-ink border-b border-brand-ink pb-1 hover:text-brand-accent hover:border-brand-accent transition-colors"
+                  className="group inline-flex items-center gap-2 text-[13px] font-medium tracking-[-0.01em] text-brand-ink border-b border-brand-ink pb-1 hover:text-brand-accent hover:border-brand-accent transition-colors"
                 >
                   See our capability pillars
-                  <ArrowRight
-                    size={14}
-                    className="group-hover:translate-x-0.5 transition-transform"
-                  />
+                  <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </div>
             </div>
 
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 border-t border-l border-brand-hair">
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 border-t border-l border-brand-hair-strong">
               {collaborationModel.map((item, idx) => (
                 <div
                   key={item.name}
-                  className="border-r border-b border-brand-hair p-7 bg-brand-paper"
+                  className="border-r border-b border-brand-hair-strong p-7 bg-brand-paper"
                 >
-                  <span className="font-mono-tab text-[10px] tracking-widest text-brand-accent">
-                    {String(idx + 1).padStart(2, '0')}
+                  <span className="label-technical text-brand-accent">
+                    C.{String(idx + 1).padStart(2, '0')}
                   </span>
-                  <h3 className="mt-3 font-display text-[18px] md:text-[20px] font-medium tracking-tight text-brand-ink">
+                  <h3 className="mt-3 font-display text-[17px] md:text-[18px] font-semibold tracking-[-0.02em] text-brand-ink">
                     {item.name}
                   </h3>
-                  <p className="mt-2 text-[14px] leading-[1.6] text-brand-ink-2">
+                  <p className="mt-2 text-[13.5px] leading-[1.6] text-brand-ink-2">
                     {item.description}
                   </p>
                 </div>
@@ -228,7 +196,7 @@ const AboutPage: React.FC = () => {
       </Section>
 
       {/* Leadership commitments */}
-      <Section tone="paper" divided>
+      <Section tone="paper">
         <Container>
           <SectionHeader
             eyebrow="Leadership Commitments"
@@ -236,10 +204,9 @@ const AboutPage: React.FC = () => {
             title={
               <>
                 The standards our leadership{' '}
-                <span className="italic text-brand-accent">
+                <span className="font-editorial italic font-medium text-brand-accent">
                   holds the firm to
-                </span>
-                .
+                </span>.
               </>
             }
             intro="Beyond service delivery, our leadership team commits to a small set of institutional standards that govern how we engage."
@@ -247,17 +214,14 @@ const AboutPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-t border-l border-brand-hair">
             {leadershipCommitments.map((item, idx) => (
-              <div
-                key={item.name}
-                className="border-r border-b border-brand-hair p-7 md:p-8"
-              >
-                <div className="font-mono-tab text-[10px] tracking-widest text-brand-accent mb-5">
-                  {String(idx + 1).padStart(2, '0')}
+              <div key={item.name} className="border-r border-b border-brand-hair p-7 md:p-8 bg-brand-paper">
+                <div className="label-technical text-brand-accent mb-5">
+                  P.{String(idx + 1).padStart(2, '0')}
                 </div>
-                <h3 className="font-display text-[18px] md:text-[20px] font-medium tracking-tight text-brand-ink">
+                <h3 className="font-display text-[17px] md:text-[18px] font-semibold tracking-[-0.02em] text-brand-ink">
                   {item.name}
                 </h3>
-                <p className="mt-3 text-[14px] leading-[1.6] text-brand-ink-2">
+                <p className="mt-3 text-[13.5px] leading-[1.6] text-brand-ink-2">
                   {item.description}
                 </p>
               </div>
@@ -266,48 +230,37 @@ const AboutPage: React.FC = () => {
         </Container>
       </Section>
 
-      {/* Story */}
+      {/* Story (dark band) */}
       <Section tone="ink">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            <div className="lg:col-span-5 order-2 lg:order-1">
-              <div className="aspect-[4/5] overflow-hidden">
-                <img
-                  src="https://d64gsuwffb70l.cloudfront.net/69ad7b9650a26a8c1a6eecd1_1772977411881_74b98593.jpg"
-                  alt="International team collaboration"
-                  className="w-full h-full object-cover grayscale-[20%]"
-                />
-              </div>
-            </div>
-            <div className="lg:col-span-7 order-1 lg:order-2">
-              <Eyebrow tone="dark" index="05">
-                Our Story
-              </Eyebrow>
-              <h2 className="mt-7 font-display text-[32px] md:text-[44px] lg:text-[52px] font-medium leading-[1.05] tracking-[-0.015em] text-brand-on-dark">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            <div className="lg:col-span-5">
+              <TechnicalLabel index="05" tone="dark">Our Story</TechnicalLabel>
+              <h2 className="mt-8 font-display text-[28px] md:text-[40px] lg:text-[48px] font-semibold leading-[1.05] tracking-[-0.025em] text-brand-on-dark">
                 Two decades of multidisciplinary practice.
               </h2>
-              <div className="mt-7 space-y-4 text-[16.5px] leading-[1.65] text-brand-on-dark-2 max-w-2xl">
-                <p>
-                  Golden Dimensions Ltd was founded in 2003 to address a gap
-                  that had become structural in professional services:
-                  institutions facing complex transformation needed strategy,
-                  engineering, and technology delivered as a single capability,
-                  not as separate vendor tracks.
-                </p>
-                <p>
-                  Twenty years on, that thesis is the firm's operating model.
-                  Today we deploy more than 200 multidisciplinary professionals
-                  across over 50 countries, supporting both public and private
-                  sector institutions through complex, regulated programmes.
-                </p>
-              </div>
+            </div>
+            <div className="lg:col-span-7 space-y-4 text-[15.5px] md:text-[16.5px] leading-[1.65] text-brand-on-dark-2 max-w-2xl">
+              <p>
+                Golden Dimensions Ltd was founded in 2003 to address a gap that
+                had become structural in professional services: institutions
+                facing complex transformation needed strategy, engineering, and
+                technology delivered as a single capability, not as separate
+                vendor tracks.
+              </p>
+              <p>
+                Twenty years on, that thesis is the firm's operating model.
+                Today we deploy more than 200 multidisciplinary professionals
+                across over 50 countries, supporting both public and private
+                sector institutions through complex, regulated programmes.
+              </p>
             </div>
           </div>
         </Container>
       </Section>
 
-      {/* Core values */}
-      <Section tone="paper" divided>
+      {/* Values */}
+      <Section tone="paper">
         <Container>
           <SectionHeader
             eyebrow="Core Values"
@@ -315,24 +268,21 @@ const AboutPage: React.FC = () => {
             title={
               <>
                 Five principles that guide every{' '}
-                <span className="italic text-brand-accent">engagement</span>.
+                <span className="font-editorial italic font-medium text-brand-accent">engagement</span>.
               </>
             }
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 border-t border-l border-brand-hair">
             {values.map((value, idx) => (
-              <div
-                key={value.title}
-                className="border-r border-b border-brand-hair p-7"
-              >
-                <div className="font-mono-tab text-[10px] tracking-widest text-brand-accent mb-5">
-                  {String(idx + 1).padStart(2, '0')}
+              <div key={value.title} className="border-r border-b border-brand-hair p-7">
+                <div className="label-technical text-brand-accent mb-5">
+                  V.{String(idx + 1).padStart(2, '0')}
                 </div>
-                <h3 className="font-display text-[18px] font-medium tracking-tight text-brand-ink">
+                <h3 className="font-display text-[17px] font-semibold tracking-[-0.02em] text-brand-ink">
                   {value.title}
                 </h3>
-                <p className="mt-2 text-[13.5px] leading-[1.6] text-brand-ink-2">
+                <p className="mt-2 text-[13px] leading-[1.6] text-brand-ink-2">
                   {value.desc}
                 </p>
               </div>
@@ -344,12 +294,12 @@ const AboutPage: React.FC = () => {
       {/* CTA */}
       <Section tone="ivory">
         <Container size="narrow">
-          <Eyebrow index="07">Engage With Us</Eyebrow>
-          <h2 className="mt-8 font-display text-[32px] md:text-[48px] lg:text-[56px] font-medium leading-[1.05] tracking-[-0.015em] text-brand-ink">
+          <TechnicalLabel index="07">Engage With Us</TechnicalLabel>
+          <h2 className="mt-8 font-display text-[32px] md:text-[48px] lg:text-[56px] font-semibold leading-[1.04] tracking-[-0.03em] text-brand-ink">
             Discuss how multidisciplinary delivery applies to your{' '}
-            <span className="italic text-brand-accent">next mandate</span>.
+            <span className="font-editorial italic font-medium text-brand-accent">next mandate</span>.
           </h2>
-          <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-3">
             <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
             <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
             <TertiaryCta to="/industries">View Industries Served</TertiaryCta>

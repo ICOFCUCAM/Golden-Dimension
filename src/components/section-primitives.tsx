@@ -3,51 +3,52 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 
 // =============================================================================
-// Editorial engineering-consulting design system primitives.
-// Convention: light surface by default; pass `tone="dark"` on dark ink bands.
+// Infrastructure Platform Consulting — section primitives (v3).
+// Sans-only display, mono technical labels, sharp corners, ink-on-ivory.
 // =============================================================================
 
 type Tone = 'light' | 'dark';
 
-const toneText: Record<Tone, { eyebrow: string; heading: string; body: string }> = {
-  light: {
-    eyebrow: 'text-brand-accent',
-    heading: 'text-brand-ink',
-    body: 'text-brand-ink-2',
-  },
-  dark: {
-    eyebrow: 'text-brand-accent-soft',
-    heading: 'text-brand-on-dark',
-    body: 'text-brand-on-dark-2',
-  },
+const toneInk: Record<Tone, { eyebrow: string; heading: string; body: string }> = {
+  light: { eyebrow: 'text-brand-mute',     heading: 'text-brand-ink',     body: 'text-brand-ink-2' },
+  dark:  { eyebrow: 'text-brand-on-dark-2', heading: 'text-brand-on-dark', body: 'text-brand-on-dark-2' },
 };
 
 // -----------------------------------------------------------------------------
-// Eyebrow — small caps label preceding section headings.
+// TechnicalLabel — Palantir-style §-numbered section marker.
+// Renders "§ 01 / CAPABILITIES" or just "§ 01" with mono spacing.
 // -----------------------------------------------------------------------------
-export const Eyebrow: React.FC<{
+export const TechnicalLabel: React.FC<{
+  index?: string;
   children: React.ReactNode;
   tone?: Tone;
-  index?: string;
   className?: string;
-}> = ({ children, tone = 'light', index, className = '' }) => (
-  <span
-    className={`inline-flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.22em] ${toneText[tone].eyebrow} ${className}`}
-  >
+}> = ({ index, children, tone = 'light', className = '' }) => (
+  <div className={`flex items-center gap-3 ${className}`}>
+    <span className="block h-px w-8 bg-brand-accent" aria-hidden />
     {index && (
-      <span className="font-mono-tab text-[10px] tracking-widest opacity-70">
-        {index}
+      <span className={`label-technical text-brand-accent`}>
+        § {index}
       </span>
     )}
-    <span className="inline-flex items-center gap-3">
-      <span className="block h-px w-6 bg-current opacity-50" aria-hidden />
+    <span className={`label-technical ${toneInk[tone].eyebrow}`}>
       {children}
     </span>
-  </span>
+  </div>
 );
 
+// Backwards-compat alias kept so existing imports of `Eyebrow` keep working.
+export const Eyebrow: React.FC<{
+  children: React.ReactNode;
+  index?: string;
+  tone?: Tone;
+  className?: string;
+}> = (props) => <TechnicalLabel {...props} />;
+
 // -----------------------------------------------------------------------------
-// SectionHeader — eyebrow + serif display heading + optional intro.
+// SectionHeader — sans display heading. Italic Plex Serif accent
+// available via `<span className="font-editorial italic text-brand-accent">`
+// inside the title node.
 // -----------------------------------------------------------------------------
 interface SectionHeaderProps {
   eyebrow: string;
@@ -73,20 +74,16 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   <div
     className={`${maxWidth === 'narrow' ? 'max-w-3xl' : 'max-w-5xl'} ${
       align === 'center' ? 'mx-auto text-center' : ''
-    } mb-14 md:mb-20 ${className}`}
+    } mb-12 md:mb-16 ${className}`}
   >
-    <div className="mb-6">
-      <Eyebrow tone={tone} index={index}>
-        {eyebrow}
-      </Eyebrow>
-    </div>
+    <TechnicalLabel index={index} tone={tone}>{eyebrow}</TechnicalLabel>
     <h2
-      className={`font-display text-[28px] sm:text-[36px] md:text-[44px] lg:text-[52px] font-medium leading-[1.08] ${toneText[tone].heading}`}
+      className={`mt-7 font-display text-[28px] sm:text-[34px] md:text-[42px] lg:text-[48px] font-semibold leading-[1.05] tracking-[-0.025em] ${toneInk[tone].heading}`}
     >
       {title}
     </h2>
     {intro && (
-      <p className={`mt-6 text-[17px] md:text-[19px] leading-[1.55] ${toneText[tone].body}`}>
+      <p className={`mt-6 text-[16px] md:text-[17px] leading-[1.6] ${toneInk[tone].body} max-w-2xl`}>
         {intro}
       </p>
     )}
@@ -105,49 +102,34 @@ interface CtaProps {
 }
 
 const baseBtn =
-  'group inline-flex items-center gap-2.5 px-6 py-3.5 text-[14px] font-medium tracking-tight transition-colors whitespace-nowrap';
+  'group inline-flex items-center gap-2.5 px-5 py-3 text-[13px] font-medium tracking-tight transition-colors whitespace-nowrap';
 
 const isAnchor = (to: string) => to.startsWith('#');
-
 const renderLink = (to: string, className: string, children: React.ReactNode) =>
   isAnchor(to) ? (
-    <a href={to} className={className}>
-      {children}
-    </a>
+    <a href={to} className={className}>{children}</a>
   ) : (
-    <Link to={to} className={className}>
-      {children}
-    </Link>
+    <Link to={to} className={className}>{children}</Link>
   );
 
-// Primary — solid ink (or accent on dark) rectangle with arrow.
-export const PrimaryCta: React.FC<CtaProps> = ({
-  to,
-  children,
-  className = '',
-  tone = 'light',
-}) => {
+// Primary — solid ink rectangle with corner-tick visual signature.
+export const PrimaryCta: React.FC<CtaProps> = ({ to, children, className = '', tone = 'light' }) => {
   const cls =
     tone === 'dark'
-      ? `${baseBtn} bg-brand-on-dark text-brand-ink hover:bg-white ${className}`
+      ? `${baseBtn} bg-brand-on-dark text-brand-ink hover:bg-brand-accent-soft hover:text-brand-ink ${className}`
       : `${baseBtn} bg-brand-ink text-brand-ivory hover:bg-brand-accent ${className}`;
   return renderLink(
     to,
     cls,
     <>
       {children}
-      <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
+      <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
     </>,
   );
 };
 
 // Secondary — bordered ghost.
-export const SecondaryCta: React.FC<CtaProps> = ({
-  to,
-  children,
-  className = '',
-  tone = 'light',
-}) => {
+export const SecondaryCta: React.FC<CtaProps> = ({ to, children, className = '', tone = 'light' }) => {
   const cls =
     tone === 'dark'
       ? `${baseBtn} border border-white/25 text-brand-on-dark hover:border-brand-accent-soft hover:text-brand-accent-soft ${className}`
@@ -155,17 +137,12 @@ export const SecondaryCta: React.FC<CtaProps> = ({
   return renderLink(to, cls, children);
 };
 
-// Tertiary — text link with underline-on-hover.
-export const TertiaryCta: React.FC<CtaProps> = ({
-  to,
-  children,
-  className = '',
-  tone = 'light',
-}) => {
+// Tertiary — text link with mono indicator + arrow.
+export const TertiaryCta: React.FC<CtaProps> = ({ to, children, className = '', tone = 'light' }) => {
   const cls =
     tone === 'dark'
       ? `group inline-flex items-center gap-1.5 text-[13px] font-medium border-b border-transparent hover:border-brand-accent-soft text-brand-on-dark-2 hover:text-brand-accent-soft transition-colors ${className}`
-      : `group inline-flex items-center gap-1.5 text-[13px] font-medium border-b border-transparent hover:border-brand-ink text-brand-ink-2 hover:text-brand-ink transition-colors ${className}`;
+      : `group inline-flex items-center gap-1.5 text-[13px] font-medium border-b border-transparent hover:border-brand-accent text-brand-ink-2 hover:text-brand-accent transition-colors ${className}`;
   return renderLink(
     to,
     cls,
@@ -176,28 +153,19 @@ export const TertiaryCta: React.FC<CtaProps> = ({
   );
 };
 
-// -----------------------------------------------------------------------------
-// CtaCluster — primary / secondary / tertiary in standard order.
-// -----------------------------------------------------------------------------
 export const CtaCluster: React.FC<{ tone?: Tone; className?: string }> = ({
   tone = 'light',
   className = '',
 }) => (
-  <div className={`flex flex-col sm:flex-row sm:items-center gap-4 ${className}`}>
-    <PrimaryCta to="/contact" tone={tone}>
-      Request Consultation
-    </PrimaryCta>
-    <SecondaryCta to="/services" tone={tone}>
-      Explore Capabilities
-    </SecondaryCta>
-    <TertiaryCta to="/industries" tone={tone}>
-      View Industries Served
-    </TertiaryCta>
+  <div className={`flex flex-col sm:flex-row sm:items-center gap-3 ${className}`}>
+    <PrimaryCta to="/contact" tone={tone}>Request Consultation</PrimaryCta>
+    <SecondaryCta to="/services" tone={tone}>Explore Capabilities</SecondaryCta>
+    <TertiaryCta to="/industries" tone={tone}>View Industries Served</TertiaryCta>
   </div>
 );
 
 // =============================================================================
-// Container — consistent max width + horizontal padding across the site.
+// Container & Section
 // =============================================================================
 export const Container: React.FC<{
   children: React.ReactNode;
@@ -209,46 +177,101 @@ export const Container: React.FC<{
   return <div className={`${max} mx-auto px-6 lg:px-10 ${className}`}>{children}</div>;
 };
 
-// =============================================================================
-// Section — handles tone, padding, and the shared rhythm. The default
-// vertical rhythm is py-24 / md:py-32 with hairline tops on light sections,
-// and dark sections use bg-brand-ink with no top hairline.
-// =============================================================================
 export const Section: React.FC<{
   children: React.ReactNode;
   tone?: 'ivory' | 'paper' | 'stone' | 'ink';
   id?: string;
   className?: string;
-  divided?: boolean; // hairline at top
+  divided?: boolean;
 }> = ({ children, tone = 'ivory', id, className = '', divided = false }) => {
   const toneCls = {
     ivory: 'bg-brand-ivory text-brand-ink',
     paper: 'bg-brand-paper text-brand-ink',
     stone: 'bg-brand-stone text-brand-ink',
-    ink: 'bg-brand-ink text-brand-on-dark',
+    ink:   'bg-brand-ink text-brand-on-dark',
   }[tone];
-
   return (
     <section
       id={id}
       className={`${toneCls} ${divided ? 'border-t border-brand-hair' : ''} ${className}`}
     >
-      <div className="py-20 md:py-28 lg:py-32">{children}</div>
+      <div className="py-20 md:py-24 lg:py-32">{children}</div>
     </section>
   );
 };
 
 // =============================================================================
-// HairRule — horizontal hairline used to divide content blocks.
+// DiagramFrame — bordered scaffolding wrapper used for diagrammatic blocks.
+// Emits a single hairline frame with corner tick marks (Palantir-coded).
+// =============================================================================
+export const DiagramFrame: React.FC<{
+  children: React.ReactNode;
+  label?: string;
+  index?: string;
+  tone?: Tone;
+  className?: string;
+}> = ({ children, label, index, tone = 'light', className = '' }) => {
+  const borderCls = tone === 'dark' ? 'border-white/15' : 'border-brand-hair-strong';
+  const tickCls = tone === 'dark' ? 'border-brand-accent-soft' : 'border-brand-accent';
+  const labelCls = tone === 'dark' ? 'text-brand-on-dark-2 bg-brand-ink' : 'text-brand-mute bg-brand-ivory';
+  return (
+    <div className={`relative border ${borderCls} ${className}`}>
+      {/* Corner tick marks */}
+      <span className={`absolute -top-px -left-px w-3 h-3 border-t-2 border-l-2 ${tickCls}`} aria-hidden />
+      <span className={`absolute -top-px -right-px w-3 h-3 border-t-2 border-r-2 ${tickCls}`} aria-hidden />
+      <span className={`absolute -bottom-px -left-px w-3 h-3 border-b-2 border-l-2 ${tickCls}`} aria-hidden />
+      <span className={`absolute -bottom-px -right-px w-3 h-3 border-b-2 border-r-2 ${tickCls}`} aria-hidden />
+      {label && (
+        <div className={`absolute -top-2.5 left-6 ${labelCls} px-2`}>
+          <span className="label-technical">
+            {index && <span className="text-brand-accent mr-2">§ {index}</span>}
+            {label}
+          </span>
+        </div>
+      )}
+      {children}
+    </div>
+  );
+};
+
+// =============================================================================
+// Metric — large numeral + mono label, used in stat bands and footprint.
+// =============================================================================
+export const Metric: React.FC<{
+  value: string;
+  label: string;
+  tone?: Tone;
+  size?: 'md' | 'lg';
+}> = ({ value, label, tone = 'light', size = 'md' }) => {
+  const numeric = value.replace(/[^0-9.]/g, '');
+  const suffix  = value.replace(numeric, '');
+  const big = size === 'lg' ? 'text-[56px] md:text-[72px]' : 'text-[40px] md:text-[52px]';
+  return (
+    <div>
+      <div className={`font-display ${big} font-semibold leading-none tracking-[-0.03em] ${
+        tone === 'dark' ? 'text-brand-on-dark' : 'text-brand-ink'
+      }`}>
+        {numeric}
+        <span className={tone === 'dark' ? 'text-brand-accent-soft' : 'text-brand-accent'}>
+          {suffix || ''}
+        </span>
+      </div>
+      <div className={`mt-3 label-technical ${tone === 'dark' ? 'text-brand-on-dark-2' : 'text-brand-mute'}`}>
+        {label}
+      </div>
+    </div>
+  );
+};
+
+// =============================================================================
+// HairRule
 // =============================================================================
 export const HairRule: React.FC<{ tone?: Tone; className?: string }> = ({
   tone = 'light',
   className = '',
 }) => (
   <div
-    className={`h-px ${
-      tone === 'dark' ? 'bg-white/10' : 'bg-brand-hair'
-    } ${className}`}
+    className={`h-px ${tone === 'dark' ? 'bg-white/10' : 'bg-brand-hair'} ${className}`}
     aria-hidden
   />
 );

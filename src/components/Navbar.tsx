@@ -30,27 +30,40 @@ const Navbar: React.FC = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-200 ${
         scrolled
           ? 'bg-brand-ivory/95 backdrop-blur-md border-b border-brand-hair'
           : 'bg-brand-ivory border-b border-transparent'
       }`}
     >
+      {/* Slim technical bar above the navbar */}
+      <div className="border-b border-brand-hair">
+        <div className="max-w-[88rem] mx-auto px-6 lg:px-10 h-7 flex items-center justify-between">
+          <span className="label-technical text-brand-mute">
+            <span className="text-brand-accent">EST.</span> 2003 / GLOBAL · MULTIDISCIPLINARY
+          </span>
+          <span className="hidden md:inline label-technical text-brand-mute">
+            EN · GMT+0
+          </span>
+        </div>
+      </div>
+
       <div className="max-w-[88rem] mx-auto px-6 lg:px-10">
-        <div className="flex items-center justify-between h-[72px]">
+        <div className="flex items-center justify-between h-[68px]">
           {/* Logo / Wordmark */}
           <Link to="/" className="flex items-center gap-3 group shrink-0">
-            <div className="w-9 h-9 bg-brand-ink flex items-center justify-center">
-              <span className="text-brand-ivory font-display font-semibold text-[15px]">
+            <div className="relative w-9 h-9 bg-brand-ink flex items-center justify-center">
+              <span className="absolute inset-1 border border-brand-accent" aria-hidden />
+              <span className="relative text-brand-ivory font-display font-semibold text-[12px] tracking-[0.05em]">
                 GD
               </span>
             </div>
             <div className="hidden sm:block leading-none">
-              <span className="block text-brand-ink font-display font-medium text-[17px] tracking-tight group-hover:text-brand-accent transition-colors">
+              <span className="block text-brand-ink font-display font-semibold text-[16px] tracking-[-0.02em] group-hover:text-brand-accent transition-colors">
                 Golden Dimensions
               </span>
-              <span className="block mt-1 text-brand-mute text-[10px] tracking-[0.22em] uppercase">
-                Established 2003
+              <span className="block mt-1.5 label-technical text-brand-mute">
+                LTD · Multidisciplinary Consulting
               </span>
             </div>
           </Link>
@@ -65,15 +78,13 @@ const Navbar: React.FC = () => {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`px-3.5 py-2 text-[13.5px] font-medium tracking-tight transition-colors relative ${
-                    active
-                      ? 'text-brand-ink'
-                      : 'text-brand-ink-2 hover:text-brand-ink'
+                  className={`px-3.5 py-2 text-[13px] font-medium tracking-[-0.01em] transition-colors relative ${
+                    active ? 'text-brand-ink' : 'text-brand-ink-2 hover:text-brand-ink'
                   }`}
                 >
                   {link.label}
                   <span
-                    className={`absolute left-3.5 right-3.5 -bottom-[26px] h-px bg-brand-ink transition-opacity ${
+                    className={`absolute left-3.5 right-3.5 -bottom-[24px] h-px bg-brand-accent transition-opacity ${
                       active ? 'opacity-100' : 'opacity-0'
                     }`}
                   />
@@ -82,10 +93,10 @@ const Navbar: React.FC = () => {
             })}
             <Link
               to="/contact"
-              className="ml-4 inline-flex items-center gap-2 px-5 py-2.5 bg-brand-ink text-brand-ivory text-[13px] font-medium tracking-tight hover:bg-brand-accent transition-colors"
+              className="ml-4 group inline-flex items-center gap-2 px-5 py-2.5 bg-brand-ink text-brand-ivory text-[13px] font-medium tracking-[-0.01em] hover:bg-brand-accent transition-colors"
             >
               Request Consultation
-              <ArrowRight size={14} />
+              <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
 
@@ -106,24 +117,29 @@ const Navbar: React.FC = () => {
           isOpen ? 'max-h-[640px] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <div className="bg-brand-paper border-t border-brand-hair px-6 py-6 space-y-1">
-          {navLinks.map((link) => {
-            const active = location.pathname === link.path;
-            return (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`block px-2 py-3 text-[15px] font-medium tracking-tight border-b border-brand-hair last:border-0 transition-colors ${
-                  active ? 'text-brand-ink' : 'text-brand-ink-2 hover:text-brand-ink'
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
+        <div className="bg-brand-paper border-t border-brand-hair px-6 py-6">
+          <div className="space-y-1">
+            {navLinks.map((link, idx) => {
+              const active = location.pathname === link.path;
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`flex items-center gap-4 py-3 text-[15px] font-medium tracking-[-0.01em] border-b border-brand-hair last:border-0 transition-colors ${
+                    active ? 'text-brand-ink' : 'text-brand-ink-2 hover:text-brand-ink'
+                  }`}
+                >
+                  <span className="label-technical text-brand-accent w-8">
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+                  {link.label}
+                </Link>
+              );
+            })}
+          </div>
           <Link
             to="/contact"
-            className="mt-4 inline-flex items-center justify-center gap-2 w-full px-5 py-3 bg-brand-ink text-brand-ivory text-[14px] font-medium hover:bg-brand-accent transition-colors"
+            className="mt-6 inline-flex items-center justify-center gap-2 w-full px-5 py-3 bg-brand-ink text-brand-ivory text-[14px] font-medium hover:bg-brand-accent transition-colors"
           >
             Request Consultation
             <ArrowRight size={14} />
