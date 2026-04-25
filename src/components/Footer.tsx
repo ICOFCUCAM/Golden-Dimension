@@ -4,12 +4,14 @@ import { ArrowUpRight, Linkedin, Twitter, Facebook } from 'lucide-react';
 import { pillars, industries } from '@/data/servicesPage';
 
 const firmLinks = [
-  { label: 'About the Firm',     path: '/about' },
-  { label: 'How We Deliver',     path: '/services#methodology' },
-  { label: 'Insights',           path: '/news' },
-  { label: 'Legal Advisory',     path: '/legal' },
-  { label: 'Transport Logistics',path: '/transport' },
-  { label: 'Contact',            path: '/contact' },
+  { label: 'About the Firm',       path: '/about' },
+  { label: 'Leadership Doctrine',  path: '/leadership' },
+  { label: 'Delivery Methodology', path: '/methodology' },
+  { label: 'Engagement Models',    path: '/engagement-models' },
+  { label: 'Insights',             path: '/news' },
+  { label: 'Legal Advisory',       path: '/legal' },
+  { label: 'Transport Logistics',  path: '/transport' },
+  { label: 'Contact',              path: '/contact' },
 ];
 
 const Footer: React.FC = () => {

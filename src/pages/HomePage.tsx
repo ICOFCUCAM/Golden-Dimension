@@ -519,6 +519,16 @@ const HomePage: React.FC = () => {
               ))}
             </div>
           </div>
+
+          <div className="mt-10">
+            <Link
+              to="/methodology"
+              className="group inline-flex items-center gap-2.5 text-[13px] font-medium tracking-[-0.01em] text-brand-ink border-b border-brand-ink hover:text-brand-accent hover:border-brand-accent transition-colors pb-1"
+            >
+              Open the methodology in detail
+              <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          </div>
         </Container>
       </Section>
 
@@ -642,11 +652,20 @@ const HomePage: React.FC = () => {
             ))}
           </div>
 
-          <div className="mt-6 flex items-center gap-3">
-            <span className="block h-px w-8 bg-brand-accent" aria-hidden />
-            <p className="label-technical text-brand-mute">
-              Engagements can begin at any phase — and combine across phases as the programme matures.
-            </p>
+          <div className="mt-6 flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-3">
+              <span className="block h-px w-8 bg-brand-accent" aria-hidden />
+              <p className="label-technical text-brand-mute">
+                Engagements can begin at any phase — and combine across phases as the programme matures.
+              </p>
+            </div>
+            <Link
+              to="/engagement-models"
+              className="group inline-flex items-center gap-2 text-[13px] font-medium tracking-[-0.01em] text-brand-ink border-b border-brand-ink hover:text-brand-accent hover:border-brand-accent transition-colors pb-1"
+            >
+              Open the engagement models in detail
+              <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+            </Link>
           </div>
         </Container>
       </Section>
@@ -682,6 +701,16 @@ const HomePage: React.FC = () => {
               <div className="label-technical text-brand-mute mt-1">
                 Golden Dimensions Ltd · EST. 2003
               </div>
+            </div>
+
+            <div className="mt-10">
+              <Link
+                to="/leadership"
+                className="group inline-flex items-center gap-2 text-[13px] font-medium tracking-[-0.01em] text-brand-ink border-b border-brand-ink hover:text-brand-accent hover:border-brand-accent transition-colors pb-1"
+              >
+                Read the leadership doctrine
+                <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+              </Link>
             </div>
           </div>
         </Container>
