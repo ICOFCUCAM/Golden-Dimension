@@ -8,6 +8,7 @@ import ServicesPage from '@/pages/ServicesPage';
 import ServiceDetailPage from '@/pages/ServiceDetailPage';
 import IndustriesPage from '@/pages/IndustriesPage';
 import SectorPage from '@/pages/SectorPage';
+import InsightDetailPage from '@/pages/InsightDetailPage';
 import TransportPage from '@/pages/TransportPage';
 import MethodologyPage from '@/pages/MethodologyPage';
 import EngagementModelsPage from '@/pages/EngagementModelsPage';
@@ -39,6 +40,7 @@ const AppLayout: React.FC = () => {
     if (path === '/leadership') return <LeadershipPage />;
     if (path === '/transport') return <TransportPage />;
     if (path === '/news') return <NewsPage />;
+    if (path.startsWith('/news/')) return <InsightDetailPage />;
     if (path === '/legal') return <LegalPage />;
     if (path === '/contact') return <ContactPage />;
     if (path === '/admin') return <AdminPage />;
