@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ArrowRight } from 'lucide-react';
+import { Menu, X, ArrowRight, Search } from 'lucide-react';
+import { SiteSearch } from '@/components/SiteSearch';
 
 const navLinks = [
   { label: 'Home', path: '/' },
@@ -15,6 +16,7 @@ const navLinks = [
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
@@ -26,7 +28,21 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     setIsOpen(false);
+    setSearchOpen(false);
   }, [location]);
+
+  // ⌘K / Ctrl+K toggles the site search palette.
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setSearchOpen((prev) => !prev);
+      }
+      if (e.key === 'Escape') setSearchOpen(false);
+    };
+    document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, []);
 
   return (
     <nav
@@ -70,7 +86,7 @@ const Navbar: React.FC = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden xl:flex items-center">
+            <div className="hidden xl:flex items-center" role="navigation" aria-label="Primary">
               {navLinks.map((link) => {
                 const active =
                   location.pathname === link.path ||
@@ -79,6 +95,7 @@ const Navbar: React.FC = () => {
                   <Link
                     key={link.path}
                     to={link.path}
+                    aria-current={active ? 'page' : undefined}
                     className={`px-3.5 py-2 text-[13px] font-medium tracking-[-0.01em] transition-colors relative ${
                       active ? 'text-brand-ink' : 'text-brand-ink-2 hover:text-brand-ink'
                     }`}
@@ -92,9 +109,20 @@ const Navbar: React.FC = () => {
                   </Link>
                 );
               })}
+              <button
+                type="button"
+                onClick={() => setSearchOpen(true)}
+                aria-label="Open site search"
+                className="ml-2 group inline-flex items-center gap-2 px-3 py-2 text-brand-ink-2 hover:text-brand-ink text-[13px] font-medium tracking-[-0.01em] border border-transparent hover:border-brand-hair-strong transition-colors"
+              >
+                <Search size={14} />
+                <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1 py-px border border-brand-hair-strong text-[10px] font-mono-tab text-brand-mute">
+                  ⌘K
+                </kbd>
+              </button>
               <Link
                 to="/contact"
-                className="ml-4 group inline-flex items-center gap-2 px-5 py-2.5 bg-brand-ink text-brand-ivory text-[13px] font-medium tracking-[-0.01em] hover:bg-brand-accent transition-colors"
+                className="ml-2 group inline-flex items-center gap-2 px-5 py-2.5 bg-brand-ink text-brand-ivory text-[13px] font-medium tracking-[-0.01em] hover:bg-brand-accent transition-colors"
               >
                 Request Consultation
                 <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
@@ -148,6 +176,9 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
       </div>
+
+      {/* Site search palette (⌘K / Ctrl+K) */}
+      <SiteSearch open={searchOpen} onOpenChange={setSearchOpen} />
     </nav>
   );
 };

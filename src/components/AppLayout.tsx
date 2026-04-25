@@ -49,8 +49,15 @@ const AppLayout: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-brand-ivory text-brand-ink">
+      {/* Skip link — visible only on keyboard focus, jumps past navigation. */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2 focus:bg-brand-ink focus:text-brand-ivory focus:text-[13px] focus:font-medium"
+      >
+        Skip to main content
+      </a>
       {!isAdmin && <Navbar />}
-      <main>{renderPage()}</main>
+      <main id="main-content">{renderPage()}</main>
       {!isAdmin && <Footer />}
     </div>
   );

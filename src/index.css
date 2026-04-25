@@ -115,6 +115,25 @@
     background-color: #1F1F1F;
     color: #F7F5F2;
   }
+
+  /* Visible focus ring for keyboard users — defaults are too subtle.
+     Mouse focus stays clean via :focus-visible. */
+  :focus-visible {
+    outline: 2px solid #B4532A;
+    outline-offset: 2px;
+  }
+
+  /* Reduce motion when the user prefers it */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 @layer utilities {

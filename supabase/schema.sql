@@ -68,3 +68,22 @@ drop policy if exists "anon select contact_messages" on public.contact_messages;
 drop policy if exists "anon update contact_messages" on public.contact_messages;
 drop policy if exists "anon select shipment_requests" on public.shipment_requests;
 drop policy if exists "anon update shipment_requests" on public.shipment_requests;
+
+-- =========================================================================
+-- Newsletter subscribers (Capability Brief signup in footer)
+-- =========================================================================
+create table if not exists public.subscribers (
+  id uuid primary key default gen_random_uuid(),
+  email text not null unique,
+  subscribed_at timestamptz not null default now()
+);
+
+alter table public.subscribers enable row level security;
+
+drop policy if exists "anon insert subscribers" on public.subscribers;
+create policy "anon insert subscribers"
+  on public.subscribers for insert to anon with check (true);
+
+drop policy if exists "auth select subscribers" on public.subscribers;
+create policy "auth select subscribers"
+  on public.subscribers for select to authenticated using (true);

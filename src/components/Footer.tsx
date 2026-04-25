@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Linkedin, Twitter, Facebook } from 'lucide-react';
 import { pillars, industries } from '@/data/servicesPage';
+import NewsletterSignup from '@/components/NewsletterSignup';
 
 const firmLinks = [
   { label: 'About the Firm',       path: '/about' },
@@ -168,6 +169,13 @@ const Footer: React.FC = () => {
                 </li>
               </ul>
             </div>
+          </div>
+        </div>
+
+        {/* Newsletter signup */}
+        <div className="border-t border-white/10 py-10 mb-10">
+          <div className="max-w-2xl">
+            <NewsletterSignup />
           </div>
         </div>
 
