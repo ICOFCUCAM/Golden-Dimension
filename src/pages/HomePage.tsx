@@ -40,18 +40,22 @@ const CountMetric: React.FC<{
 const engagementModels = [
   {
     name: 'Advisory',
+    appliesWhen: 'Framing the case',
     description: 'Short-form expert engagements that frame strategy, decisions, and business cases.',
   },
   {
     name: 'Programme Delivery',
+    appliesWhen: 'Executing the programme',
     description: 'Multidisciplinary teams executing major transformations end to end.',
   },
   {
     name: 'Managed Services',
+    appliesWhen: 'Running the system',
     description: 'Long-term operation of systems, networks, and back-office functions.',
   },
   {
-    name: 'Capability Build',
+    name: 'Capability Transfer',
+    appliesWhen: 'Handing over to client teams',
     description: 'Embedded teams that transfer skills and operating models to client organisations.',
   },
 ];
@@ -98,22 +102,50 @@ const HomePage: React.FC = () => {
             </div>
 
             <div className="lg:col-span-4 flex flex-col justify-end">
-              <DiagramFrame label="Operating Posture" index="OP" className="bg-brand-paper">
+              <DiagramFrame label="Operating System" index="OP" className="bg-brand-paper">
                 <div className="p-7">
-                  <ul className="space-y-4">
+                  {/* Three-track schematic — Strategy / Engineering / Operations
+                      flowing through a single delivery axis, signalling the
+                      multidisciplinary thesis visually rather than via copy. */}
+                  <svg viewBox="0 0 320 220" className="w-full h-auto" aria-hidden>
+                    {/* Vertical axis */}
+                    <line x1="40" y1="20" x2="40" y2="200" stroke="#BCB8AB" strokeWidth="1" />
+                    {/* Three lateral tracks */}
                     {[
-                      ['Active Mandates',          '> 200 professionals'],
-                      ['Geographies',              '> 50 countries'],
-                      ['Disciplines integrated',   '16 / 5 pillars'],
-                      ['Practice established',     '2003'],
-                      ['Client base',              'Public + private'],
-                    ].map(([k, v]) => (
-                      <li key={k} className="grid grid-cols-2 gap-3">
-                        <span className="label-technical text-brand-mute">{k}</span>
-                        <span className="text-[13px] text-brand-ink tracking-tight text-right">{v}</span>
-                      </li>
+                      { y: 40,  label: 'STRATEGY',    sub: 'Diagnose · Decide' },
+                      { y: 110, label: 'ENGINEERING', sub: 'Design · Build' },
+                      { y: 180, label: 'OPERATIONS',  sub: 'Run · Sustain' },
+                    ].map((row) => (
+                      <g key={row.label}>
+                        <line x1="40" y1={row.y} x2="300" y2={row.y} stroke="#E2E0DA" strokeWidth="1" />
+                        <circle cx="40" cy={row.y} r="4" fill="#C24914" />
+                        <text x="56" y={row.y - 6} fontFamily="JetBrains Mono" fontSize="9" letterSpacing="1.5" fill="#74757B">
+                          {row.label}
+                        </text>
+                        <text x="56" y={row.y + 12} fontFamily="Plus Jakarta Sans" fontWeight="500" fontSize="11" fill="#0A0A0B">
+                          {row.sub}
+                        </text>
+                      </g>
                     ))}
-                  </ul>
+                    {/* Connecting flow ticks */}
+                    {[40, 110, 180].map((y, i) => (
+                      <g key={i}>
+                        <circle cx="280" cy={y} r="2.5" fill="#0A0A0B" />
+                      </g>
+                    ))}
+                    {/* Vertical flow arrows */}
+                    <path d="M40 50 L40 100" stroke="#C24914" strokeWidth="1.2" strokeDasharray="2,3" />
+                    <path d="M40 120 L40 170" stroke="#C24914" strokeWidth="1.2" strokeDasharray="2,3" />
+                  </svg>
+
+                  <div className="mt-6 pt-6 border-t border-brand-hair">
+                    <div className="grid grid-cols-2 gap-y-3 gap-x-3">
+                      <span className="label-technical text-brand-mute">Practice est.</span>
+                      <span className="text-[12.5px] text-brand-ink tracking-tight text-right">2003</span>
+                      <span className="label-technical text-brand-mute">Client base</span>
+                      <span className="text-[12.5px] text-brand-ink tracking-tight text-right">Public + private</span>
+                    </div>
+                  </div>
                 </div>
               </DiagramFrame>
             </div>
@@ -126,11 +158,23 @@ const HomePage: React.FC = () => {
          ============================================================ */}
       <section className="bg-brand-ivory border-b border-brand-hair">
         <Container size="wide">
-          <div className="py-14 md:py-20 grid grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
-            <CountMetric value={200} suffix="+" label="Professionals worldwide" />
-            <CountMetric value={20}  suffix="+" label="Years of practice" />
-            <CountMetric value={50}  suffix="+" label="Countries served" />
-            <CountMetric value={16}  suffix=""  label="Integrated disciplines" />
+          <div className="py-14 md:py-20 grid grid-cols-2 lg:grid-cols-12 gap-x-10 gap-y-10 items-end">
+            <div className="lg:col-span-2"><CountMetric value={200} suffix="+" label="Professionals worldwide" /></div>
+            <div className="lg:col-span-2"><CountMetric value={20}  suffix="+" label="Years of practice" /></div>
+            <div className="lg:col-span-2"><CountMetric value={50}  suffix="+" label="Countries served" /></div>
+            <div className="lg:col-span-2"><CountMetric value={16}  suffix=""  label="Integrated disciplines" /></div>
+
+            {/* Founding-year indicator */}
+            <div className="col-span-2 lg:col-span-4 lg:border-l lg:border-brand-hair lg:pl-10">
+              <div className="label-technical text-brand-accent mb-3">Established</div>
+              <div className="font-display text-[40px] md:text-[56px] font-semibold leading-none tracking-[-0.03em] text-brand-ink font-mono-tab">
+                2003
+              </div>
+              <div className="mt-3 text-[13px] leading-[1.55] text-brand-ink-2 max-w-xs">
+                Two decades of multidisciplinary practice — supporting public
+                and private institutions through complex transformation.
+              </div>
+            </div>
           </div>
         </Container>
       </section>
@@ -244,25 +288,41 @@ const HomePage: React.FC = () => {
               <Link
                 key={industry.id}
                 to="/industries"
-                className="group grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 py-8 md:py-10 border-b border-brand-hair hover:bg-brand-stone transition-colors"
+                className="group grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 py-10 md:py-14 border-b border-brand-hair hover:bg-brand-stone transition-colors"
               >
                 <div className="md:col-span-1 label-technical text-brand-accent pt-2">
-                  {String(idx + 1).padStart(2, '0')}
+                  S.{String(idx + 1).padStart(2, '0')}
                 </div>
                 <div className="md:col-span-4">
                   <h3 className="font-display text-[20px] md:text-[24px] font-semibold leading-tight tracking-[-0.025em] text-brand-ink group-hover:text-brand-accent transition-colors">
                     {industry.name}
                   </h3>
-                </div>
-                <div className="md:col-span-6">
-                  <p className="text-[14.5px] leading-[1.65] text-brand-ink-2">
-                    {industry.description}
+                  <p className="mt-5 font-editorial italic text-[16px] md:text-[18px] leading-[1.45] text-brand-ink-2">
+                    {industry.impact}
                   </p>
+                </div>
+                <div className="md:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 md:pt-1">
+                  <div>
+                    <div className="label-technical text-brand-mute mb-2">
+                      <span className="text-brand-accent">→</span> Delivery scope
+                    </div>
+                    <p className="text-[13.5px] leading-[1.6] text-brand-ink-2">
+                      {industry.scope}
+                    </p>
+                  </div>
+                  <div>
+                    <div className="label-technical text-brand-mute mb-2">
+                      <span className="text-brand-accent">→</span> Institutional relevance
+                    </div>
+                    <p className="text-[13.5px] leading-[1.6] text-brand-ink-2">
+                      {industry.relevance}
+                    </p>
+                  </div>
                 </div>
                 <div className="md:col-span-1 flex md:justify-end items-start pt-2">
                   <ArrowUpRight
                     size={18}
-                    className="text-brand-mute group-hover:text-brand-accent transition-colors"
+                    className="text-brand-mute group-hover:text-brand-accent group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all"
                   />
                 </div>
               </Link>
@@ -298,11 +358,21 @@ const HomePage: React.FC = () => {
             intro="A dedicated technology practice — software, networks, data, and digital experience — embedded across every transformation programme."
           />
 
+          {/* Connector axis — communicates the four modules as a system. */}
+          <div className="hidden lg:flex items-center mb-px relative">
+            <div className="flex-1 h-px bg-brand-hair-strong" />
+            <div className="absolute inset-x-0 flex justify-around">
+              {technologyCapabilities.map((cap) => (
+                <span key={cap.id} className="block w-2 h-2 -mt-px bg-brand-accent" />
+              ))}
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-t border-l border-brand-hair">
             {technologyCapabilities.map((cap, idx) => (
               <div
                 key={cap.id}
-                className="border-r border-b border-brand-hair p-7 md:p-8 bg-brand-paper"
+                className="relative border-r border-b border-brand-hair p-7 md:p-8 bg-brand-paper"
               >
                 <div className="label-technical text-brand-accent mb-5">
                   T.{String(idx + 1).padStart(2, '0')}
@@ -313,8 +383,26 @@ const HomePage: React.FC = () => {
                 <p className="mt-3 text-[13.5px] leading-[1.6] text-brand-ink-2">
                   {cap.description}
                 </p>
+                {/* Inter-module arrow connector (lg only, between cells) */}
+                {idx < technologyCapabilities.length - 1 && (
+                  <span
+                    className="hidden lg:flex absolute top-1/2 -translate-y-1/2 -right-3 w-6 h-6 items-center justify-center text-brand-accent z-10 bg-brand-paper border border-brand-hair-strong"
+                    aria-hidden
+                  >
+                    <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
+                      <path d="M2 7H12M12 7L7 2M12 7L7 12" stroke="currentColor" strokeWidth="1.5" />
+                    </svg>
+                  </span>
+                )}
               </div>
             ))}
+          </div>
+
+          <div className="mt-6 flex items-center gap-3">
+            <span className="block h-px w-8 bg-brand-accent" aria-hidden />
+            <p className="label-technical text-brand-mute">
+              Modules deploy as a single technology practice, not isolated tracks.
+            </p>
           </div>
         </Container>
       </Section>
@@ -352,6 +440,28 @@ const HomePage: React.FC = () => {
                       {phase.description}
                     </p>
                   </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Lifecycle ownership — explains how the firm spans the rail. */}
+          <div className="mt-14 md:mt-16 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 pt-10 border-t border-brand-hair">
+            <div className="lg:col-span-4">
+              <div className="label-technical text-brand-accent mb-3">Lifecycle Ownership</div>
+              <h3 className="font-display text-[20px] md:text-[24px] font-semibold tracking-[-0.025em] text-brand-ink leading-tight">
+                One firm across the whole rail.
+              </h3>
+            </div>
+            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {[
+                ['Origination', 'We frame the case and engage at programme inception, not after scope is fixed.'],
+                ['Execution',   'The same firm designs, builds, and integrates — no handoff to a delivery partner.'],
+                ['Sustainment', 'We can run the system, hand it back to client teams, or both — designed in from day one.'],
+              ].map(([label, copy]) => (
+                <div key={label} className="border-l border-brand-accent pl-4">
+                  <div className="label-technical text-brand-mute mb-2">{label}</div>
+                  <p className="text-[13px] leading-[1.6] text-brand-ink-2">{copy}</p>
                 </div>
               ))}
             </div>
@@ -413,20 +523,56 @@ const HomePage: React.FC = () => {
             intro="From short advisory mandates through multi-year programme delivery, our engagement models scale to the complexity and time horizon of each transformation."
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 border-t border-l border-brand-hair-strong">
+          {/* Sequential pathway — Advisory → Programme Delivery → Managed
+              Services → Capability Transfer. Engagement model can begin at
+              any stage; the rail makes the progression explicit. */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-px bg-brand-hair-strong border border-brand-hair-strong">
             {engagementModels.map((model, idx) => (
-              <div key={model.name} className="border-r border-b border-brand-hair-strong p-8 md:p-10 bg-brand-paper">
-                <div className="label-technical text-brand-accent mb-5">
-                  E.{String(idx + 1).padStart(2, '0')}
+              <div
+                key={model.name}
+                className="relative bg-brand-paper p-7 md:p-8"
+              >
+                <div className="flex items-baseline gap-3 mb-5">
+                  <span className="label-technical text-brand-accent">
+                    E.{String(idx + 1).padStart(2, '0')}
+                  </span>
+                  <span className="label-technical text-brand-mute">
+                    Phase {idx + 1} of {engagementModels.length}
+                  </span>
                 </div>
-                <h3 className="font-display text-[22px] md:text-[24px] font-semibold tracking-[-0.025em] text-brand-ink">
+                <h3 className="font-display text-[20px] md:text-[22px] font-semibold tracking-[-0.025em] text-brand-ink leading-tight">
                   {model.name}
                 </h3>
-                <p className="mt-3 text-[14.5px] leading-[1.6] text-brand-ink-2 max-w-md">
+                <div className="mt-3 mb-4 inline-flex items-center gap-2 px-2.5 py-1 border border-brand-hair-strong">
+                  <span className="block w-1.5 h-1.5 bg-brand-accent" aria-hidden />
+                  <span className="label-technical text-brand-ink-2">
+                    {model.appliesWhen}
+                  </span>
+                </div>
+                <p className="text-[13.5px] leading-[1.6] text-brand-ink-2">
                   {model.description}
                 </p>
+
+                {/* Forward-flow arrow on lg+ between cells */}
+                {idx < engagementModels.length - 1 && (
+                  <span
+                    className="hidden lg:flex absolute top-1/2 -translate-y-1/2 -right-3 w-6 h-6 items-center justify-center text-brand-accent z-10 bg-brand-paper border border-brand-hair-strong"
+                    aria-hidden
+                  >
+                    <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
+                      <path d="M2 7H12M12 7L7 2M12 7L7 12" stroke="currentColor" strokeWidth="1.5" />
+                    </svg>
+                  </span>
+                )}
               </div>
             ))}
+          </div>
+
+          <div className="mt-6 flex items-center gap-3">
+            <span className="block h-px w-8 bg-brand-accent" aria-hidden />
+            <p className="label-technical text-brand-mute">
+              Engagements can begin at any phase — and combine across phases as the programme matures.
+            </p>
           </div>
         </Container>
       </Section>
@@ -465,9 +611,9 @@ const HomePage: React.FC = () => {
         <Container size="narrow">
           <TechnicalLabel index="11">Engage With Us</TechnicalLabel>
           <h2 className="mt-8 font-display text-[32px] md:text-[48px] lg:text-[56px] font-semibold leading-[1.04] tracking-[-0.03em] text-brand-ink">
-            Bring multidisciplinary capability to your next{' '}
+            Start a transformation conversation with our{' '}
             <span className="font-editorial italic font-medium text-brand-accent">
-              transformation programme
+              multidisciplinary team
             </span>.
           </h2>
           <p className="mt-7 max-w-2xl text-[16px] leading-[1.6] text-brand-ink-2">
