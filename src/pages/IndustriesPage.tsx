@@ -110,12 +110,19 @@ const IndustriesPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="mt-8">
+                  <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
                     <Link
-                      to="/contact"
+                      to={`/industries/${industry.id}`}
                       className="group inline-flex items-center gap-2 text-[13px] font-medium tracking-[-0.01em] text-brand-ink border-b border-brand-ink pb-1 hover:text-brand-accent hover:border-brand-accent transition-colors"
                     >
-                      Discuss a {industry.name.toLowerCase()} engagement
+                      Open the {industry.name.toLowerCase()} sector page
+                      <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+                    </Link>
+                    <Link
+                      to="/contact"
+                      className="group inline-flex items-center gap-1.5 text-[13px] font-medium tracking-[-0.01em] text-brand-ink-2 hover:text-brand-accent transition-colors"
+                    >
+                      Or discuss an engagement
                       <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
                     </Link>
                   </div>

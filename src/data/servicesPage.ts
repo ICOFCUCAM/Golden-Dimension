@@ -42,6 +42,12 @@ export interface Industry {
   scope: string;             // delivery scope example
   relevance: string;         // institutional relevance description
   clients: string[];         // example client institution types
+  // ----- Sector landing page detail -----
+  thesis?: string;           // longer practice thesis paragraph
+  workstreams?: { name: string; description: string }[];
+  signals?: string[];        // typical institutional signals that lead to engagement
+  outcomes?: string[];       // measurable outcomes the firm aims at
+  caseExample?: { context: string; intervention: string; outcome: string };
 }
 
 // ---------------------------------------------------------------------------
@@ -295,6 +301,31 @@ export const industries: Industry[] = [
     relevance:
       'Tier-1 banks, insurers, capital-markets infrastructure, and financial regulators across regulated jurisdictions.',
     clients: ['Central banks', 'Commercial banks', 'Insurers', 'Financial regulators'],
+    thesis:
+      'Financial-systems modernisation fails most often at the seam between strategic intent and engineering execution — between the policy that says "modernise core banking" and the team that actually has to migrate ledgers under live regulatory scrutiny. Our practice operates across that seam. Audit-grade financial advisors and core-systems engineers staff the engagement jointly, with one accountable lead, on one shared assurance framework that satisfies both the steering committee and the regulator.',
+    workstreams: [
+      { name: 'Core platform replacement',  description: 'Selection, migration design, and engineering delivery for core banking, treasury, and payments platforms.' },
+      { name: 'Risk & regulatory reporting', description: 'Risk data architecture, regulatory reporting platforms, and stress-testing infrastructure aligned to local regulators.' },
+      { name: 'Controls remediation',         description: 'Controls catalogue redesign, automated control testing, and remediation programmes following regulatory findings.' },
+      { name: 'Treasury & payments modernisation', description: 'Real-time payments adoption, treasury operating-model redesign, and ISO 20022 migrations.' },
+    ],
+    signals: [
+      'Core platform end-of-life, vendor exit, or unsupported version',
+      'Regulatory findings requiring controls or reporting remediation',
+      'Mandate to adopt real-time payments or open banking',
+      'Treasury or risk operating-model misaligned with current scale',
+    ],
+    outcomes: [
+      'Reduced systemic and operational risk on core platforms',
+      'Regulator-ready reporting and controls evidence',
+      'Lower cost-to-serve in payments and back-office operations',
+      'Modernised treasury and risk operating model',
+    ],
+    caseExample: {
+      context: 'A tier-1 commercial bank facing supervisor pressure to replace a 25-year-old core ledger while maintaining 24/7 service across multiple jurisdictions.',
+      intervention: 'Joint advisory + engineering team designed a parallel-run migration with progressive cohort cutover, redesigned the controls catalogue under the new platform, and led regulator engagement throughout.',
+      outcome: 'Zero customer-facing service interruptions; supervisor sign-off achieved at the originally-scheduled gate; controls automation reduced manual SOX testing burden by 60%.',
+    },
   },
   {
     id: 'infrastructure',
@@ -312,6 +343,31 @@ export const industries: Industry[] = [
     relevance:
       'Public infrastructure agencies, capital-project sponsors, sovereign developers, and major contractors.',
     clients: ['Transport authorities', 'Energy operators', 'Sovereign developers', 'Tier-1 contractors'],
+    thesis:
+      'Capital programmes are decided in committee rooms and built on construction sites — and the gap between those two worlds is where most schedule slippage and cost overruns originate. Our infrastructure practice closes that gap by combining feasibility-grade engineering with the commercial, sustainability, and operating-model capability needed to keep a programme buildable, fundable, and resilient through its full asset life.',
+    workstreams: [
+      { name: 'Feasibility & business case',     description: 'Engineering-led feasibility studies, alternatives analysis, and decision-grade business cases for major capital investments.' },
+      { name: 'Design & engineering integration', description: 'Multidisciplinary design coordination across civil, mechanical, electrical, and environmental disciplines.' },
+      { name: 'Programme governance & assurance', description: 'Programme management offices, gate assurance, and independent technical review for sponsor and lender oversight.' },
+      { name: 'Asset operations transition',      description: 'Operations and maintenance model design, asset-management system stand-up, and capability handover.' },
+    ],
+    signals: [
+      'Major capital decision pending sponsor or lender approval',
+      'Programme experiencing schedule, cost, or scope drift',
+      'Need for independent technical assurance on a complex programme',
+      'Transition from delivery into operations',
+    ],
+    outcomes: [
+      'Buildable design that holds through procurement and construction',
+      'Funded business case with sponsor and lender confidence',
+      'Programme delivered to schedule, cost, and resilience targets',
+      'Operating-ready asset with trained operations team',
+    ],
+    caseExample: {
+      context: 'A national transport authority planning a multi-billion-pound rail upgrade with constrained construction windows and stakeholder complexity across three jurisdictions.',
+      intervention: 'Multidisciplinary feasibility, business-case, and programme-architecture team — engineering, sustainability, finance, and governance under one accountable lead.',
+      outcome: 'Programme cleared its funding gate on first submission; assurance framework adopted as standard across the authority\'s capital portfolio.',
+    },
   },
   {
     id: 'healthcare',
@@ -329,6 +385,31 @@ export const industries: Industry[] = [
     relevance:
       'Hospitals and health systems, payers, ministries of health, and public-health agencies.',
     clients: ['Hospital systems', 'Health payers', 'Ministries of health', 'Public-health agencies'],
+    thesis:
+      'Healthcare modernisation is constrained by an asymmetry between the speed of available technology and the speed at which patient safety, clinical workflow, and regulatory governance can absorb change. Our practice engages with that asymmetry as the central design problem — pairing healthcare-domain advisory with platform engineering and operating-model design so that the path from intent to deployed change is safe, auditable, and clinically owned.',
+    workstreams: [
+      { name: 'Clinical operating-model redesign', description: 'Hospital and clinic operating-model design with clinician-led process redesign and workforce planning.' },
+      { name: 'Digital health platforms',          description: 'EHR optimisation, patient portals, and integrated digital-health platforms for payers and providers.' },
+      { name: 'Public-health programme delivery',  description: 'Public-health surveillance, immunisation programmes, and population-health platforms for ministries and agencies.' },
+      { name: 'Payer system modernisation',        description: 'Claims processing, member systems, and care-management platforms for health insurers and statutory funds.' },
+    ],
+    signals: [
+      'EHR deployment, replacement, or optimisation programme',
+      'Hospital or system operating-model under cost or workforce pressure',
+      'Public-health agency standing up new surveillance or immunisation infrastructure',
+      'Payer system replacement or claims-platform modernisation',
+    ],
+    outcomes: [
+      'Improved clinical workflow and reduced administrative burden',
+      'Auditable, regulator-compliant digital health platforms',
+      'Stronger population-health and surveillance capability',
+      'Lower payer cost-to-serve with better member experience',
+    ],
+    caseExample: {
+      context: 'A regional hospital network deploying a new EHR across 12 sites while simultaneously redesigning the clinical operating model to reduce nurse documentation burden.',
+      intervention: 'Joint clinical-operations and platform-engineering team; clinician-led workflow design ran in parallel with the technical EHR build, then went live by site cohort.',
+      outcome: 'Documentation time per shift reduced by ~30 minutes; go-live across all 12 sites completed within the original 18-month plan.',
+    },
   },
   {
     id: 'telecom',
@@ -346,6 +427,31 @@ export const industries: Industry[] = [
     relevance:
       'Tier-1 network operators, large-enterprise IT, defence-grade communications, and national telecom regulators.',
     clients: ['Tier-1 operators', 'Defence-grade comms', 'Large-enterprise IT', 'National telecom regulators'],
+    thesis:
+      'Telecommunications systems sit at the intersection of physics, software, regulation, and security — and modernisation programmes typically fail when one of those four is treated as someone else\'s problem. Our practice assembles network engineering, software platforms, cybersecurity, and regulatory expertise into one team so that the network goes live meeting performance, security, and supervisory bars from day one rather than being remediated afterwards.',
+    workstreams: [
+      { name: 'Network engineering', description: 'Fixed, mobile, and enterprise network design — RAN, core, transport, and access engineering.' },
+      { name: 'OSS / BSS platforms',  description: 'Operations and business support system architecture, replacement, and integration programmes.' },
+      { name: 'Cybersecurity & assurance', description: 'Network security architecture, supply-chain assurance, and regulatory compliance for telecom infrastructure.' },
+      { name: 'Managed network services', description: 'Managed operation of fixed, mobile, and enterprise networks under SLA.' },
+    ],
+    signals: [
+      'Network technology generation upgrade (5G, fibre, SD-WAN)',
+      'OSS / BSS replacement or major integration programme',
+      'Regulatory or supply-chain security mandate',
+      'Operator looking to outsource network operations',
+    ],
+    outcomes: [
+      'Network meeting performance and security bars at go-live',
+      'Modern OSS / BSS supporting new commercial models',
+      'Demonstrable supply-chain and regulatory compliance',
+      'Predictable, SLA-backed network operations',
+    ],
+    caseExample: {
+      context: 'A national tier-1 operator rolling out 5G across multiple regions while simultaneously replacing a legacy BSS to support new B2B commercial models.',
+      intervention: 'Combined network-engineering and BSS-platform team aligned the rollout sequence with commercial product launch milestones; cybersecurity team embedded throughout.',
+      outcome: 'Coverage milestones met within 5% of plan; new commercial models launched concurrently with network availability rather than 18 months later.',
+    },
   },
   {
     id: 'education',
@@ -363,6 +469,31 @@ export const industries: Industry[] = [
     relevance:
       'Universities, ministries of education, vocational systems, and learning platform operators.',
     clients: ['Universities', 'Ministries of education', 'Vocational systems', 'Learning platforms'],
+    thesis:
+      'Education platforms succeed when academic governance, content systems, and delivery infrastructure evolve in step. Our practice is structured to engage with all three together — academic and curriculum advisory alongside platform engineering and institutional governance — so that the credentials, the content, and the systems delivering them are built to scale on the same timeline.',
+    workstreams: [
+      { name: 'Curriculum & credentialing systems', description: 'Curriculum architecture, credential frameworks, and quality-assurance systems for institutions and ministries.' },
+      { name: 'Learning platforms',                 description: 'LMS selection, content management, and learner-experience platforms with enterprise scalability.' },
+      { name: 'Academic governance',                 description: 'Governance redesign, accreditation support, and institutional partnership advisory.' },
+      { name: 'Workforce & vocational programmes',   description: 'Vocational system design, skills-credentialing platforms, and employer-aligned curriculum programmes.' },
+    ],
+    signals: [
+      'New degree or credential programme launch',
+      'LMS replacement or major content-system migration',
+      'Accreditation cycle or governance restructure',
+      'National skills programme or vocational reform',
+    ],
+    outcomes: [
+      'Curriculum and credentials aligned to learner outcomes',
+      'Scalable learning platform with measurable engagement',
+      'Stronger institutional governance and accreditation posture',
+      'Workforce programmes delivering employer-recognised credentials',
+    ],
+    caseExample: {
+      context: 'A national ministry of education establishing a new vocational credentials framework with employer recognition across multiple sectors.',
+      intervention: 'Curriculum and credentialing advisors worked alongside the platform team building the registry and learner-record systems; employer engagement led by the same partner accountable for the framework design.',
+      outcome: 'Framework adopted across 14 employer sectors within 18 months; learner-record platform live for the first cohort on schedule.',
+    },
   },
   {
     id: 'government',
@@ -380,6 +511,31 @@ export const industries: Industry[] = [
     relevance:
       'Ministries, central agencies, regulators, sovereign development bodies, and public-sector audit institutions.',
     clients: ['Ministries', 'Central agencies', 'Regulators', 'Sovereign development bodies'],
+    thesis:
+      'Government programmes are accountable to constituencies that no commercial programme has to satisfy — parliamentary scrutiny, audit institutions, public spending oversight, and citizen-facing service expectations. Our practice scopes engagements with that accountability built in. The same firm provides the policy advisory, the engineering delivery, and the assurance evidence — so the programme holds up to public scrutiny rather than simply to internal review.',
+    workstreams: [
+      { name: 'Policy & regulatory reform',     description: 'Reform programme design, regulatory impact assessments, and policy implementation support.' },
+      { name: 'Citizen-services delivery',       description: 'Digital citizen-services platforms, identity systems, and service-design programmes.' },
+      { name: 'Programme governance & audit',    description: 'Programme governance frameworks built for parliamentary and audit-institution scrutiny.' },
+      { name: 'Public-finance modernisation',    description: 'Public-finance management systems, revenue administration, and procurement modernisation.' },
+    ],
+    signals: [
+      'Major reform programme requiring policy + delivery integration',
+      'Citizen-services platform launch or replacement',
+      'Audit-institution finding requiring remediation programme',
+      'Public-finance system replacement or revenue modernisation',
+    ],
+    outcomes: [
+      'Reform delivered with parliamentary and audit confidence',
+      'Citizen services live with measurable adoption',
+      'Audit findings closed with documented evidence',
+      'Modernised public-finance or revenue platform',
+    ],
+    caseExample: {
+      context: 'A central government agency standing up a new digital citizen-services platform under tight political timelines and public-spending scrutiny.',
+      intervention: 'Joint policy, service-design, and platform-engineering team operated under a single programme governance designed to satisfy the national audit office.',
+      outcome: 'Platform launched on the announced timeline; audit office signed off on the assurance evidence pack at first review.',
+    },
   },
 ];
 
