@@ -37,6 +37,10 @@ export interface Industry {
   summary: string;           // long — used on Industries page detail card
   icon: string;
   pillars: string[];         // ids of related pillars in `pillars` array
+  // ----- Homepage transformation narrative -----
+  impact: string;            // one-line impact statement
+  scope: string;             // delivery scope example
+  relevance: string;         // institutional relevance description
 }
 
 // ---------------------------------------------------------------------------
@@ -264,7 +268,7 @@ export const methodology: MethodologyPhase[] = [
   },
   {
     index: '06',
-    name: 'Long-term Support',
+    name: 'Sustainment',
     description:
       'Managed services, advisory retainers, and capability transfer to in-house teams.',
   },
@@ -276,13 +280,19 @@ export const methodology: MethodologyPhase[] = [
 export const industries: Industry[] = [
   {
     id: 'financial-systems',
-    name: 'Financial Systems Transformation',
+    name: 'Financial Systems Modernization',
     icon: 'Landmark',
     description:
       'Banks, insurers, and financial institutions modernising core systems and controls.',
     summary:
       'We help banks, insurers, and capital-markets institutions modernise core platforms, treasury and payments, risk and regulatory reporting — combining audit-grade financial advisory with the engineering capability to deliver new systems safely.',
     pillars: ['financial-legal', 'digital-technology', 'enterprise-strategy'],
+    impact:
+      'Reduce systemic risk while modernising the platforms institutions actually run on.',
+    scope:
+      'Core banking replacement, treasury and payments modernisation, regulatory reporting, controls remediation.',
+    relevance:
+      'Tier-1 banks, insurers, capital-markets infrastructure, and financial regulators across regulated jurisdictions.',
   },
   {
     id: 'infrastructure',
@@ -293,16 +303,28 @@ export const industries: Industry[] = [
     summary:
       'We plan and deliver capital programmes across transport, energy, water, and the built environment, with the environmental and sustainability capabilities required for modern infrastructure mandates and resilient asset performance.',
     pillars: ['engineering-infrastructure', 'enterprise-strategy'],
+    impact:
+      'Deliver capital programmes that are buildable, fundable, and resilient through their full asset life.',
+    scope:
+      'Transport, energy, water, and built-environment programmes — feasibility through commissioning and asset operations.',
+    relevance:
+      'Public infrastructure agencies, capital-project sponsors, sovereign developers, and major contractors.',
   },
   {
     id: 'healthcare',
-    name: 'Healthcare Modernization',
+    name: 'Healthcare Transformation',
     icon: 'Stethoscope',
     description:
       'Hospitals, payers, and ministries of health upgrading clinical and digital operations.',
     summary:
       'We support hospitals, payers, and ministries of health in transforming clinical operations, digital health, and public-health programmes — pairing healthcare-domain advisory with the technology and operating-model capability to deliver at institutional scale.',
     pillars: ['education-institutional', 'digital-technology', 'enterprise-strategy'],
+    impact:
+      'Modernise clinical operations and digital health while preserving safety and continuity of care.',
+    scope:
+      'Hospital operating models, digital health platforms, payer systems, public-health programme delivery.',
+    relevance:
+      'Hospitals and health systems, payers, ministries of health, and public-health agencies.',
   },
   {
     id: 'telecom',
@@ -313,6 +335,12 @@ export const industries: Industry[] = [
     summary:
       'We design and deploy fixed, mobile, and enterprise network systems for operators and large enterprises — combining network engineering with software platforms, cybersecurity, and managed-service delivery models.',
     pillars: ['engineering-infrastructure', 'digital-technology'],
+    impact:
+      'Stand up next-generation networks that meet performance, security, and regulatory bars from day one.',
+    scope:
+      'Fixed, mobile, and enterprise network engineering; OSS / BSS platforms; cybersecurity and managed services.',
+    relevance:
+      'Tier-1 network operators, large-enterprise IT, defence-grade communications, and national telecom regulators.',
   },
   {
     id: 'education',
@@ -323,16 +351,28 @@ export const industries: Industry[] = [
     summary:
       'We build education and training systems for universities, ministries, and learning providers — uniting academic and curriculum advisory with platform engineering, content systems, and institutional governance.',
     pillars: ['education-institutional', 'digital-technology'],
+    impact:
+      'Build the learning platforms institutions need to scale credentials, content, and outcomes.',
+    scope:
+      'Curriculum and credentialing systems, learning platforms, academic governance, institutional partnerships.',
+    relevance:
+      'Universities, ministries of education, vocational systems, and learning platform operators.',
   },
   {
     id: 'government',
-    name: 'Government & Public Sector Advisory',
+    name: 'Government Advisory',
     icon: 'ShieldCheck',
     description:
       'Public bodies and regulators delivering reform, policy, and citizen services.',
     summary:
       'We support ministries, regulators, and public bodies on policy, reform, and citizen-services delivery — backed by the engineering, legal, and operations capabilities that public-sector programmes demand for accountable outcomes.',
     pillars: ['financial-legal', 'engineering-infrastructure', 'education-institutional'],
+    impact:
+      'Help governments deliver reform programmes that hold up to public, parliamentary, and audit scrutiny.',
+    scope:
+      'Policy and regulatory reform, citizen-services delivery, programme governance, public-finance modernisation.',
+    relevance:
+      'Ministries, central agencies, regulators, sovereign development bodies, and public-sector audit institutions.',
   },
 ];
 
