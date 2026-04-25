@@ -13,6 +13,7 @@ import {
   Metric,
 } from '@/components/section-primitives';
 import { CapabilityArchitecture, WorldMap } from '@/components/diagrams';
+import { Seo } from '@/components/Seo';
 import { pillars, industries, methodology, capabilityModel } from '@/data/servicesPage';
 import { useScrollAnimation, useCountUp } from '@/hooks/useScrollAnimation';
 
@@ -81,6 +82,11 @@ const technologyCapabilities = [
 const HomePage: React.FC = () => {
   return (
     <div className="bg-brand-ivory">
+      <Seo
+        title="Multidisciplinary Consulting & Engineering"
+        description="Integrated consulting and engineering capabilities for institutions, enterprises, and governments worldwide — multidisciplinary delivery across finance, infrastructure, healthcare, education, and digital systems since 2003."
+        path="/"
+      />
       {/* ============================================================
            § 01 — Hero
          ============================================================ */}

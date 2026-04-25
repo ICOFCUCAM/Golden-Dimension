@@ -10,6 +10,7 @@ import {
   TechnicalLabel,
   PrimaryCta,
 } from '@/components/section-primitives';
+import { Seo } from '@/components/Seo';
 
 const ServiceDetailPage: React.FC = () => {
   const { serviceId } = useParams<{ serviceId: string }>();
@@ -24,6 +25,11 @@ const ServiceDetailPage: React.FC = () => {
 
   return (
     <div className="bg-brand-ivory">
+      <Seo
+        title={`${service.title} — capability detail`}
+        description={service.shortDescription}
+        path={`/services/${service.id}`}
+      />
       <PageHeader
         eyebrow="Capability Detail"
         index={`SVC.${String(currentIndex + 1).padStart(2, '0')}`}

@@ -17,10 +17,16 @@ import {
   methodology,
   industries,
 } from '@/data/servicesPage';
+import { Seo } from '@/components/Seo';
 
 const ServicesPage: React.FC = () => {
   return (
     <div>
+      <Seo
+        title="Capabilities — five consulting pillars, sixteen disciplines"
+        description="Capability architecture spanning Engineering & Infrastructure, Financial & Legal Advisory, Digital Transformation & Technology, Education & Institutional Development, and Enterprise Strategy — under one delivery framework."
+        path="/services"
+      />
       {/* Hero */}
       <section className="bg-brand-ivory pt-[140px] md:pt-[160px] pb-20 md:pb-28 border-b border-brand-hair">
         <Container size="wide">

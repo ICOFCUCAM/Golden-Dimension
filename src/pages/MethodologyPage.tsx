@@ -12,6 +12,7 @@ import {
   TertiaryCta,
 } from '@/components/section-primitives';
 import { methodology } from '@/data/servicesPage';
+import { Seo } from '@/components/Seo';
 
 // Detail extension of the six methodology phases.
 // Each phase carries: typical duration · key activities · primary deliverables.
@@ -108,6 +109,11 @@ const phaseDetail: Record<
 const MethodologyPage: React.FC = () => {
   return (
     <div className="bg-brand-ivory">
+      <Seo
+        title="Delivery Methodology — six-phase transformation lifecycle"
+        description="A six-phase delivery methodology spanning Strategy, Planning, Design, Implementation, Optimization, and Sustainment — engineered for institutional accountability and measurable outcomes."
+        path="/methodology"
+      />
       <PageHeader
         eyebrow="How We Deliver"
         index="M.01"

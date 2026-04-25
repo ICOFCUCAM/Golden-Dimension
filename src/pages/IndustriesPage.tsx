@@ -11,12 +11,18 @@ import {
   Section,
 } from '@/components/section-primitives';
 import { industries, pillars } from '@/data/servicesPage';
+import { Seo } from '@/components/Seo';
 
 const pillarById = Object.fromEntries(pillars.map((p) => [p.id, p] as const));
 
 const IndustriesPage: React.FC = () => {
   return (
     <div>
+      <Seo
+        title="Industries — sector authority across regulated industries"
+        description="Multidisciplinary capability applied across financial systems, infrastructure engineering, healthcare transformation, telecommunications, education platforms, and government advisory."
+        path="/industries"
+      />
       {/* Hero */}
       <section className="bg-brand-ivory pt-[140px] md:pt-[160px] pb-20 md:pb-28 border-b border-brand-hair">
         <Container size="wide">

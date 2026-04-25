@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Lock, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2, Lock, AlertCircle } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+
+const inputClass =
+  'w-full px-4 py-3 bg-brand-paper border border-brand-hair-strong text-[15px] text-brand-ink placeholder:text-brand-mute focus:outline-none focus:border-brand-ink transition-colors';
 
 const AdminLogin: React.FC = () => {
   const { signIn } = useAuth();
@@ -21,69 +24,76 @@ const AdminLogin: React.FC = () => {
 
   return (
     <div className="bg-brand-ivory min-h-screen pt-24 pb-16 flex items-start justify-center">
-      <div className="w-full max-w-md mx-auto px-4 sm:px-6">
+      <div className="w-full max-w-md mx-auto px-6">
         <Link
           to="/"
-          className="inline-flex items-center gap-1 text-brand-mute hover:text-brand-accent text-sm mb-6 transition-colors"
+          className="group inline-flex items-center gap-1.5 text-[13px] text-brand-ink-2 hover:text-brand-accent mb-8 transition-colors"
         >
-          <ArrowLeft size={14} /> Back to Site
+          <ArrowLeft size={13} className="group-hover:-translate-x-0.5 transition-transform" />
+          Back to site
         </Link>
 
-        <div className="rounded-2xl border border-brand-hair bg-brand-paper p-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2.5 rounded-lg bg-brand-accent/10 text-brand-accent">
-              <Lock size={20} />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-brand-ink">Admin Sign In</h1>
-              <p className="text-brand-mute text-sm">Authorized personnel only</p>
-            </div>
+        <div className="border border-brand-hair-strong bg-brand-paper p-8">
+          <div className="flex items-baseline justify-between pb-4 mb-6 border-b border-brand-hair-strong">
+            <span className="label-technical text-brand-mute">
+              <span className="text-brand-accent">§ ADMIN</span> · Authenticated
+            </span>
+            <Lock size={14} className="text-brand-mute" />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <h1 className="font-display text-[24px] md:text-[28px] font-medium tracking-[-0.015em] text-brand-ink leading-tight">
+            Admin sign in
+          </h1>
+          <p className="mt-2 text-[13.5px] text-brand-ink-2">
+            Authorised personnel only.
+          </p>
+
+          <form onSubmit={handleSubmit} className="mt-7 space-y-5">
             <div>
-              <label className="block text-brand-ink-2 text-sm mb-1.5">Email</label>
+              <label className="label-technical text-brand-mute mb-2 block">Email</label>
               <input
                 type="email"
                 required
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-lg bg-brand-paper border border-brand-hair text-brand-ink placeholder:text-brand-mute focus:outline-none focus:border-brand-accent/30 transition-colors"
+                className={inputClass}
                 placeholder="you@example.com"
               />
             </div>
             <div>
-              <label className="block text-brand-ink-2 text-sm mb-1.5">Password</label>
+              <label className="label-technical text-brand-mute mb-2 block">Password</label>
               <input
                 type="password"
                 required
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-lg bg-brand-paper border border-brand-hair text-brand-ink placeholder:text-brand-mute focus:outline-none focus:border-brand-accent/30 transition-colors"
+                className={inputClass}
                 placeholder="••••••••"
               />
             </div>
 
             {error && (
-              <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
-                {error}
+              <div className="flex items-start gap-3 px-3 py-2.5 border border-red-500/40 bg-red-50 text-[13px] text-red-700">
+                <AlertCircle size={13} className="mt-0.5 shrink-0" />
+                <span>{error}</span>
               </div>
             )}
 
             <button
               type="submit"
               disabled={submitting}
-              className="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-brand-accent text-brand-ivory font-medium hover:bg-brand-accent-hover transition-colors disabled:opacity-60"
+              className="group inline-flex items-center justify-center gap-2.5 w-full px-5 py-3 bg-brand-ink text-brand-ivory text-[14px] font-medium tracking-tight hover:bg-brand-accent transition-colors disabled:opacity-60"
             >
-              {submitting ? <Loader2 size={16} className="animate-spin" /> : null}
-              {submitting ? 'Signing in…' : 'Sign In'}
+              {submitting ? <Loader2 size={14} className="animate-spin" /> : null}
+              {submitting ? 'Signing in…' : 'Sign in'}
             </button>
           </form>
 
-          <p className="text-brand-mute text-xs mt-6">
-            Create the admin user in your Supabase dashboard under Authentication → Users.
+          <p className="mt-7 pt-5 border-t border-brand-hair label-technical text-brand-mute leading-relaxed normal-case tracking-normal">
+            Create the admin user in your Supabase dashboard under
+            Authentication → Users.
           </p>
         </div>
       </div>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://golden-dimension.vercel.app/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/services</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/industries</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/methodology</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/engagement-models</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/leadership</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/about</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/transport</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/news</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/legal</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/contact</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+
+  <url><loc>https://golden-dimension.vercel.app/services/accounting</loc><priority>0.5</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/services/designing</loc><priority>0.5</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/services/engineering</loc><priority>0.5</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/services/education</loc><priority>0.5</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/services/environment</loc><priority>0.5</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/services/finance</loc><priority>0.5</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/services/giving</loc><priority>0.5</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/services/health</loc><priority>0.5</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/services/legal-advice</loc><priority>0.5</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/services/marketing</loc><priority>0.5</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/services/programming</loc><priority>0.5</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/services/telecom</loc><priority>0.5</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/services/transport</loc><priority>0.5</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/services/umbrella-company</loc><priority>0.5</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/services/websites</loc><priority>0.5</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/services/writing</loc><priority>0.5</priority></url>
+</urlset>

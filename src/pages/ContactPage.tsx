@@ -3,6 +3,7 @@ import { Mail, Phone, MapPin, Clock, Send, Check, AlertCircle } from 'lucide-rea
 import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
 import { PageHeader, Container, Section, TechnicalLabel } from '@/components/section-primitives';
+import { Seo } from '@/components/Seo';
 
 const offices = [
   { city: 'London',     country: 'United Kingdom', type: 'Headquarters',  timezone: 'GMT' },
@@ -59,6 +60,11 @@ const ContactPage: React.FC = () => {
 
   return (
     <div className="bg-brand-ivory">
+      <Seo
+        title="Contact — discuss your next transformation programme"
+        description="Tell us about the institutional outcome you're working toward. A partner from the relevant practice area will respond within one business day."
+        path="/contact"
+      />
       <PageHeader
         eyebrow="Get in Touch"
         index="C.01"

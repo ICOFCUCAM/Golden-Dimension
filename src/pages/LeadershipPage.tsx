@@ -12,6 +12,7 @@ import {
   TertiaryCta,
   Metric,
 } from '@/components/section-primitives';
+import { Seo } from '@/components/Seo';
 
 const doctrine = [
   {
@@ -62,6 +63,11 @@ const commitments = [
 const LeadershipPage: React.FC = () => {
   return (
     <div className="bg-brand-ivory">
+      <Seo
+        title="Leadership Doctrine — multidisciplinary by design"
+        description="The firm's leadership philosophy, transformation doctrine, and the operating choices that shape how every engagement is staffed and governed."
+        path="/leadership"
+      />
       <PageHeader
         eyebrow="Leadership"
         index="LD.01"

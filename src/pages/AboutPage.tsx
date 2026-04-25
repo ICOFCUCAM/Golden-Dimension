@@ -12,6 +12,7 @@ import {
   Metric,
 } from '@/components/section-primitives';
 import { globalStats } from '@/data/servicesPage';
+import { Seo } from '@/components/Seo';
 
 const collaborationModel = [
   {
@@ -70,6 +71,11 @@ const values = [
 const AboutPage: React.FC = () => {
   return (
     <div>
+      <Seo
+        title="About — multidisciplinary by design, institutional in delivery"
+        description="A multidisciplinary consulting and engineering firm built for institutional transformation. Founded in 2003; 200+ professionals across 50+ countries; one accountable team per engagement."
+        path="/about"
+      />
       {/* Hero */}
       <section className="bg-brand-ivory pt-[140px] md:pt-[160px] pb-20 md:pb-28 border-b border-brand-hair">
         <Container size="wide">

@@ -11,6 +11,7 @@ import {
   SecondaryCta,
   TertiaryCta,
 } from '@/components/section-primitives';
+import { Seo } from '@/components/Seo';
 
 interface EngagementModel {
   id: string;
@@ -128,6 +129,11 @@ const models: EngagementModel[] = [
 const EngagementModelsPage: React.FC = () => {
   return (
     <div className="bg-brand-ivory">
+      <Seo
+        title="Engagement Models — four ways institutions engage with us"
+        description="Advisory, Programme Delivery, Managed Services, and Capability Transfer — engagement shapes that scale to the complexity and time horizon of each transformation."
+        path="/engagement-models"
+      />
       <PageHeader
         eyebrow="Engagement Models"
         index="E.01"

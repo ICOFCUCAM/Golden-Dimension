@@ -9,6 +9,7 @@ import {
   TechnicalLabel,
   SectionHeader,
 } from '@/components/section-primitives';
+import { Seo } from '@/components/Seo';
 
 const transportServices = [
   {
@@ -87,6 +88,11 @@ const TransportPage: React.FC = () => {
 
   return (
     <div className="bg-brand-ivory">
+      <Seo
+        title="Transport Logistics — air, sea, and ground freight"
+        description="End-to-end logistics across air, sea, and land for institutional clients moving cargo across regulated jurisdictions."
+        path="/transport"
+      />
       <PageHeader
         eyebrow="Transport & Logistics"
         index="T.01"

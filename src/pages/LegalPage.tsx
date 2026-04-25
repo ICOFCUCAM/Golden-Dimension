@@ -10,6 +10,7 @@ import {
   SecondaryCta,
 } from '@/components/section-primitives';
 import { Link } from 'react-router-dom';
+import { Seo } from '@/components/Seo';
 
 const legalTopics = [
   {
@@ -61,6 +62,11 @@ const LegalPage: React.FC = () => {
 
   return (
     <div className="bg-brand-ivory">
+      <Seo
+        title="Legal Advisory — corporate, regulatory, and cross-jurisdictional counsel"
+        description="Legal guidance, compliance updates, and regulatory advisory for institutional clients operating across multiple jurisdictions."
+        path="/legal"
+      />
       <PageHeader
         eyebrow="Legal Advisory"
         index="L.01"

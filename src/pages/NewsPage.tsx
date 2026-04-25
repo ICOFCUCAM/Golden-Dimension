@@ -8,6 +8,7 @@ import {
   Section,
   TechnicalLabel,
 } from '@/components/section-primitives';
+import { Seo } from '@/components/Seo';
 
 const categories = ['All', 'Company News', 'Sustainability', 'Industry Insights', 'Transport', 'Engineering', 'Technology', 'Healthcare', 'Giving'];
 
@@ -26,6 +27,11 @@ const NewsPage: React.FC = () => {
 
   return (
     <div className="bg-brand-ivory">
+      <Seo
+        title="Insights — practitioner perspectives from the firm"
+        description="Practitioner perspectives across engineering, finance, technology, and institutional development — company news, industry analysis, and thought leadership."
+        path="/news"
+      />
       <PageHeader
         eyebrow="Insights"
         index="N.01"
