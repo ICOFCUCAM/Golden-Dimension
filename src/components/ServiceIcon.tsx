@@ -2,13 +2,16 @@ import React from 'react';
 import {
   Calculator, Palette, Wrench, GraduationCap, Leaf, TrendingUp,
   Heart, Stethoscope, Scale, Megaphone, Code, Radio, Truck,
-  Umbrella, Globe, PenTool
+  Umbrella, Globe, PenTool,
+  // Extended icons used by the upgraded Services page sections
+  Compass, Cpu, Settings2, Landmark, Building2, ShieldCheck,
 } from 'lucide-react';
 
 const iconMap: Record<string, React.ComponentType<any>> = {
   Calculator, Palette, Wrench, GraduationCap, Leaf, TrendingUp,
   Heart, Stethoscope, Scale, Megaphone, Code, Radio, Truck,
-  Umbrella, Globe, PenTool
+  Umbrella, Globe, PenTool,
+  Compass, Cpu, Settings2, Landmark, Building2, ShieldCheck,
 };
 
 interface ServiceIconProps {

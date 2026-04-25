@@ -1,121 +1,358 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Search } from 'lucide-react';
-import { services } from '@/data/services';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import ServiceIcon from '@/components/ServiceIcon';
-import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import {
+  capabilityModel,
+  pillars,
+  methodology,
+  industries,
+  globalStats,
+} from '@/data/servicesPage';
+
+// -----------------------------------------------------------------------------
+// Small primitives — kept local so the page reads as a single capability story.
+// -----------------------------------------------------------------------------
+
+const Eyebrow: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <span className="block text-[#C8A44D] text-xs font-semibold uppercase tracking-[0.24em] mb-5">
+    {children}
+  </span>
+);
+
+const SectionHeader: React.FC<{
+  eyebrow: string;
+  title: React.ReactNode;
+  intro?: string;
+  align?: 'left' | 'center';
+}> = ({ eyebrow, title, intro, align = 'left' }) => (
+  <div
+    className={`max-w-3xl ${
+      align === 'center' ? 'mx-auto text-center' : ''
+    } mb-14 md:mb-20`}
+  >
+    <Eyebrow>{eyebrow}</Eyebrow>
+    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-[1.1] tracking-tight">
+      {title}
+    </h2>
+    {intro && (
+      <p className="mt-5 text-white/55 text-lg leading-relaxed">{intro}</p>
+    )}
+  </div>
+);
+
+// -----------------------------------------------------------------------------
+// Page
+// -----------------------------------------------------------------------------
 
 const ServicesPage: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const { ref, isVisible } = useScrollAnimation(0.05);
-
-  const filteredServices = services.filter(
-    (s) =>
-      s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.shortDescription.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   return (
     <div className="bg-[#0B1F3A]">
-      {/* Hero */}
-      <section className="relative pt-32 pb-16 overflow-hidden">
-        <div className="absolute top-20 left-0 w-96 h-96 bg-[#C8A44D]/5 rounded-full blur-3xl" />
+      {/* ==================================================================
+           SECTION 1 — Hero: enterprise capability positioning
+         ================================================================== */}
+      <section className="relative pt-32 pb-24 md:pt-40 md:pb-32 overflow-hidden border-b border-white/[0.06]">
+        <div className="absolute -top-20 left-0 w-[34rem] h-[34rem] bg-[#C8A44D]/[0.06] rounded-full blur-3xl pointer-events-none" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <span className="text-[#C8A44D] text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">
-            Our Expertise
-          </span>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            Our <span className="bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent">Services</span>
+          <Eyebrow>Capabilities</Eyebrow>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.05] tracking-tight max-w-5xl">
+            Integrated consulting and engineering capabilities for{' '}
+            <span className="bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent">
+              institutions, enterprises, and governments
+            </span>{' '}
+            worldwide.
           </h1>
-          <p className="text-xl text-white/60 max-w-3xl leading-relaxed mb-10">
-            Comprehensive professional services spanning 16 disciplines. From accounting to web development, we deliver excellence across every domain.
+          <p className="mt-8 max-w-3xl text-lg md:text-xl text-white/60 leading-relaxed">
+            Golden Dimensions Ltd unites strategy, engineering, technology, and
+            human-capital expertise into a single delivery framework — supporting
+            multidisciplinary transformation across finance, infrastructure,
+            healthcare, education, and digital systems since 2003.
           </p>
 
-          {/* Search */}
-          <div className="max-w-md relative">
-            <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
-            <input
-              type="text"
-              placeholder="Search services..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#C8A44D]/50 focus:bg-white/[0.08] transition-all"
-            />
+          {/* CTA hierarchy: primary / secondary / tertiary */}
+          <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-4">
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] text-[#0B1F3A] font-semibold rounded-md hover:shadow-xl hover:shadow-[#C8A44D]/20 transition-all"
+            >
+              Request Consultation <ArrowRight size={16} />
+            </Link>
+            <a
+              href="#pillars"
+              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 border border-white/15 text-white/85 font-medium rounded-md hover:border-[#C8A44D]/50 hover:text-white transition-all"
+            >
+              Explore Capability Areas
+            </a>
+            <a
+              href="#industries"
+              className="inline-flex items-center gap-1.5 text-white/60 hover:text-[#C8A44D] text-sm font-medium transition-colors"
+            >
+              View Industries Supported <ArrowUpRight size={14} />
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Services Grid */}
-      <section className="py-16 pb-24" ref={ref}>
+      {/* ==================================================================
+           SECTION 2 — Our Capability Model (six layers)
+         ================================================================== */}
+      <section id="capabilities" className="py-24 md:py-32 border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {filteredServices.length === 0 ? (
-            <div className="text-center py-16">
-              <p className="text-white/50 text-lg">No services found matching "{searchQuery}"</p>
-              <button
-                onClick={() => setSearchQuery('')}
-                className="mt-4 text-[#C8A44D] hover:underline"
-              >
-                Clear search
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredServices.map((service, index) => (
-                <Link
-                  key={service.id}
-                  to={`/services/${service.id}`}
-                  className={`group relative rounded-2xl overflow-hidden bg-white/[0.03] border border-white/[0.06] hover:border-[#C8A44D]/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-[#C8A44D]/5 ${
-                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                  }`}
-                  style={{ transitionDelay: `${index * 40}ms` }}
-                >
-                  {/* Image */}
-                  <div className="h-44 overflow-hidden">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3A] via-[#0B1F3A]/30 to-transparent" />
-                  </div>
+          <SectionHeader
+            eyebrow="Our Capability Model"
+            title={
+              <>
+                Six integrated layers that frame every{' '}
+                <span className="text-[#C8A44D]">institutional engagement</span>.
+              </>
+            }
+            intro="Each engagement combines these layers in proportions tailored to the client's transformation agenda — from strategic framing through long-term operational support."
+          />
 
-                  {/* Content */}
-                  <div className="relative p-6">
-                    <div className="w-12 h-12 rounded-xl bg-[#C8A44D]/10 flex items-center justify-center text-[#C8A44D] mb-4 -mt-12 relative z-10 border border-[#C8A44D]/20 backdrop-blur-sm group-hover:bg-[#C8A44D]/20 transition-colors">
-                      <ServiceIcon icon={service.icon} size={22} />
-                    </div>
-                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#C8A44D] transition-colors">
-                      {service.title}
-                    </h3>
-                    <p className="text-white/40 text-sm leading-relaxed line-clamp-3">
-                      {service.shortDescription}
-                    </p>
-                    <div className="mt-4 flex items-center gap-2 text-[#C8A44D] text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-0 group-hover:translate-x-1">
-                      View Details <ArrowRight size={14} />
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/[0.06] border border-white/[0.06] rounded-2xl overflow-hidden">
+            {capabilityModel.map((layer) => (
+              <div
+                key={layer.name}
+                className="bg-[#0B1F3A] p-8 md:p-10 hover:bg-white/[0.02] transition-colors"
+              >
+                <div className="w-11 h-11 rounded-md bg-[#C8A44D]/10 border border-[#C8A44D]/20 flex items-center justify-center text-[#C8A44D] mb-6">
+                  <ServiceIcon icon={layer.icon} size={20} />
+                </div>
+                <h3 className="text-lg font-semibold text-white tracking-tight mb-3">
+                  {layer.name}
+                </h3>
+                <p className="text-white/55 text-sm leading-relaxed">
+                  {layer.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-20 bg-[#0a1a30]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            Need a Custom Solution?
-          </h2>
-          <p className="text-white/60 text-lg mb-8">
-            Our multidisciplinary team can create tailored solutions that combine expertise from multiple service areas.
-          </p>
-          <Link
-            to="/contact"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] text-[#0B1F3A] font-semibold rounded-lg hover:shadow-xl hover:shadow-[#C8A44D]/25 transition-all duration-300"
-          >
-            Request Consultation <ArrowRight size={18} />
-          </Link>
+      {/* ==================================================================
+           SECTION 3 — Capability Pillars (16 services regrouped into 5)
+         ================================================================== */}
+      <section id="pillars" className="py-24 md:py-32 bg-[#0a1a30] border-b border-white/[0.06]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader
+            eyebrow="Capability Pillars"
+            title={
+              <>
+                Sixteen disciplines, organised into five{' '}
+                <span className="text-[#C8A44D]">consulting pillars</span>.
+              </>
+            }
+            intro="Each pillar groups complementary capabilities so engagements are scoped, staffed, and governed as a coherent transformation programme."
+          />
+
+          <div className="space-y-20 md:space-y-24">
+            {pillars.map((pillar) => (
+              <div key={pillar.id}>
+                {/* Pillar header */}
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 pb-8 mb-10 border-b border-white/[0.08]">
+                  <div className="md:col-span-4 lg:col-span-3 flex items-start gap-5">
+                    <span className="text-[#C8A44D]/70 text-sm font-mono tracking-widest pt-1">
+                      {pillar.index}
+                    </span>
+                    <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight tracking-tight">
+                      {pillar.name}
+                    </h3>
+                  </div>
+                  <p className="md:col-span-8 lg:col-span-9 text-white/55 text-base md:text-lg leading-relaxed md:pt-2">
+                    {pillar.tagline}
+                  </p>
+                </div>
+
+                {/* Pillar services */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {pillar.services.map((svc) => (
+                    <Link
+                      key={svc.id}
+                      to={`/services/${svc.id}`}
+                      className="group relative flex flex-col p-7 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-[#C8A44D]/40 hover:bg-white/[0.045] transition-all duration-300"
+                    >
+                      <h4 className="text-base md:text-lg font-semibold text-white leading-snug tracking-tight pr-6">
+                        {svc.title}
+                      </h4>
+                      <p className="mt-3 text-white/50 text-sm leading-relaxed">
+                        {svc.summary}
+                      </p>
+                      <span className="mt-6 inline-flex items-center gap-1.5 text-[#C8A44D] text-xs font-semibold uppercase tracking-[0.18em] opacity-70 group-hover:opacity-100 transition-opacity">
+                        View Capability <ArrowRight size={12} />
+                      </span>
+                      <ArrowUpRight
+                        size={16}
+                        className="absolute top-6 right-6 text-white/20 group-hover:text-[#C8A44D] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all"
+                      />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ==================================================================
+           SECTION 4 — How We Deliver (lifecycle methodology)
+         ================================================================== */}
+      <section id="methodology" className="py-24 md:py-32 border-b border-white/[0.06]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader
+            eyebrow="How We Deliver"
+            title={
+              <>
+                A six-phase methodology that supports clients across the full{' '}
+                <span className="text-[#C8A44D]">transformation lifecycle</span>.
+              </>
+            }
+            intro="From early-stage diagnostics to long-term operational support, our delivery framework is designed for institutional accountability and measurable outcomes."
+          />
+
+          <div className="relative">
+            <div className="hidden lg:block absolute top-7 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C8A44D]/30 to-transparent" />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 lg:gap-4">
+              {methodology.map((phase) => (
+                <div key={phase.index} className="relative">
+                  <div className="flex lg:flex-col items-start gap-4 lg:gap-5">
+                    <div className="relative z-10 w-14 h-14 shrink-0 rounded-full border border-[#C8A44D]/30 bg-[#0B1F3A] text-[#C8A44D] font-mono text-sm flex items-center justify-center">
+                      {phase.index}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-base font-semibold text-white tracking-tight">
+                        {phase.name}
+                      </h3>
+                      <p className="mt-2 text-white/50 text-sm leading-relaxed">
+                        {phase.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ==================================================================
+           SECTION 5 — Industries We Support
+         ================================================================== */}
+      <section id="industries" className="py-24 md:py-32 bg-[#0a1a30] border-b border-white/[0.06]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader
+            eyebrow="Industries We Support"
+            title={
+              <>
+                Multidisciplinary capabilities, applied across{' '}
+                <span className="text-[#C8A44D]">regulated sectors</span>.
+              </>
+            }
+            intro="Our pillars converge differently for each industry — combining the engineering, technology, financial, and human-capital capabilities most relevant to that sector's operating reality."
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {industries.map((industry) => (
+              <div
+                key={industry.name}
+                className="group p-8 rounded-xl bg-white/[0.025] border border-white/[0.06] hover:border-[#C8A44D]/30 transition-colors"
+              >
+                <div className="flex items-start gap-5">
+                  <div className="w-12 h-12 rounded-md bg-[#C8A44D]/10 border border-[#C8A44D]/20 flex items-center justify-center text-[#C8A44D] shrink-0">
+                    <ServiceIcon icon={industry.icon} size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-white tracking-tight leading-snug">
+                      {industry.name}
+                    </h3>
+                    <p className="mt-2.5 text-white/55 text-sm leading-relaxed">
+                      {industry.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ==================================================================
+           SECTION 6 — Global Delivery (credibility positioning)
+         ================================================================== */}
+      <section id="global" className="py-24 md:py-32 border-b border-white/[0.06]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+            <div className="lg:col-span-5">
+              <Eyebrow>Global Delivery</Eyebrow>
+              <h2 className="text-3xl md:text-4xl font-bold text-white leading-[1.1] tracking-tight">
+                Serving organisations across{' '}
+                <span className="text-[#C8A44D]">50+ countries</span> — delivering
+                multidisciplinary consulting since 2003.
+              </h2>
+              <p className="mt-6 text-white/55 text-base md:text-lg leading-relaxed">
+                We support both public and private sector institutions, with
+                multidisciplinary teams structured for international delivery,
+                regulatory complexity, and long-horizon institutional outcomes.
+              </p>
+            </div>
+
+            <div className="lg:col-span-7 grid grid-cols-2 gap-px bg-white/[0.06] border border-white/[0.06] rounded-2xl overflow-hidden">
+              {globalStats.map((stat) => (
+                <div key={stat.label} className="bg-[#0B1F3A] p-8 md:p-10">
+                  <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent leading-none">
+                    {stat.value}
+                  </div>
+                  <div className="mt-3 text-white/55 text-sm tracking-wide">
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ==================================================================
+           SECTION 7 — Closing CTA hierarchy
+         ================================================================== */}
+      <section className="py-24 md:py-32 bg-[#0a1a30]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="border border-white/[0.08] rounded-2xl p-10 md:p-14 bg-gradient-to-br from-white/[0.02] to-transparent">
+            <Eyebrow>Engage With Us</Eyebrow>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-[1.1] tracking-tight max-w-3xl">
+              Bring multidisciplinary capability to your next{' '}
+              <span className="bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent">
+                transformation programme
+              </span>
+              .
+            </h2>
+            <p className="mt-5 max-w-2xl text-white/60 text-lg leading-relaxed">
+              Tell us about the institutional outcome you're working toward —
+              we'll assemble the right combination of strategy, engineering,
+              technology, and operations expertise around it.
+            </p>
+            <div className="mt-9 flex flex-col sm:flex-row sm:items-center gap-4">
+              <Link
+                to="/contact"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] text-[#0B1F3A] font-semibold rounded-md hover:shadow-xl hover:shadow-[#C8A44D]/20 transition-all"
+              >
+                Request Consultation <ArrowRight size={16} />
+              </Link>
+              <a
+                href="#pillars"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 border border-white/15 text-white/85 font-medium rounded-md hover:border-[#C8A44D]/50 hover:text-white transition-all"
+              >
+                Explore Capability Areas
+              </a>
+              <a
+                href="#industries"
+                className="inline-flex items-center gap-1.5 text-white/60 hover:text-[#C8A44D] text-sm font-medium transition-colors"
+              >
+                View Industries Supported <ArrowUpRight size={14} />
+              </a>
+            </div>
+          </div>
         </div>
       </section>
     </div>
