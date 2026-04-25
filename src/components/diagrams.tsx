@@ -207,12 +207,12 @@ export const WorldMap: React.FC<{
   const landStroke = isDark ? '#5A5A62' : '#7A7A7A';
 
   return (
-    <div className={`relative w-full ${className}`}>
+    <div className={`relative w-full max-w-4xl mx-auto ${className}`}>
       <ComposableMap
         projection="geoEqualEarth"
-        projectionConfig={{ scale: 230 }}
-        width={1200}
-        height={620}
+        projectionConfig={{ scale: 175 }}
+        width={1000}
+        height={460}
         style={{ width: '100%', height: 'auto', display: 'block' }}
       >
         <Geographies geography={GEO_URL}>
@@ -223,7 +223,7 @@ export const WorldMap: React.FC<{
                 geography={geo}
                 fill={landFill}
                 stroke={landStroke}
-                strokeWidth={1}
+                strokeWidth={0.9}
                 style={{
                   default: { outline: 'none' },
                   hover:   { outline: 'none', fill: landFill },
@@ -237,13 +237,11 @@ export const WorldMap: React.FC<{
         {regionPins.map((pin) => (
           <Marker key={pin.id} coordinates={pin.coords}>
             {/* Outer pulse ring */}
-            <circle r={18} fill="none" stroke="#B4532A" strokeWidth={1} opacity={0.35} />
-            {/* Mid pulse ring */}
-            <circle r={11} fill="none" stroke="#B4532A" strokeWidth={1.25} opacity={0.6} />
+            <circle r={14} fill="none" stroke="#B4532A" strokeWidth={1} opacity={0.4} />
             {/* Outer dot */}
-            <circle r={6.5} fill="#B4532A" />
+            <circle r={5} fill="#B4532A" />
             {/* Inner dot */}
-            <circle r={2.4} fill="#F7F5F2" />
+            <circle r={2} fill="#F7F5F2" />
           </Marker>
         ))}
       </ComposableMap>
