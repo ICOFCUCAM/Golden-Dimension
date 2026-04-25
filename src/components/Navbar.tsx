@@ -52,28 +52,19 @@ const Navbar: React.FC = () => {
       <div className="bg-brand-paper border-b border-brand-hair">
         <div className="max-w-[88rem] mx-auto px-6 lg:px-10">
           <div className="flex items-center justify-between h-[68px]">
-            {/* Logo / Wordmark — uses the brand PNGs (monogram + wordmark)
-                hosted on Supabase. Heights tuned to sit on the 68px nav row. */}
+            {/* Logo — GD monogram (PNG) + typeset wordmark next to it. */}
             <Link to="/" className="flex items-center gap-3 group shrink-0">
               <img
                 src="https://ousjmnfvtdnztyqqyvay.supabase.co/storage/v1/object/public/Golden%20Dimension/GD.png"
-                alt=""
-                aria-hidden
+                alt="Golden Dimensions"
                 className="block h-9 w-auto"
               />
-              <span className="hidden sm:flex items-center">
-                <img
-                  src="https://ousjmnfvtdnztyqqyvay.supabase.co/storage/v1/object/public/Golden%20Dimension/Golden.png"
-                  alt="Golden Dimensions"
-                  className="block h-6 w-auto"
-                />
-              </span>
-              <span className="hidden md:block ml-2 pl-3 border-l border-brand-hair leading-none">
-                <span className="block label-technical text-brand-mute">
-                  LTD · Multidisciplinary Consulting
+              <span className="hidden sm:block leading-none">
+                <span className="block text-brand-ink font-display font-medium text-[17px] tracking-[-0.015em] group-hover:text-brand-accent transition-colors">
+                  Golden Dimensions
                 </span>
-                <span className="block mt-1.5 label-technical text-brand-accent">
-                  Established 2003
+                <span className="block mt-1.5 label-technical text-brand-mute">
+                  LTD · Established 2003
                 </span>
               </span>
             </Link>

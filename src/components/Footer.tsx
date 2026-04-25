@@ -43,22 +43,19 @@ const Footer: React.FC = () => {
         {/* Capability columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 mb-16">
           <div className="lg:col-span-3">
-            <Link to="/" className="inline-flex flex-col items-start gap-4">
-              <span className="inline-flex items-center gap-3">
-                <img
-                  src="https://ousjmnfvtdnztyqqyvay.supabase.co/storage/v1/object/public/Golden%20Dimension/GD.png"
-                  alt=""
-                  aria-hidden
-                  className="block h-10 w-auto"
-                />
-                <img
-                  src="https://ousjmnfvtdnztyqqyvay.supabase.co/storage/v1/object/public/Golden%20Dimension/Golden.png"
-                  alt="Golden Dimensions"
-                  className="block h-6 w-auto"
-                />
-              </span>
-              <span className="block label-technical text-brand-on-dark-2">
-                LTD · EST. 2003
+            <Link to="/" className="inline-flex items-center gap-3">
+              <img
+                src="https://ousjmnfvtdnztyqqyvay.supabase.co/storage/v1/object/public/Golden%20Dimension/GD.png"
+                alt="Golden Dimensions"
+                className="block h-10 w-auto"
+              />
+              <span className="leading-none">
+                <span className="block font-display font-medium text-[17px] text-brand-on-dark tracking-[-0.015em]">
+                  Golden Dimensions
+                </span>
+                <span className="block mt-1.5 label-technical text-brand-on-dark-2">
+                  LTD · EST. 2003
+                </span>
               </span>
             </Link>
             <p className="mt-6 max-w-sm text-[13.5px] leading-[1.6] text-brand-on-dark-2">
