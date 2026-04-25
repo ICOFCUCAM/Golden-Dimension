@@ -168,45 +168,96 @@ export const CapabilityArchitecture: React.FC<{
 };
 
 // -----------------------------------------------------------------------------
-// WorldMap — stylised dot-grid map with continents and region pins.
-// Hand-tuned grid; intentionally schematic, not cartographic. Used on the
-// homepage's Global Footprint section.
+// WorldMap — schematic dot-density world map.
+// Each landmass is rendered as a grid of small dots; ocean stays as a fainter
+// dot grid. This reads as a recognisable world map on first glance without
+// shipping kilobytes of cartographic SVG paths.
 // -----------------------------------------------------------------------------
 
 interface RegionPin {
   id: string;
   label: string;
-  x: number; // percent (0-100)
-  y: number; // percent (0-100)
+  x: number; // percent (0-100) — horizontal position in viewBox
+  y: number; // percent (0-100) — vertical position in viewBox
 }
 
-const continents: { d: string }[] = [
-  // North America
-  { d: 'M120 110 L210 95 L260 110 L290 150 L300 200 L260 240 L200 230 L150 200 L130 165 Z' },
-  // South America
-  { d: 'M260 270 L300 270 L320 320 L300 380 L270 410 L250 380 L240 320 Z' },
-  // Europe
-  { d: 'M450 110 L530 100 L560 130 L555 170 L500 180 L460 170 Z' },
-  // Africa
-  { d: 'M460 200 L550 200 L580 260 L570 330 L530 380 L490 380 L460 320 L450 260 Z' },
-  // Middle East
-  { d: 'M555 180 L600 180 L620 215 L595 240 L560 230 Z' },
-  // Asia
-  { d: 'M580 110 L730 100 L800 140 L820 200 L780 240 L700 240 L630 220 L600 180 Z' },
-  // South Asia
-  { d: 'M650 230 L720 230 L730 275 L685 290 L660 270 Z' },
-  // SE Asia / Australia (combined schematic)
-  { d: 'M740 250 L800 260 L820 300 L780 320 L750 300 Z' },
-  { d: 'M770 350 L830 350 L850 380 L800 405 L760 390 Z' },
+// World viewBox: 200 x 100 grid (rows x cols). Each "1" is a land cell that
+// will be rendered as a small filled dot. Built by hand to look roughly like
+// continents at low resolution. 0 = ocean, 1 = land, 2 = sparse-land/coast.
+const WORLD_GRID: string[] = [
+  // 100 cols wide, 50 rows tall
+  // Cols index           0         1         2         3         4         5         6         7         8         9
+  // Cols index           0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
+  /*  0 */               '          11                                                                                        ',
+  /*  1 */               '         1111  1                                                                                    ',
+  /*  2 */               '       11111111  111         11                                                                     ',
+  /*  3 */               '    1111111111111111111      111111                                       11                        ',
+  /*  4 */               '   11111111111111111111111  1111111   1111                       1111  1111111  111111              ',
+  /*  5 */               '   11111111111111111111111  111111   1111111111      11   111111111111111111111111111111            ',
+  /*  6 */               '    111111111111111111111   11111  1111111111111   11111111111111111111111111111111111111           ',
+  /*  7 */               '    1111111111111111111     1111  111111111111111111111111111111111111111111111111111111111  1      ',
+  /*  8 */               '     1111111111111111      11111  1111  1111111111111111111111111111111111111111111111111111111     ',
+  /*  9 */               '      11111111111111      11111   11    111111111111111111111111111111111111111111111111111111      ',
+  /* 10 */               '       11111111111        11111         1111111111111111111111111111111111111111111111111111        ',
+  /* 11 */               '        111111111         11111          111111111111111111111111111111111111111111111111111        ',
+  /* 12 */               '         11111111          111            111111111111111111111111111111111111111111111111          ',
+  /* 13 */               '          1111111          11             1111111111111111111111111111111111111111111  111          ',
+  /* 14 */               '           111111           1             1111  111111111111111111111111111111  111      11         ',
+  /* 15 */               '           111111                          11   111111111111111111111111111111   1                  ',
+  /* 16 */               '            11111                                111111111111111  11111111111                       ',
+  /* 17 */               '             111      11                          1111111111111    1111111111                       ',
+  /* 18 */               '             111      111                         111111111111      11111111                        ',
+  /* 19 */               '             111     1111                         11111111111        11111111                       ',
+  /* 20 */               '            1111    1111                          1111111111         1111111                        ',
+  /* 21 */               '            1111   1111                            11111111          1111111   111                  ',
+  /* 22 */               '            1111  1111                              111111            11111111111                   ',
+  /* 23 */               '            1111  1111                              111111             111111111                    ',
+  /* 24 */               '            111111111                                111111            11111111                     ',
+  /* 25 */               '            11111111                                  111111            1111111                     ',
+  /* 26 */               '            1111111                                   1111111            11111                      ',
+  /* 27 */               '             111111                                    11111111            11           1111        ',
+  /* 28 */               '             11111                                      111111111                      1111111      ',
+  /* 29 */               '             11111                                       1111111                       111111111    ',
+  /* 30 */               '             1111                                         1111111                      11111111111  ',
+  /* 31 */               '              111                                          111111                       1111111111  ',
+  /* 32 */               '              111                                           11111                        111111111  ',
+  /* 33 */               '              111                                            1111                          1111     ',
+  /* 34 */               '               11                                             111                                   ',
+  /* 35 */               '               11                                              11                                   ',
+  /* 36 */               '               1                                                                                    ',
+  /* 37 */               '                                                                                                    ',
+  /* 38 */               '                                                                                                    ',
+  /* 39 */               '                                                                                                    ',
 ];
 
+// Translate the grid to <circle> coordinates.
+const COLS = 100;
+const ROWS = WORLD_GRID.length;
+const CELL_W = 10;
+const CELL_H = 10;
+const VIEW_W = COLS * CELL_W;  // 1000
+const VIEW_H = ROWS * CELL_H;  // 400
+
+const landDots: { cx: number; cy: number }[] = [];
+WORLD_GRID.forEach((row, r) => {
+  for (let c = 0; c < row.length; c++) {
+    if (row[c] === '1') {
+      landDots.push({
+        cx: c * CELL_W + CELL_W / 2,
+        cy: r * CELL_H + CELL_H / 2,
+      });
+    }
+  }
+});
+
 const regionPins: RegionPin[] = [
-  { id: 'na',    label: 'North America',         x: 23,   y: 36 },
-  { id: 'eu',    label: 'European Union',        x: 53,   y: 32 },
-  { id: 'uk',    label: 'United Kingdom',        x: 50,   y: 28 },
-  { id: 'mena',  label: 'MENA',                  x: 60,   y: 47 },
-  { id: 'ssa',   label: 'Sub-Saharan Africa',    x: 55,   y: 65 },
-  { id: 'apac',  label: 'Asia Pacific',          x: 80,   y: 60 },
+  // Tuned to land-dot positions in the grid above.
+  { id: 'na',    label: 'North America',      x: 18, y: 30 },  // E. USA
+  { id: 'uk',    label: 'United Kingdom',     x: 47, y: 24 },  // British Isles
+  { id: 'eu',    label: 'European Union',     x: 50, y: 27 },  // Central Europe
+  { id: 'mena',  label: 'MENA',               x: 56, y: 38 },  // Egypt / Levant
+  { id: 'ssa',   label: 'Sub-Saharan Africa', x: 53, y: 56 },  // Central Africa
+  { id: 'apac',  label: 'Asia Pacific',       x: 78, y: 50 },  // Southeast Asia
 ];
 
 export const WorldMap: React.FC<{
@@ -214,52 +265,52 @@ export const WorldMap: React.FC<{
   tone?: 'light' | 'dark';
 }> = ({ className = '', tone = 'dark' }) => {
   const isDark = tone === 'dark';
-  const continentFill   = isDark ? '#1F1F23' : '#EFEDE7';
-  const continentStroke = isDark ? '#2C2D33' : '#BCB8AB';
-  const dotColor        = isDark ? 'rgba(166,167,172,0.18)' : 'rgba(116,117,123,0.20)';
+  const landDotColor  = isDark ? '#7B7C82' : '#3F4047';   // continents
+  const oceanDotColor = isDark ? 'rgba(166,167,172,0.16)' : 'rgba(116,117,123,0.18)';
+  const oceanCellSize = 22;
 
   return (
     <div className={`relative w-full ${className}`}>
       <svg
-        viewBox="0 0 900 450"
+        viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
         xmlns="http://www.w3.org/2000/svg"
         className="block w-full h-auto"
         role="img"
         aria-label="Global delivery footprint map"
       >
-        {/* Dot grid background */}
+        {/* Ocean dot grid background */}
         <defs>
-          <pattern id="map-dot-grid" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse">
-            <circle cx="1.25" cy="1.25" r="1.25" fill={dotColor} />
+          <pattern
+            id="map-ocean-grid"
+            x="0"
+            y="0"
+            width={oceanCellSize}
+            height={oceanCellSize}
+            patternUnits="userSpaceOnUse"
+          >
+            <circle cx={oceanCellSize / 2} cy={oceanCellSize / 2} r="1" fill={oceanDotColor} />
           </pattern>
         </defs>
-        <rect width="900" height="450" fill="url(#map-dot-grid)" />
+        <rect width={VIEW_W} height={VIEW_H} fill="url(#map-ocean-grid)" />
 
-        {/* Continent silhouettes */}
+        {/* Land dots — one per "1" in WORLD_GRID. */}
         <g>
-          {continents.map((c, i) => (
-            <path
-              key={i}
-              d={c.d}
-              fill={continentFill}
-              stroke={continentStroke}
-              strokeWidth="1"
-              strokeLinejoin="round"
-            />
+          {landDots.map((d, i) => (
+            <circle key={i} cx={d.cx} cy={d.cy} r="2.4" fill={landDotColor} />
           ))}
         </g>
 
         {/* Region pins */}
         <g>
           {regionPins.map((pin) => {
-            const cx = (pin.x / 100) * 900;
-            const cy = (pin.y / 100) * 450;
+            const cx = (pin.x / 100) * VIEW_W;
+            const cy = (pin.y / 100) * VIEW_H;
             return (
               <g key={pin.id}>
                 {/* Pulse ring */}
-                <circle cx={cx} cy={cy} r="14" fill="none" stroke="#C24914" strokeWidth="0.75" opacity="0.45" />
+                <circle cx={cx} cy={cy} r="14" fill="none" stroke="#C24914" strokeWidth="1" opacity="0.5" />
                 {/* Outer dot */}
-                <circle cx={cx} cy={cy} r="5" fill="#C24914" />
+                <circle cx={cx} cy={cy} r="5.5" fill="#C24914" />
                 {/* Inner dot */}
                 <circle cx={cx} cy={cy} r="2" fill="#FAFAF7" />
               </g>
