@@ -63,104 +63,104 @@ export const LayerStack: React.FC<{
 // flow into pillars, which apply across industries.
 // -----------------------------------------------------------------------------
 
+// 3-column cascade: capability layers feed pillars feed industries.
+// Editorial style — left-to-right reading order, no boxed grids,
+// hairline column separators, and a thin midline arrow between
+// columns. Each column is a labelled list with mono indices.
+
 export const CapabilityArchitecture: React.FC<{
   layers: { index: string; name: string }[];
   pillars: { index: string; name: string }[];
   industries: { name: string }[];
   className?: string;
 }> = ({ layers, pillars, industries, className = '' }) => {
+  const cols: {
+    code: string;
+    title: string;
+    items: { index: string; name: string }[];
+  }[] = [
+    {
+      code: 'L1',
+      title: 'Capability Layers',
+      items: layers,
+    },
+    {
+      code: 'L2',
+      title: 'Consulting Pillars',
+      items: pillars,
+    },
+    {
+      code: 'L3',
+      title: 'Industries Applied',
+      items: industries.map((i, idx) => ({
+        index: String(idx + 1).padStart(2, '0'),
+        name: i.name,
+      })),
+    },
+  ];
+
+  const FlowArrow = () => (
+    <div className="hidden lg:flex flex-col items-center justify-center px-1 self-stretch" aria-hidden>
+      <span className="block w-px flex-1 bg-brand-hair" />
+      <span className="block w-7 h-7 rounded-full border border-brand-accent text-brand-accent flex items-center justify-center my-3 bg-brand-paper">
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7H12M12 7L7 2M12 7L7 12" stroke="currentColor" strokeWidth="1.5" />
+        </svg>
+      </span>
+      <span className="block w-px flex-1 bg-brand-hair" />
+    </div>
+  );
+
   return (
     <div className={`relative ${className}`}>
-      {/* Three-row diagrammatic stack */}
-
-      {/* Row 1 — Capability layers */}
       <div className="border border-brand-hair-strong bg-brand-paper">
-        <div className="px-5 py-3 border-b border-brand-hair-strong flex items-center justify-between">
-          <span className="label-technical text-brand-mute">
-            <span className="text-brand-accent">L1</span> · Capability Layers
-          </span>
-          <span className="label-technical text-brand-mute">06</span>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
-          {layers.map((l, idx) => (
-            <div
-              key={l.name}
-              className={`p-4 md:p-5 ${idx > 0 ? 'border-l border-brand-hair' : ''} ${
-                idx >= 3 ? 'border-t lg:border-t-0 border-brand-hair' : ''
-              }`}
-            >
-              <span className="label-technical text-brand-accent">{l.index}</span>
-              <div className="mt-2 text-[13px] font-semibold tracking-[-0.015em] text-brand-ink leading-tight">
-                {l.name}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr_auto_1fr]">
+          {cols.map((col, ci) => (
+            <React.Fragment key={col.code}>
+              <div className={`p-7 md:p-8 ${ci > 0 ? 'border-t lg:border-t-0 border-brand-hair' : ''}`}>
+                {/* Column header */}
+                <div className="flex items-baseline justify-between pb-4 mb-5 border-b border-brand-hair-strong">
+                  <span className="label-technical">
+                    <span className="text-brand-accent">{col.code}</span>
+                    <span className="text-brand-mute"> · {col.title}</span>
+                  </span>
+                  <span className="label-technical text-brand-mute font-mono-tab">
+                    {String(col.items.length).padStart(2, '0')}
+                  </span>
+                </div>
+
+                {/* Column list */}
+                <ul className="space-y-3.5">
+                  {col.items.map((it) => (
+                    <li
+                      key={it.name}
+                      className="grid grid-cols-[auto_1fr] gap-3 items-baseline"
+                    >
+                      <span className="label-technical text-brand-accent shrink-0 pt-0.5 font-mono-tab">
+                        {it.index}
+                      </span>
+                      <span className="font-display text-[15px] md:text-[16px] font-medium tracking-[-0.005em] text-brand-ink leading-snug">
+                        {it.name}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
+
+              {/* Inter-column flow arrow (desktop only) */}
+              {ci < cols.length - 1 && <FlowArrow />}
+            </React.Fragment>
           ))}
         </div>
-      </div>
 
-      {/* Connector */}
-      <div className="flex items-center justify-center py-4">
-        <svg width="20" height="32" viewBox="0 0 20 32" fill="none" aria-hidden>
-          <path d="M10 0V26M10 26L2 18M10 26L18 18" stroke="#C24914" strokeWidth="1.25" />
-        </svg>
-      </div>
-
-      {/* Row 2 — Capability pillars */}
-      <div className="border border-brand-hair-strong bg-brand-paper">
-        <div className="px-5 py-3 border-b border-brand-hair-strong flex items-center justify-between">
+        {/* Footer caption strip */}
+        <div className="border-t border-brand-hair-strong px-6 md:px-8 py-3 flex items-center justify-between">
           <span className="label-technical text-brand-mute">
-            <span className="text-brand-accent">L2</span> · Capability Pillars
+            <span className="text-brand-accent">Read</span> · Layers feed pillars · Pillars apply across industries
           </span>
-          <span className="label-technical text-brand-mute">{String(pillars.length).padStart(2, '0')}</span>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
-          {pillars.map((p, idx) => (
-            <div
-              key={p.name}
-              className={`p-4 md:p-5 ${idx > 0 ? 'lg:border-l border-brand-hair' : ''} ${
-                idx > 0 ? 'border-t lg:border-t-0 border-brand-hair' : ''
-              }`}
-            >
-              <span className="label-technical text-brand-accent">{p.index}</span>
-              <div className="mt-2 text-[13px] font-semibold tracking-[-0.015em] text-brand-ink leading-tight">
-                {p.name}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Connector */}
-      <div className="flex items-center justify-center py-4">
-        <svg width="20" height="32" viewBox="0 0 20 32" fill="none" aria-hidden>
-          <path d="M10 0V26M10 26L2 18M10 26L18 18" stroke="#C24914" strokeWidth="1.25" />
-        </svg>
-      </div>
-
-      {/* Row 3 — Industries applied */}
-      <div className="border border-brand-hair-strong bg-brand-paper">
-        <div className="px-5 py-3 border-b border-brand-hair-strong flex items-center justify-between">
-          <span className="label-technical text-brand-mute">
-            <span className="text-brand-accent">L3</span> · Industry Applications
+          <span className="label-technical text-brand-mute font-mono-tab">
+            ARCH / 03 · v.{new Date().getFullYear() % 100}.01
           </span>
-          <span className="label-technical text-brand-mute">{String(industries.length).padStart(2, '0')}</span>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
-          {industries.map((it, idx) => (
-            <div
-              key={it.name}
-              className={`p-4 md:p-5 ${idx > 0 ? 'border-l border-brand-hair' : ''} ${
-                idx >= 3 ? 'border-t lg:border-t-0 border-brand-hair' : ''
-              }`}
-            >
-              <span className="label-technical text-brand-accent">
-                {String(idx + 1).padStart(2, '0')}
-              </span>
-              <div className="mt-2 text-[12.5px] font-semibold tracking-[-0.015em] text-brand-ink leading-tight">
-                {it.name}
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </div>
@@ -203,16 +203,16 @@ export const WorldMap: React.FC<{
   tone?: 'light' | 'dark';
 }> = ({ className = '', tone = 'dark' }) => {
   const isDark = tone === 'dark';
-  const landFill   = isDark ? '#1F1F23' : '#EFEDE7';
-  const landStroke = isDark ? '#3A3A40' : '#BCB8AB';
+  const landFill   = isDark ? '#26262B' : '#E7E1DA';
+  const landStroke = isDark ? '#5A5A62' : '#7A7A7A';
 
   return (
     <div className={`relative w-full ${className}`}>
       <ComposableMap
         projection="geoEqualEarth"
-        projectionConfig={{ scale: 165 }}
-        width={900}
-        height={460}
+        projectionConfig={{ scale: 230 }}
+        width={1200}
+        height={620}
         style={{ width: '100%', height: 'auto', display: 'block' }}
       >
         <Geographies geography={GEO_URL}>
@@ -223,7 +223,7 @@ export const WorldMap: React.FC<{
                 geography={geo}
                 fill={landFill}
                 stroke={landStroke}
-                strokeWidth={0.5}
+                strokeWidth={1}
                 style={{
                   default: { outline: 'none' },
                   hover:   { outline: 'none', fill: landFill },
@@ -236,12 +236,14 @@ export const WorldMap: React.FC<{
 
         {regionPins.map((pin) => (
           <Marker key={pin.id} coordinates={pin.coords}>
-            {/* Pulse ring */}
-            <circle r={11} fill="none" stroke="#C24914" strokeWidth={1} opacity={0.5} />
+            {/* Outer pulse ring */}
+            <circle r={18} fill="none" stroke="#B4532A" strokeWidth={1} opacity={0.35} />
+            {/* Mid pulse ring */}
+            <circle r={11} fill="none" stroke="#B4532A" strokeWidth={1.25} opacity={0.6} />
             {/* Outer dot */}
-            <circle r={5} fill="#C24914" />
+            <circle r={6.5} fill="#B4532A" />
             {/* Inner dot */}
-            <circle r={1.8} fill="#FAFAF7" />
+            <circle r={2.4} fill="#F7F5F2" />
           </Marker>
         ))}
       </ComposableMap>

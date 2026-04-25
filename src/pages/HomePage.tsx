@@ -143,52 +143,50 @@ const HomePage: React.FC = () => {
             </div>
 
             <div className="lg:col-span-4 flex flex-col justify-end">
-              <DiagramFrame label="Operating System" index="OP" className="bg-brand-paper">
-                <div className="p-7">
-                  {/* Three-track schematic — Strategy / Engineering / Operations
-                      flowing through a single delivery axis, signalling the
-                      multidisciplinary thesis visually rather than via copy. */}
-                  <svg viewBox="0 0 320 220" className="w-full h-auto" aria-hidden>
-                    {/* Vertical axis */}
-                    <line x1="40" y1="20" x2="40" y2="200" stroke="#BCB8AB" strokeWidth="1" />
-                    {/* Three lateral tracks */}
-                    {[
-                      { y: 40,  label: 'STRATEGY',    sub: 'Diagnose · Decide' },
-                      { y: 110, label: 'ENGINEERING', sub: 'Design · Build' },
-                      { y: 180, label: 'OPERATIONS',  sub: 'Run · Sustain' },
-                    ].map((row) => (
-                      <g key={row.label}>
-                        <line x1="40" y1={row.y} x2="300" y2={row.y} stroke="#E2E0DA" strokeWidth="1" />
-                        <circle cx="40" cy={row.y} r="4" fill="#C24914" />
-                        <text x="56" y={row.y - 6} fontFamily="JetBrains Mono" fontSize="9" letterSpacing="1.5" fill="#74757B">
-                          {row.label}
-                        </text>
-                        <text x="56" y={row.y + 12} fontFamily="Plus Jakarta Sans" fontWeight="500" fontSize="11" fill="#0A0A0B">
-                          {row.sub}
-                        </text>
-                      </g>
-                    ))}
-                    {/* Connecting flow ticks */}
-                    {[40, 110, 180].map((y, i) => (
-                      <g key={i}>
-                        <circle cx="280" cy={y} r="2.5" fill="#0A0A0B" />
-                      </g>
-                    ))}
-                    {/* Vertical flow arrows */}
-                    <path d="M40 50 L40 100" stroke="#C24914" strokeWidth="1.2" strokeDasharray="2,3" />
-                    <path d="M40 120 L40 170" stroke="#C24914" strokeWidth="1.2" strokeDasharray="2,3" />
-                  </svg>
+              {/* Editorial hero visual — architectural infrastructure photo,
+                  desaturated to match the editorial palette, with a thin
+                  technical annotation overlay in the corner. Replaces the
+                  earlier SVG schematic. */}
+              <figure className="relative">
+                <div className="relative overflow-hidden bg-brand-stone aspect-[4/5]">
+                  <img
+                    src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1200&q=80"
+                    alt="Modern architectural infrastructure — a vertical view of a steel-and-glass facade representing the institutional engineering work the firm delivers."
+                    className="w-full h-full object-cover grayscale contrast-[1.05]"
+                    loading="eager"
+                  />
+                  {/* Corner ticks (Palantir-coded) */}
+                  <span className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-brand-accent" aria-hidden />
+                  <span className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-brand-accent" aria-hidden />
+                  <span className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-brand-accent" aria-hidden />
+                  <span className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-brand-accent" aria-hidden />
 
-                  <div className="mt-6 pt-6 border-t border-brand-hair">
-                    <div className="grid grid-cols-2 gap-y-3 gap-x-3">
-                      <span className="label-technical text-brand-mute">Practice est.</span>
-                      <span className="text-[12.5px] text-brand-ink tracking-tight text-right">2003</span>
-                      <span className="label-technical text-brand-mute">Client base</span>
-                      <span className="text-[12.5px] text-brand-ink tracking-tight text-right">Public + private</span>
-                    </div>
+                  {/* Technical annotation top-left */}
+                  <div className="absolute top-3 left-4 right-4 flex items-baseline justify-between">
+                    <span className="label-technical text-brand-on-dark/90">
+                      <span className="text-brand-accent-soft">§</span> HERO / 01
+                    </span>
+                    <span className="label-technical text-brand-on-dark/70 font-mono-tab">
+                      {new Date().getFullYear()}
+                    </span>
                   </div>
+
+                  {/* Caption bottom-left */}
+                  <figcaption className="absolute bottom-3 left-4 right-4">
+                    <span className="label-technical text-brand-on-dark/85">
+                      <span className="text-brand-accent-soft">→</span> Institutional engineering capability
+                    </span>
+                  </figcaption>
                 </div>
-              </DiagramFrame>
+
+                {/* Footer ledger row beneath the image */}
+                <div className="mt-3 pt-3 border-t border-brand-hair grid grid-cols-2 gap-3">
+                  <span className="label-technical text-brand-mute">Practice est.</span>
+                  <span className="text-[12.5px] text-brand-ink tracking-tight text-right font-mono-tab">2003</span>
+                  <span className="label-technical text-brand-mute">Client base</span>
+                  <span className="text-[12.5px] text-brand-ink tracking-tight text-right">Public + private</span>
+                </div>
+              </figure>
             </div>
           </div>
         </Container>
@@ -528,34 +526,39 @@ const HomePage: React.FC = () => {
            § 08 — Global Footprint (the dark band, with map)
          ============================================================ */}
       <Section tone="ink" id="footprint">
-        <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-            <div className="lg:col-span-5">
+        <Container size="wide">
+          {/* Header row — left-aligned typography on top of the map */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 mb-12 md:mb-16">
+            <div className="lg:col-span-7">
               <TechnicalLabel index="08" tone="dark">Global Footprint</TechnicalLabel>
-              <h2 className="mt-8 font-display text-[32px] md:text-[44px] lg:text-[52px] font-semibold leading-[1.05] tracking-[-0.025em] text-brand-on-dark">
+              <h2 className="mt-8 font-display text-[32px] md:text-[44px] lg:text-[52px] font-medium leading-[1.05] tracking-[-0.015em] text-brand-on-dark">
                 Operating across{' '}
-                <span className="font-editorial italic font-medium text-brand-accent-soft">six regions</span>{' '}
+                <span className="font-editorial italic text-brand-accent-soft">six regions</span>{' '}
                 — public and private institutions, since 2003.
               </h2>
-              <p className="mt-7 max-w-xl text-[15.5px] leading-[1.65] text-brand-on-dark-2">
+            </div>
+            <div className="lg:col-span-5">
+              <p className="text-[15.5px] leading-[1.65] text-brand-on-dark-2 lg:pt-6">
                 Delivery teams structured for international engagements,
                 regulatory complexity, and long-horizon institutional outcomes.
               </p>
+            </div>
+          </div>
 
-              <div className="mt-10 grid grid-cols-3 gap-x-6">
-                <Metric value="50+"  label="Countries"     tone="dark" size="md" />
-                <Metric value="200+" label="Professionals" tone="dark" size="md" />
-                <Metric value="20+"  label="Years"         tone="dark" size="md" />
-              </div>
+          {/* Full-width map */}
+          <WorldMap tone="dark" />
 
-              <div className="mt-10 flex flex-col sm:flex-row gap-3">
-                <PrimaryCta to="/contact" tone="dark">Request Consultation</PrimaryCta>
-                <SecondaryCta to="/industries" tone="dark">View Industries Served</SecondaryCta>
-              </div>
+          {/* Metrics row + CTAs below the map */}
+          <div className="mt-14 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-end pt-10 border-t border-white/10">
+            <div className="lg:col-span-7 grid grid-cols-3 gap-x-6">
+              <Metric value="50+"  label="Countries"     tone="dark" size="md" />
+              <Metric value="200+" label="Professionals" tone="dark" size="md" />
+              <Metric value="20+"  label="Years"         tone="dark" size="md" />
             </div>
 
-            <div className="lg:col-span-7">
-              <WorldMap tone="dark" />
+            <div className="lg:col-span-5 flex flex-col sm:flex-row gap-3">
+              <PrimaryCta to="/contact" tone="dark">Request Consultation</PrimaryCta>
+              <SecondaryCta to="/industries" tone="dark">View Industries Served</SecondaryCta>
             </div>
           </div>
         </Container>
