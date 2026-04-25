@@ -1,19 +1,28 @@
 import React, { useState } from 'react';
-import { Clock, ArrowRight, Tag } from 'lucide-react';
+import { Clock, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { newsArticles } from '@/data/news';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
-import { PageHeader } from '@/components/section-primitives';
+import {
+  PageHeader,
+  Container,
+  Section,
+  TechnicalLabel,
+} from '@/components/section-primitives';
 
 const categories = ['All', 'Company News', 'Sustainability', 'Industry Insights', 'Transport', 'Engineering', 'Technology', 'Healthcare', 'Giving'];
 
 const NewsPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const [expandedArticle, setExpandedArticle] = useState<string | null>(null);
-  const { ref, isVisible } = useScrollAnimation(0.05);
+  const { ref } = useScrollAnimation(0.05);
 
-  const filteredArticles = activeCategory === 'All'
-    ? newsArticles
-    : newsArticles.filter((a) => a.category === activeCategory);
+  const filteredArticles =
+    activeCategory === 'All'
+      ? newsArticles
+      : newsArticles.filter((a) => a.category === activeCategory);
+
+  const featured = activeCategory === 'All' ? filteredArticles[0] : null;
+  const grid = activeCategory === 'All' ? filteredArticles.slice(1) : filteredArticles;
 
   return (
     <div className="bg-brand-ivory">
@@ -24,143 +33,154 @@ const NewsPage: React.FC = () => {
         subtitle="Practitioner perspectives from across the firm — engineering, finance, technology, and institutional development."
       />
 
-      {/* Category Filter */}
-      <section className="pb-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap gap-2">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                  activeCategory === cat
-                    ? 'bg-brand-accent text-brand-ivory'
-                    : 'bg-brand-paper text-brand-mute hover:bg-brand-paper hover:text-brand-ink-2'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+      {/* Category filter — editorial chip rail */}
+      <section className="bg-brand-ivory border-b border-brand-hair">
+        <Container>
+          <div className="py-6 flex items-baseline gap-6 overflow-x-auto">
+            <span className="label-technical text-brand-mute shrink-0">Filter by</span>
+            <div className="flex flex-wrap gap-2">
+              {categories.map((cat) => {
+                const active = activeCategory === cat;
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`px-3 py-1.5 text-[12.5px] font-medium tracking-tight border transition-colors ${
+                      active
+                        ? 'bg-brand-ink border-brand-ink text-brand-ivory'
+                        : 'bg-brand-paper border-brand-hair-strong text-brand-ink-2 hover:border-brand-ink hover:text-brand-ink'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* Articles Grid */}
-      <section className="py-12 pb-24" ref={ref}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Articles */}
+      <Section tone="paper">
+        <Container>
           {filteredArticles.length === 0 ? (
-            <div className="text-center py-16">
-              <p className="text-brand-mute text-lg">No articles found in this category.</p>
+            <div className="py-16 text-center">
+              <p className="text-brand-mute text-[15px]">No articles in this category.</p>
               <button
                 onClick={() => setActiveCategory('All')}
-                className="mt-4 text-brand-accent hover:underline"
+                className="mt-4 text-[13px] font-medium text-brand-ink border-b border-brand-ink hover:text-brand-accent hover:border-brand-accent transition-colors pb-1"
               >
                 View all articles
               </button>
             </div>
           ) : (
-            <>
-              {/* Featured Article */}
-              {activeCategory === 'All' && (
-                <div
-                  className={`mb-12 grid grid-cols-1 lg:grid-cols-2 gap-8 p-6 rounded-2xl bg-brand-paper border border-brand-hair hover:border-brand-accent/30 transition-all duration-700 cursor-pointer ${
-                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                  }`}
-                  onClick={() => setExpandedArticle(expandedArticle === filteredArticles[0].id ? null : filteredArticles[0].id)}
-                >
-                  <div className="rounded-xl overflow-hidden h-72">
-                    <img
-                      src={filteredArticles[0].image}
-                      alt={filteredArticles[0].title}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                  <div className="flex flex-col justify-center">
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className="px-3 py-1 rounded-full bg-brand-accent/10 text-brand-accent text-xs font-medium">
-                        {filteredArticles[0].category}
-                      </span>
-                      <span className="text-brand-mute text-sm flex items-center gap-1">
-                        <Clock size={14} /> {filteredArticles[0].readTime}
-                      </span>
-                    </div>
-                    <h2 className="text-2xl md:text-3xl font-bold text-brand-ink mb-4 hover:text-brand-accent transition-colors">
-                      {filteredArticles[0].title}
-                    </h2>
-                    <p className="text-brand-mute leading-relaxed mb-4">
-                      {filteredArticles[0].excerpt}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-brand-mute text-sm">{filteredArticles[0].date}</span>
-                      <span className="text-brand-accent text-sm font-medium flex items-center gap-1">
-                        Read More <ArrowRight size={14} />
-                      </span>
-                    </div>
-                    {expandedArticle === filteredArticles[0].id && (
-                      <div className="mt-6 pt-6 border-t border-brand-hair">
-                        <p className="text-brand-ink-2 leading-relaxed">
-                          This is an expanded view of the article. In a full implementation, this would contain the complete article content with rich formatting, images, and related resources. Golden Dimensions is committed to keeping our stakeholders informed about our latest developments and industry insights.
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Article Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {(activeCategory === 'All' ? filteredArticles.slice(1) : filteredArticles).map((article, i) => (
-                  <div
-                    key={article.id}
-                    className={`group rounded-2xl overflow-hidden bg-brand-paper border border-brand-hair hover:border-brand-accent/30 transition-all duration-500 hover:-translate-y-1 cursor-pointer ${
-                      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                    }`}
-                    style={{ transitionDelay: `${i * 80}ms` }}
-                    onClick={() => setExpandedArticle(expandedArticle === article.id ? null : article.id)}
-                  >
-                    <div className="h-48 overflow-hidden">
+            <div ref={ref}>
+              {/* Featured article — editorial wide layout */}
+              {featured && (
+                <article className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 pb-14 mb-14 border-b-2 border-brand-ink">
+                  <div className="lg:col-span-5">
+                    <div className="aspect-[4/3] overflow-hidden bg-brand-stone">
                       <img
-                        src={article.image}
-                        alt={article.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        src={featured.image}
+                        alt={featured.title}
+                        className="w-full h-full object-cover grayscale-[10%]"
                       />
                     </div>
-                    <div className="p-6">
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className="px-3 py-1 rounded-full bg-brand-accent/10 text-brand-accent text-xs font-medium">
-                          {article.category}
-                        </span>
-                        <span className="text-brand-mute text-xs flex items-center gap-1">
-                          <Clock size={12} /> {article.readTime}
-                        </span>
-                      </div>
-                      <h3 className="text-lg font-bold text-brand-ink mb-3 group-hover:text-brand-accent transition-colors line-clamp-2">
-                        {article.title}
-                      </h3>
-                      <p className="text-brand-mute text-sm leading-relaxed line-clamp-3 mb-4">
-                        {article.excerpt}
+                  </div>
+                  <div className="lg:col-span-7 flex flex-col justify-center">
+                    <div className="flex items-center gap-3 mb-5">
+                      <span className="label-technical text-brand-accent">Featured · {featured.category}</span>
+                      <span className="label-technical text-brand-mute flex items-center gap-1.5">
+                        <Clock size={11} /> {featured.readTime}
+                      </span>
+                    </div>
+                    <h2 className="font-display text-[28px] md:text-[36px] lg:text-[42px] font-medium tracking-[-0.015em] text-brand-ink leading-[1.1]">
+                      {featured.title}
+                    </h2>
+                    <p className="mt-5 max-w-2xl text-[15.5px] md:text-[16.5px] leading-[1.65] text-brand-ink-2">
+                      {featured.excerpt}
+                    </p>
+
+                    {expandedArticle === featured.id && (
+                      <p className="mt-5 max-w-2xl text-[14.5px] leading-[1.7] text-brand-ink-2 border-l-2 border-brand-accent pl-5">
+                        Full article content would appear here with detailed analysis, expert commentary, and actionable insights from the Golden Dimensions team.
                       </p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-brand-mute text-xs">{article.date}</span>
-                        <span className="text-brand-accent text-sm font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          Read <ArrowRight size={14} />
-                        </span>
-                      </div>
-                      {expandedArticle === article.id && (
-                        <div className="mt-4 pt-4 border-t border-brand-hair">
-                          <p className="text-brand-ink-2 text-sm leading-relaxed">
-                            Full article content would appear here with detailed analysis, expert commentary, and actionable insights from the Golden Dimensions team.
-                          </p>
-                        </div>
-                      )}
+                    )}
+
+                    <div className="mt-7 flex items-center justify-between">
+                      <span className="label-technical text-brand-mute font-mono-tab">
+                        {featured.date}
+                      </span>
+                      <button
+                        onClick={() => setExpandedArticle(expandedArticle === featured.id ? null : featured.id)}
+                        className="group inline-flex items-center gap-2 text-[13px] font-medium tracking-tight text-brand-ink border-b border-brand-ink pb-1 hover:text-brand-accent hover:border-brand-accent transition-colors"
+                      >
+                        {expandedArticle === featured.id ? 'Collapse' : 'Read article'}
+                        <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+                      </button>
                     </div>
                   </div>
+                </article>
+              )}
+
+              {/* Article grid — editorial rule grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l border-brand-hair">
+                {grid.map((article, idx) => (
+                  <article
+                    key={article.id}
+                    className="border-r border-b border-brand-hair bg-brand-paper hover:bg-brand-stone transition-colors"
+                  >
+                    <button
+                      onClick={() => setExpandedArticle(expandedArticle === article.id ? null : article.id)}
+                      className="block w-full text-left h-full"
+                    >
+                      <div className="aspect-[16/10] overflow-hidden bg-brand-stone">
+                        <img
+                          src={article.image}
+                          alt={article.title}
+                          className="w-full h-full object-cover grayscale-[10%]"
+                        />
+                      </div>
+
+                      <div className="p-7">
+                        <div className="flex items-baseline justify-between mb-4">
+                          <span className="label-technical text-brand-accent">
+                            N.{String(idx + (featured ? 2 : 1)).padStart(2, '0')} · {article.category}
+                          </span>
+                          <span className="label-technical text-brand-mute font-mono-tab">
+                            {article.readTime.replace(/\s*read/i, '')}
+                          </span>
+                        </div>
+
+                        <h3 className="font-display text-[18px] md:text-[20px] font-medium tracking-[-0.015em] text-brand-ink leading-snug line-clamp-2">
+                          {article.title}
+                        </h3>
+
+                        <p className="mt-3 text-[13.5px] leading-[1.6] text-brand-ink-2 line-clamp-3">
+                          {article.excerpt}
+                        </p>
+
+                        <div className="mt-5 pt-4 border-t border-brand-hair flex items-center justify-between">
+                          <span className="label-technical text-brand-mute font-mono-tab">
+                            {article.date}
+                          </span>
+                          <ArrowUpRight size={14} className="text-brand-mute" />
+                        </div>
+
+                        {expandedArticle === article.id && (
+                          <p className="mt-5 text-[13px] leading-[1.65] text-brand-ink-2 border-l-2 border-brand-accent pl-4">
+                            Full article content would appear here with detailed analysis, expert commentary, and actionable insights from the Golden Dimensions team.
+                          </p>
+                        )}
+                      </div>
+                    </button>
+                  </article>
                 ))}
               </div>
-            </>
+            </div>
           )}
-        </div>
-      </section>
+        </Container>
+      </Section>
     </div>
   );
 };

@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Send, Check, Globe2 } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Send, Check, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
-import { PageHeader } from '@/components/section-primitives';
+import { PageHeader, Container, Section, TechnicalLabel } from '@/components/section-primitives';
 
 const offices = [
-  { city: 'London', country: 'United Kingdom', type: 'Headquarters', timezone: 'GMT' },
-  { city: 'New York', country: 'United States', type: 'Regional Office', timezone: 'EST' },
-  { city: 'Dubai', country: 'UAE', type: 'Regional Office', timezone: 'GST' },
-  { city: 'Singapore', country: 'Singapore', type: 'Asia Pacific', timezone: 'SGT' },
+  { city: 'London',     country: 'United Kingdom', type: 'Headquarters',  timezone: 'GMT' },
+  { city: 'New York',   country: 'United States',  type: 'Regional Office', timezone: 'EST' },
+  { city: 'Dubai',      country: 'United Arab Emirates', type: 'Regional Office', timezone: 'GST' },
+  { city: 'Singapore',  country: 'Singapore',      type: 'Asia Pacific',  timezone: 'SGT' },
 ];
+
+// Editorial form input — sharp corners, hairline border, focus turns ink.
+const inputClass = (hasError: boolean) =>
+  `w-full px-4 py-3 bg-brand-paper border text-[15px] text-brand-ink placeholder:text-brand-mute focus:outline-none transition-colors ${
+    hasError ? 'border-red-500/60 focus:border-red-600' : 'border-brand-hair-strong focus:border-brand-ink'
+  }`;
 
 const ContactPage: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -40,9 +46,9 @@ const ContactPage: React.FC = () => {
       });
       if (error) throw error;
       setSubmitted(true);
-      toast.success('Message sent successfully! We\'ll get back to you soon.');
+      toast.success("Message sent. We'll respond within one business day.");
       setFormData({ name: '', email: '', message: '' });
-      setTimeout(() => setSubmitted(false), 4000);
+      setTimeout(() => setSubmitted(false), 5000);
     } catch (err: any) {
       toast.error('Failed to send message. Please try again.');
       console.error(err);
@@ -60,96 +66,193 @@ const ContactPage: React.FC = () => {
         subtitle="Tell us about the institutional outcome you're working toward. We'll respond within one business day with a partner-led conversation, not a sales pitch."
       />
 
-      {/* Contact Section */}
-      <section className="py-16 pb-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-16">
-            {/* Contact Form */}
-            <div className="lg:col-span-3">
-              <h2 className="text-2xl font-bold text-brand-ink mb-8">Send Us a Message</h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Form + contact ledger */}
+      <Section tone="paper">
+        <Container>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+            {/* Form */}
+            <div className="lg:col-span-7">
+              <TechnicalLabel index="01">Contact Form</TechnicalLabel>
+              <h2 className="mt-7 font-display text-[26px] md:text-[32px] font-medium tracking-[-0.015em] text-brand-ink leading-tight">
+                Send a message
+              </h2>
+              <p className="mt-4 text-[15px] leading-[1.6] text-brand-ink-2 max-w-xl">
+                Provide a brief description of the engagement you're considering.
+                We'll route it to the partner most relevant to your sector.
+              </p>
+
+              <form onSubmit={handleSubmit} className="mt-10 space-y-7">
                 <div>
-                  <label className="block text-brand-ink-2 text-sm font-medium mb-2">Full Name</label>
-                  <input type="text" value={formData.name} onChange={(e) => { setFormData({ ...formData, name: e.target.value }); if (errors.name) setErrors({ ...errors, name: '' }); }} placeholder="Enter your full name" className={`w-full px-5 py-4 bg-brand-paper border rounded-xl text-brand-ink placeholder-brand-mute focus:outline-none focus:border-brand-accent/30 focus:bg-brand-paper transition-all ${errors.name ? 'border-red-500/50' : 'border-brand-hair'}`} />
-                  {errors.name && <p className="mt-1 text-red-400 text-sm">{errors.name}</p>}
+                  <label className="label-technical text-brand-mute mb-2 block">Full name</label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => { setFormData({ ...formData, name: e.target.value }); if (errors.name) setErrors({ ...errors, name: '' }); }}
+                    placeholder="Your name"
+                    className={inputClass(!!errors.name)}
+                  />
+                  {errors.name && (
+                    <p className="mt-2 inline-flex items-center gap-2 text-[12.5px] text-red-600">
+                      <AlertCircle size={12} /> {errors.name}
+                    </p>
+                  )}
                 </div>
+
                 <div>
-                  <label className="block text-brand-ink-2 text-sm font-medium mb-2">Email Address</label>
-                  <input type="email" value={formData.email} onChange={(e) => { setFormData({ ...formData, email: e.target.value }); if (errors.email) setErrors({ ...errors, email: '' }); }} placeholder="Enter your email address" className={`w-full px-5 py-4 bg-brand-paper border rounded-xl text-brand-ink placeholder-brand-mute focus:outline-none focus:border-brand-accent/30 focus:bg-brand-paper transition-all ${errors.email ? 'border-red-500/50' : 'border-brand-hair'}`} />
-                  {errors.email && <p className="mt-1 text-red-400 text-sm">{errors.email}</p>}
+                  <label className="label-technical text-brand-mute mb-2 block">Email address</label>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => { setFormData({ ...formData, email: e.target.value }); if (errors.email) setErrors({ ...errors, email: '' }); }}
+                    placeholder="you@organisation.com"
+                    className={inputClass(!!errors.email)}
+                  />
+                  {errors.email && (
+                    <p className="mt-2 inline-flex items-center gap-2 text-[12.5px] text-red-600">
+                      <AlertCircle size={12} /> {errors.email}
+                    </p>
+                  )}
                 </div>
+
                 <div>
-                  <label className="block text-brand-ink-2 text-sm font-medium mb-2">Message</label>
-                  <textarea value={formData.message} onChange={(e) => { setFormData({ ...formData, message: e.target.value }); if (errors.message) setErrors({ ...errors, message: '' }); }} placeholder="Tell us about your project or inquiry..." rows={6} className={`w-full px-5 py-4 bg-brand-paper border rounded-xl text-brand-ink placeholder-brand-mute focus:outline-none focus:border-brand-accent/30 focus:bg-brand-paper transition-all resize-none ${errors.message ? 'border-red-500/50' : 'border-brand-hair'}`} />
-                  {errors.message && <p className="mt-1 text-red-400 text-sm">{errors.message}</p>}
+                  <label className="label-technical text-brand-mute mb-2 block">Engagement details</label>
+                  <textarea
+                    value={formData.message}
+                    onChange={(e) => { setFormData({ ...formData, message: e.target.value }); if (errors.message) setErrors({ ...errors, message: '' }); }}
+                    placeholder="Sector, the institutional outcome you're working toward, and any constraints we should know about."
+                    rows={6}
+                    className={`${inputClass(!!errors.message)} resize-none`}
+                  />
+                  {errors.message && (
+                    <p className="mt-2 inline-flex items-center gap-2 text-[12.5px] text-red-600">
+                      <AlertCircle size={12} /> {errors.message}
+                    </p>
+                  )}
                 </div>
-                <button type="submit" disabled={isSubmitting} className="w-full sm:w-auto flex items-center justify-center gap-2 px-10 py-4 bg-gradient-to-r from-brand-ink to-brand-ink text-brand-ivory font-semibold rounded-xl hover:shadow-xl hover:shadow-black/5 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed">
-                  {isSubmitting ? <div className="w-5 h-5 border-2 border-brand-ink/30 border-t-brand-ink rounded-full animate-spin" /> : submitted ? <><Check size={18} /> Message Sent</> : <><Send size={18} /> Send Message</>}
-                </button>
+
+                {submitted && (
+                  <div className="flex items-start gap-3 px-4 py-3 border border-brand-accent bg-brand-accent-tint">
+                    <Check size={16} className="text-brand-accent mt-0.5 shrink-0" />
+                    <div>
+                      <div className="text-[14px] font-medium text-brand-ink">Message received.</div>
+                      <div className="text-[13px] text-brand-ink-2 mt-0.5">We'll respond within one business day.</div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 bg-brand-ink text-brand-ivory text-[14px] font-medium tracking-tight hover:bg-brand-accent transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <span className="w-4 h-4 border border-brand-ivory/30 border-t-brand-ivory rounded-full animate-spin" />
+                        Sending…
+                      </>
+                    ) : (
+                      <>
+                        <Send size={14} />
+                        Request Consultation
+                      </>
+                    )}
+                  </button>
+                </div>
               </form>
             </div>
 
-            {/* Contact Info Sidebar */}
-            <div className="lg:col-span-2 space-y-8">
-              <div>
-                <h2 className="text-2xl font-bold text-brand-ink mb-8">Contact Information</h2>
-                <div className="space-y-6">
-                  <a href="mailto:admin@golden-dimensions.org" className="flex items-start gap-4 p-4 rounded-xl bg-brand-paper border border-brand-hair hover:border-brand-accent/30 transition-all group">
-                    <div className="w-12 h-12 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent flex-shrink-0"><Mail size={20} /></div>
-                    <div><h4 className="text-brand-ink font-medium mb-1">Email</h4><span className="text-brand-mute text-sm group-hover:text-brand-accent transition-colors">admin@golden-dimensions.org</span></div>
-                  </a>
-                  <a href="tel:+442012345678" className="flex items-start gap-4 p-4 rounded-xl bg-brand-paper border border-brand-hair hover:border-brand-accent/30 transition-all group">
-                    <div className="w-12 h-12 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent flex-shrink-0"><Phone size={20} /></div>
-                    <div><h4 className="text-brand-ink font-medium mb-1">Phone</h4><span className="text-brand-mute text-sm group-hover:text-brand-accent transition-colors">+44 20 1234 5678</span></div>
-                  </a>
-                  <div className="flex items-start gap-4 p-4 rounded-xl bg-brand-paper border border-brand-hair">
-                    <div className="w-12 h-12 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent flex-shrink-0"><Clock size={20} /></div>
-                    <div><h4 className="text-brand-ink font-medium mb-1">Business Hours</h4><span className="text-brand-mute text-sm">Mon – Fri: 9:00 AM – 6:00 PM (GMT)</span></div>
-                  </div>
-                </div>
-              </div>
-              {/* Map Placeholder */}
-              <div className="rounded-2xl overflow-hidden border border-brand-hair">
-                <div className="h-48 bg-brand-stone flex items-center justify-center relative">
-                  <div className="absolute inset-0 opacity-20">
-                    <svg viewBox="0 0 800 400" className="w-full h-full" fill="none" stroke="#0F4C4A" strokeWidth="0.5">
-                      <ellipse cx="400" cy="200" rx="350" ry="150" opacity="0.3" />
-                      <ellipse cx="400" cy="200" rx="250" ry="100" opacity="0.2" />
-                      <line x1="50" y1="200" x2="750" y2="200" opacity="0.2" />
-                      <line x1="400" y1="50" x2="400" y2="350" opacity="0.2" />
-                    </svg>
-                  </div>
-                  <div className="relative text-center">
-                    <Globe2 size={32} className="text-brand-accent mx-auto mb-2" />
-                    <p className="text-brand-mute text-sm">Global Headquarters</p>
-                    <p className="text-brand-ink font-semibold">London, United Kingdom</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+            {/* Contact ledger */}
+            <aside className="lg:col-span-5 lg:border-l lg:border-brand-hair lg:pl-12">
+              <TechnicalLabel index="02">Direct Contact</TechnicalLabel>
+              <h2 className="mt-7 font-display text-[26px] md:text-[32px] font-medium tracking-[-0.015em] text-brand-ink leading-tight">
+                Reach the firm directly
+              </h2>
 
-      {/* Global Offices */}
-      <section className="py-20 bg-brand-stone">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <span className="text-brand-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">Global Presence</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-brand-ink mb-4">Our Offices</h2>
+              <dl className="mt-10 divide-y divide-brand-hair border-y border-brand-hair">
+                <div className="grid grid-cols-[auto_1fr] gap-x-8 py-5 items-baseline">
+                  <dt className="label-technical text-brand-mute flex items-center gap-2">
+                    <Mail size={11} /> Email
+                  </dt>
+                  <dd>
+                    <a
+                      href="mailto:admin@golden-dimensions.org"
+                      className="text-[14.5px] tracking-tight text-brand-ink hover:text-brand-accent transition-colors border-b border-transparent hover:border-brand-accent"
+                    >
+                      admin@golden-dimensions.org
+                    </a>
+                  </dd>
+                </div>
+                <div className="grid grid-cols-[auto_1fr] gap-x-8 py-5 items-baseline">
+                  <dt className="label-technical text-brand-mute flex items-center gap-2">
+                    <Phone size={11} /> Phone
+                  </dt>
+                  <dd>
+                    <a
+                      href="tel:+442012345678"
+                      className="text-[14.5px] tracking-tight text-brand-ink hover:text-brand-accent transition-colors border-b border-transparent hover:border-brand-accent font-mono-tab"
+                    >
+                      +44 20 1234 5678
+                    </a>
+                  </dd>
+                </div>
+                <div className="grid grid-cols-[auto_1fr] gap-x-8 py-5 items-baseline">
+                  <dt className="label-technical text-brand-mute flex items-center gap-2">
+                    <Clock size={11} /> Hours
+                  </dt>
+                  <dd className="text-[14.5px] tracking-tight text-brand-ink">
+                    Mon – Fri · 09:00 – 18:00 GMT
+                  </dd>
+                </div>
+                <div className="grid grid-cols-[auto_1fr] gap-x-8 py-5 items-baseline">
+                  <dt className="label-technical text-brand-mute flex items-center gap-2">
+                    <MapPin size={11} /> HQ
+                  </dt>
+                  <dd className="text-[14.5px] tracking-tight text-brand-ink leading-snug">
+                    Golden Dimensions Ltd<br />London, United Kingdom
+                  </dd>
+                </div>
+              </dl>
+
+              <p className="mt-8 text-[13px] leading-[1.6] text-brand-ink-2">
+                Engagements are responded to by a partner from the practice
+                area most relevant to your sector — not by a generic sales
+                desk.
+              </p>
+            </aside>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        </Container>
+      </Section>
+
+      {/* Global offices */}
+      <Section tone="ivory" divided>
+        <Container>
+          <TechnicalLabel index="03">Global Offices</TechnicalLabel>
+          <h2 className="mt-7 font-display text-[26px] md:text-[34px] font-medium tracking-[-0.015em] text-brand-ink leading-tight max-w-2xl">
+            Where the firm operates from
+          </h2>
+
+          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-t border-l border-brand-hair">
             {offices.map((office, i) => (
-              <div key={i} className="p-6 rounded-2xl bg-brand-paper border border-brand-hair hover:border-brand-accent/30 transition-all duration-300 group text-center">
-                <div className="w-12 h-12 mx-auto rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent mb-4 group-hover:bg-brand-accent/10 transition-colors"><MapPin size={20} /></div>
-                <h3 className="text-lg font-bold text-brand-ink mb-1">{office.city}</h3>
-                <p className="text-brand-mute text-sm mb-2">{office.country}</p>
-                <span className="inline-block px-3 py-1 rounded-full bg-brand-accent/10 text-brand-accent text-xs font-medium">{office.type}</span>
+              <div key={office.city} className="border-r border-b border-brand-hair p-7 bg-brand-paper">
+                <div className="label-technical text-brand-accent mb-5 font-mono-tab">
+                  O.{String(i + 1).padStart(2, '0')}
+                </div>
+                <h3 className="font-display text-[22px] font-medium tracking-[-0.01em] text-brand-ink leading-tight">
+                  {office.city}
+                </h3>
+                <p className="mt-1.5 text-[13.5px] text-brand-ink-2">{office.country}</p>
+                <div className="mt-5 pt-4 border-t border-brand-hair grid grid-cols-2 gap-y-2.5">
+                  <span className="label-technical text-brand-mute">Role</span>
+                  <span className="text-[12.5px] text-brand-ink tracking-tight text-right">{office.type}</span>
+                  <span className="label-technical text-brand-mute">Time zone</span>
+                  <span className="text-[12.5px] text-brand-ink tracking-tight text-right font-mono-tab">{office.timezone}</span>
+                </div>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
     </div>
   );
 };
