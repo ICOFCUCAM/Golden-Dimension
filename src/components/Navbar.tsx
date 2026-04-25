@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 
+// Consulting-grade information architecture: capability-first ordering.
 const navLinks = [
   { label: 'Home', path: '/' },
+  { label: 'Capabilities', path: '/services' },
+  { label: 'Industries', path: '/industries' },
+  { label: 'Transport Logistics', path: '/transport' },
+  { label: 'Insights', path: '/news' },
+  { label: 'Legal Advisory', path: '/legal' },
   { label: 'About', path: '/about' },
-  { label: 'Services', path: '/services' },
-  { label: 'Transport', path: '/transport' },
-  { label: 'News & Insights', path: '/news' },
-  { label: 'Legal Issues', path: '/legal' },
   { label: 'Contact', path: '/contact' },
 ];
 
@@ -55,12 +57,12 @@ const Navbar: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-1">
+          <div className="hidden xl:flex items-center space-x-0.5">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`px-4 py-2 text-sm font-medium transition-all duration-300 relative group ${
+                className={`px-3 py-2 text-[13px] font-medium transition-all duration-300 relative group whitespace-nowrap ${
                   location.pathname === link.path
                     ? 'text-[#C8A44D]'
                     : 'text-white/80 hover:text-white'
@@ -76,16 +78,16 @@ const Navbar: React.FC = () => {
             ))}
             <Link
               to="/contact"
-              className="ml-4 px-6 py-2.5 bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] text-[#0B1F3A] text-sm font-semibold rounded-lg hover:shadow-lg hover:shadow-[#C8A44D]/25 transition-all duration-300 hover:-translate-y-0.5"
+              className="ml-3 px-5 py-2.5 bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] text-[#0B1F3A] text-[13px] font-semibold rounded-md hover:shadow-lg hover:shadow-[#C8A44D]/25 transition-all duration-300"
             >
-              Get in Touch
+              Request Consultation
             </Link>
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden text-white p-2 hover:text-[#C8A44D] transition-colors"
+            className="xl:hidden text-white p-2 hover:text-[#C8A44D] transition-colors"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -94,8 +96,8 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`lg:hidden transition-all duration-500 overflow-hidden ${
-          isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+        className={`xl:hidden transition-all duration-500 overflow-hidden ${
+          isOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
         <div className="bg-[#0B1F3A]/98 backdrop-blur-md border-t border-white/10 px-4 py-4 space-y-1">
@@ -116,7 +118,7 @@ const Navbar: React.FC = () => {
             to="/contact"
             className="block mx-4 mt-3 px-6 py-3 bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] text-[#0B1F3A] text-sm font-semibold rounded-lg text-center"
           >
-            Get in Touch
+            Request Consultation
           </Link>
         </div>
       </div>

@@ -31,9 +31,12 @@ export interface MethodologyPhase {
 }
 
 export interface Industry {
+  id: string;
   name: string;
-  description: string;
+  description: string;       // short — used on Services page summary card
+  summary: string;           // long — used on Industries page detail card
   icon: string;
+  pillars: string[];         // ids of related pillars in `pillars` array
 }
 
 // ---------------------------------------------------------------------------
@@ -272,40 +275,64 @@ export const methodology: MethodologyPhase[] = [
 // ---------------------------------------------------------------------------
 export const industries: Industry[] = [
   {
+    id: 'financial-systems',
     name: 'Financial Systems Transformation',
     icon: 'Landmark',
     description:
       'Banks, insurers, and financial institutions modernising core systems and controls.',
+    summary:
+      'We help banks, insurers, and capital-markets institutions modernise core platforms, treasury and payments, risk and regulatory reporting — combining audit-grade financial advisory with the engineering capability to deliver new systems safely.',
+    pillars: ['financial-legal', 'digital-technology', 'enterprise-strategy'],
   },
   {
+    id: 'infrastructure',
     name: 'Infrastructure Engineering',
     icon: 'Building2',
     description:
       'Capital projects, transport, energy, and built-environment programmes.',
+    summary:
+      'We plan and deliver capital programmes across transport, energy, water, and the built environment, with the environmental and sustainability capabilities required for modern infrastructure mandates and resilient asset performance.',
+    pillars: ['engineering-infrastructure', 'enterprise-strategy'],
   },
   {
+    id: 'healthcare',
     name: 'Healthcare Modernization',
     icon: 'Stethoscope',
     description:
       'Hospitals, payers, and ministries of health upgrading clinical and digital operations.',
+    summary:
+      'We support hospitals, payers, and ministries of health in transforming clinical operations, digital health, and public-health programmes — pairing healthcare-domain advisory with the technology and operating-model capability to deliver at institutional scale.',
+    pillars: ['education-institutional', 'digital-technology', 'enterprise-strategy'],
   },
   {
+    id: 'telecom',
     name: 'Telecommunications Systems',
     icon: 'Radio',
     description:
       'Operators and enterprises deploying next-generation network and platform systems.',
+    summary:
+      'We design and deploy fixed, mobile, and enterprise network systems for operators and large enterprises — combining network engineering with software platforms, cybersecurity, and managed-service delivery models.',
+    pillars: ['engineering-infrastructure', 'digital-technology'],
   },
   {
+    id: 'education',
     name: 'Education Platforms',
     icon: 'GraduationCap',
     description:
       'Universities, training providers, and learning platforms scaling institutionally.',
+    summary:
+      'We build education and training systems for universities, ministries, and learning providers — uniting academic and curriculum advisory with platform engineering, content systems, and institutional governance.',
+    pillars: ['education-institutional', 'digital-technology'],
   },
   {
+    id: 'government',
     name: 'Government & Public Sector Advisory',
     icon: 'ShieldCheck',
     description:
       'Public bodies and regulators delivering reform, policy, and citizen services.',
+    summary:
+      'We support ministries, regulators, and public bodies on policy, reform, and citizen-services delivery — backed by the engineering, legal, and operations capabilities that public-sector programmes demand for accountable outcomes.',
+    pillars: ['financial-legal', 'engineering-infrastructure', 'education-institutional'],
   },
 ];
 

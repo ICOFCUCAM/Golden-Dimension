@@ -3,43 +3,19 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import ServiceIcon from '@/components/ServiceIcon';
 import {
+  Eyebrow,
+  SectionHeader,
+  PrimaryCta,
+  SecondaryCta,
+  TertiaryCta,
+} from '@/components/section-primitives';
+import {
   capabilityModel,
   pillars,
   methodology,
   industries,
   globalStats,
 } from '@/data/servicesPage';
-
-// -----------------------------------------------------------------------------
-// Small primitives — kept local so the page reads as a single capability story.
-// -----------------------------------------------------------------------------
-
-const Eyebrow: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <span className="block text-[#C8A44D] text-xs font-semibold uppercase tracking-[0.24em] mb-5">
-    {children}
-  </span>
-);
-
-const SectionHeader: React.FC<{
-  eyebrow: string;
-  title: React.ReactNode;
-  intro?: string;
-  align?: 'left' | 'center';
-}> = ({ eyebrow, title, intro, align = 'left' }) => (
-  <div
-    className={`max-w-3xl ${
-      align === 'center' ? 'mx-auto text-center' : ''
-    } mb-14 md:mb-20`}
-  >
-    <Eyebrow>{eyebrow}</Eyebrow>
-    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-[1.1] tracking-tight">
-      {title}
-    </h2>
-    {intro && (
-      <p className="mt-5 text-white/55 text-lg leading-relaxed">{intro}</p>
-    )}
-  </div>
-);
 
 // -----------------------------------------------------------------------------
 // Page
@@ -71,24 +47,9 @@ const ServicesPage: React.FC = () => {
 
           {/* CTA hierarchy: primary / secondary / tertiary */}
           <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-4">
-            <Link
-              to="/contact"
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] text-[#0B1F3A] font-semibold rounded-md hover:shadow-xl hover:shadow-[#C8A44D]/20 transition-all"
-            >
-              Request Consultation <ArrowRight size={16} />
-            </Link>
-            <a
-              href="#pillars"
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 border border-white/15 text-white/85 font-medium rounded-md hover:border-[#C8A44D]/50 hover:text-white transition-all"
-            >
-              Explore Capability Areas
-            </a>
-            <a
-              href="#industries"
-              className="inline-flex items-center gap-1.5 text-white/60 hover:text-[#C8A44D] text-sm font-medium transition-colors"
-            >
-              View Industries Supported <ArrowUpRight size={14} />
-            </a>
+            <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+            <SecondaryCta to="#pillars">Explore Capability Areas</SecondaryCta>
+            <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
           </div>
         </div>
       </section>
@@ -333,24 +294,9 @@ const ServicesPage: React.FC = () => {
               technology, and operations expertise around it.
             </p>
             <div className="mt-9 flex flex-col sm:flex-row sm:items-center gap-4">
-              <Link
-                to="/contact"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] text-[#0B1F3A] font-semibold rounded-md hover:shadow-xl hover:shadow-[#C8A44D]/20 transition-all"
-              >
-                Request Consultation <ArrowRight size={16} />
-              </Link>
-              <a
-                href="#pillars"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 border border-white/15 text-white/85 font-medium rounded-md hover:border-[#C8A44D]/50 hover:text-white transition-all"
-              >
-                Explore Capability Areas
-              </a>
-              <a
-                href="#industries"
-                className="inline-flex items-center gap-1.5 text-white/60 hover:text-[#C8A44D] text-sm font-medium transition-colors"
-              >
-                View Industries Supported <ArrowUpRight size={14} />
-              </a>
+              <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+              <SecondaryCta to="#pillars">Explore Capability Areas</SecondaryCta>
+              <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
             </div>
           </div>
         </div>
