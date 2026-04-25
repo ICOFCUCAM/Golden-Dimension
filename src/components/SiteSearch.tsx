@@ -5,6 +5,8 @@ import { Search, ArrowRight } from 'lucide-react';
 import { pillars, industries, methodology } from '@/data/servicesPage';
 import { services } from '@/data/services';
 import { newsArticles } from '@/data/news';
+import { caseStudies, engagementModelsById } from '@/data/caseStudies';
+import { practitioners } from '@/data/team';
 
 interface SearchEntry {
   id: string;
@@ -25,6 +27,8 @@ const buildIndex = (): SearchEntry[] => {
     { id: 'method',     group: 'Pages', label: 'Delivery Methodology', hint: 'Six-phase lifecycle',                  path: '/methodology' },
     { id: 'eng',        group: 'Pages', label: 'Engagement Models',   hint: 'Four ways to engage',                   path: '/engagement-models' },
     { id: 'lead',       group: 'Pages', label: 'Leadership Doctrine', hint: 'Firm philosophy + transformation doctrine', path: '/leadership' },
+    { id: 'team',       group: 'Pages', label: 'Practice Leads',      hint: 'Partners and practice leads',           path: '/leadership/team' },
+    { id: 'cases',      group: 'Pages', label: 'Case Studies',        hint: 'Anonymised engagement evidence',         path: '/case-studies' },
     { id: 'about',      group: 'Pages', label: 'About the Firm',      hint: 'Multidisciplinary by design',           path: '/about' },
     { id: 'transport',  group: 'Pages', label: 'Transport Logistics', hint: 'Air, sea, ground freight',              path: '/transport' },
     { id: 'insights',   group: 'Pages', label: 'Insights',            hint: 'Practitioner perspectives',             path: '/news' },
@@ -84,6 +88,28 @@ const buildIndex = (): SearchEntry[] => {
       label: a.title,
       hint: a.excerpt,
       path: `/news/${a.slug}`,
+    });
+  });
+
+  // Case studies
+  caseStudies.forEach((c) => {
+    index.push({
+      id: `case-${c.slug}`,
+      group: 'Case Studies',
+      label: c.title,
+      hint: `${engagementModelsById[c.engagementModelId]} · ${c.year} · ${c.snippet}`,
+      path: `/case-studies/${c.slug}`,
+    });
+  });
+
+  // Practitioners
+  practitioners.forEach((p) => {
+    index.push({
+      id: `team-${p.id}`,
+      group: 'Practice Leads',
+      label: `${p.name} · ${p.title}`,
+      hint: p.bio,
+      path: '/leadership/team',
     });
   });
 

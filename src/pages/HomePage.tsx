@@ -709,12 +709,19 @@ const HomePage: React.FC = () => {
               </div>
             </div>
 
-            <div className="mt-10">
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
               <Link
                 to="/leadership"
                 className="group inline-flex items-center gap-2 text-[13px] font-medium tracking-[-0.01em] text-brand-ink border-b border-brand-ink hover:text-brand-accent hover:border-brand-accent transition-colors pb-1"
               >
                 Read the leadership doctrine
+                <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+              </Link>
+              <Link
+                to="/case-studies"
+                className="group inline-flex items-center gap-2 text-[13px] font-medium tracking-[-0.01em] text-brand-ink-2 hover:text-brand-accent transition-colors"
+              >
+                Or browse engagement evidence
                 <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
               </Link>
             </div>

@@ -7,8 +7,10 @@ import NewsletterSignup from '@/components/NewsletterSignup';
 const firmLinks = [
   { label: 'About the Firm',       path: '/about' },
   { label: 'Leadership Doctrine',  path: '/leadership' },
+  { label: 'Practice Leads',       path: '/leadership/team' },
   { label: 'Delivery Methodology', path: '/methodology' },
   { label: 'Engagement Models',    path: '/engagement-models' },
+  { label: 'Case Studies',         path: '/case-studies' },
   { label: 'Insights',             path: '/news' },
   { label: 'Legal Advisory',       path: '/legal' },
   { label: 'Transport Logistics',  path: '/transport' },

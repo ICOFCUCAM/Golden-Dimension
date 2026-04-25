@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Send, Check, AlertCircle } from 'lucide-react';
-import { toast } from 'sonner';
-import { supabase } from '@/lib/supabase';
+import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 import { PageHeader, Container, Section, TechnicalLabel } from '@/components/section-primitives';
 import { Seo } from '@/components/Seo';
+import { EngagementIntakeForm } from '@/components/EngagementIntakeForm';
 
 const offices = [
   { city: 'London',     country: 'United Kingdom', type: 'Headquarters',  timezone: 'GMT' },
@@ -12,52 +11,7 @@ const offices = [
   { city: 'Singapore',  country: 'Singapore',      type: 'Asia Pacific',  timezone: 'SGT' },
 ];
 
-// Editorial form input — sharp corners, hairline border, focus turns ink.
-const inputClass = (hasError: boolean) =>
-  `w-full px-4 py-3 bg-brand-paper border text-[15px] text-brand-ink placeholder:text-brand-mute focus:outline-none transition-colors ${
-    hasError ? 'border-red-500/60 focus:border-red-600' : 'border-brand-hair-strong focus:border-brand-ink'
-  }`;
-
 const ContactPage: React.FC = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-
-  const validate = () => {
-    const newErrors: Record<string, string> = {};
-    if (!formData.name.trim()) newErrors.name = 'Name is required';
-    if (!formData.email.trim()) newErrors.email = 'Email is required';
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Invalid email address';
-    if (!formData.message.trim()) newErrors.message = 'Message is required';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
-
-    setIsSubmitting(true);
-    try {
-      const { error } = await supabase.from('contact_messages').insert({
-        name: formData.name.trim(),
-        email: formData.email.trim(),
-        message: formData.message.trim(),
-      });
-      if (error) throw error;
-      setSubmitted(true);
-      toast.success("Message sent. We'll respond within one business day.");
-      setFormData({ name: '', email: '', message: '' });
-      setTimeout(() => setSubmitted(false), 5000);
-    } catch (err: any) {
-      toast.error('Failed to send message. Please try again.');
-      console.error(err);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <div className="bg-brand-ivory">
       <Seo
@@ -66,106 +20,29 @@ const ContactPage: React.FC = () => {
         path="/contact"
       />
       <PageHeader
-        eyebrow="Get in Touch"
+        eyebrow="Engagement Intake"
         index="C.01"
         title={<>Discuss your next <span className="font-editorial italic text-brand-accent">transformation</span> programme.</>}
-        subtitle="Tell us about the institutional outcome you're working toward. We'll respond within one business day with a partner-led conversation, not a sales pitch."
+        subtitle="Four short steps. We use them to route your enquiry directly to the partner accountable for your sector — initial conversations are partner-led, not gated by a sales desk."
       />
 
-      {/* Form + contact ledger */}
+      {/* Intake form + contact ledger */}
       <Section tone="paper">
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-            {/* Form */}
+            {/* Multi-step intake */}
             <div className="lg:col-span-7">
-              <TechnicalLabel index="01">Contact Form</TechnicalLabel>
+              <TechnicalLabel index="01">Engagement Intake</TechnicalLabel>
               <h2 className="mt-7 font-display text-[26px] md:text-[32px] font-medium tracking-[-0.015em] text-brand-ink leading-tight">
-                Send a message
+                Start the intake
               </h2>
               <p className="mt-4 text-[15px] leading-[1.6] text-brand-ink-2 max-w-xl">
-                Provide a brief description of the engagement you're considering.
-                We'll route it to the partner most relevant to your sector.
+                Sector → Capability → Timeline → Contact. Takes about 90 seconds.
               </p>
 
-              <form onSubmit={handleSubmit} className="mt-10 space-y-7">
-                <div>
-                  <label className="label-technical text-brand-mute mb-2 block">Full name</label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => { setFormData({ ...formData, name: e.target.value }); if (errors.name) setErrors({ ...errors, name: '' }); }}
-                    placeholder="Your name"
-                    className={inputClass(!!errors.name)}
-                  />
-                  {errors.name && (
-                    <p className="mt-2 inline-flex items-center gap-2 text-[12.5px] text-red-600">
-                      <AlertCircle size={12} /> {errors.name}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="label-technical text-brand-mute mb-2 block">Email address</label>
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => { setFormData({ ...formData, email: e.target.value }); if (errors.email) setErrors({ ...errors, email: '' }); }}
-                    placeholder="you@organisation.com"
-                    className={inputClass(!!errors.email)}
-                  />
-                  {errors.email && (
-                    <p className="mt-2 inline-flex items-center gap-2 text-[12.5px] text-red-600">
-                      <AlertCircle size={12} /> {errors.email}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="label-technical text-brand-mute mb-2 block">Engagement details</label>
-                  <textarea
-                    value={formData.message}
-                    onChange={(e) => { setFormData({ ...formData, message: e.target.value }); if (errors.message) setErrors({ ...errors, message: '' }); }}
-                    placeholder="Sector, the institutional outcome you're working toward, and any constraints we should know about."
-                    rows={6}
-                    className={`${inputClass(!!errors.message)} resize-none`}
-                  />
-                  {errors.message && (
-                    <p className="mt-2 inline-flex items-center gap-2 text-[12.5px] text-red-600">
-                      <AlertCircle size={12} /> {errors.message}
-                    </p>
-                  )}
-                </div>
-
-                {submitted && (
-                  <div className="flex items-start gap-3 px-4 py-3 border border-brand-accent bg-brand-accent-tint">
-                    <Check size={16} className="text-brand-accent mt-0.5 shrink-0" />
-                    <div>
-                      <div className="text-[14px] font-medium text-brand-ink">Message received.</div>
-                      <div className="text-[13px] text-brand-ink-2 mt-0.5">We'll respond within one business day.</div>
-                    </div>
-                  </div>
-                )}
-
-                <div className="pt-2">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 bg-brand-ink text-brand-ivory text-[14px] font-medium tracking-tight hover:bg-brand-accent transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <span className="w-4 h-4 border border-brand-ivory/30 border-t-brand-ivory rounded-full animate-spin" />
-                        Sending…
-                      </>
-                    ) : (
-                      <>
-                        <Send size={14} />
-                        Request Consultation
-                      </>
-                    )}
-                  </button>
-                </div>
-              </form>
+              <div className="mt-10 bg-brand-paper border border-brand-hair-strong p-7 md:p-9">
+                <EngagementIntakeForm />
+              </div>
             </div>
 
             {/* Contact ledger */}
@@ -221,10 +98,21 @@ const ContactPage: React.FC = () => {
               </dl>
 
               <p className="mt-8 text-[13px] leading-[1.6] text-brand-ink-2">
-                Engagements are responded to by a partner from the practice
-                area most relevant to your sector — not by a generic sales
-                desk.
+                Engagements are routed by sector to the partner accountable
+                for that practice. Initial conversations are partner-led, not
+                gated by a sales desk.
               </p>
+
+              <div className="mt-7 p-5 border-l-2 border-brand-accent bg-brand-stone">
+                <p className="font-editorial italic text-[14.5px] leading-[1.5] text-brand-ink">
+                  Prefer email? Write directly to{' '}
+                  <a href="mailto:admin@golden-dimensions.org" className="text-brand-accent hover:underline">
+                    admin@golden-dimensions.org
+                  </a>{' '}
+                  with a one-line description of the engagement. We'll route
+                  it the same way the intake form does.
+                </p>
+              </div>
             </aside>
           </div>
         </Container>

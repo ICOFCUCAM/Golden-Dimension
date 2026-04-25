@@ -257,6 +257,9 @@ const LeadershipPage: React.FC = () => {
 
           <div className="mt-12 pt-10 border-t border-brand-hair flex flex-wrap items-center gap-x-8 gap-y-4">
             <span className="label-technical text-brand-mute">Related</span>
+            <Link to="/leadership/team" className="group inline-flex items-center gap-2 text-[14px] font-medium tracking-tight text-brand-ink border-b border-brand-ink hover:text-brand-accent hover:border-brand-accent transition-colors pb-1">
+              Practice Leads <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+            </Link>
             <Link to="/methodology" className="group inline-flex items-center gap-2 text-[14px] font-medium tracking-tight text-brand-ink border-b border-brand-ink hover:text-brand-accent hover:border-brand-accent transition-colors pb-1">
               Delivery Methodology <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
             </Link>
