@@ -1,0 +1,47 @@
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import HomePage from '@/pages/HomePage';
+import AboutPage from '@/pages/AboutPage';
+import ServicesPage from '@/pages/ServicesPage';
+import ServiceDetailPage from '@/pages/ServiceDetailPage';
+import TransportPage from '@/pages/TransportPage';
+import NewsPage from '@/pages/NewsPage';
+import LegalPage from '@/pages/LegalPage';
+import ContactPage from '@/pages/ContactPage';
+import AdminPage from '@/pages/AdminPage';
+
+const AppLayout: React.FC = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location.pathname]);
+
+  const isAdmin = location.pathname === '/admin';
+
+  const renderPage = () => {
+    const path = location.pathname;
+    if (path === '/') return <HomePage />;
+    if (path === '/about') return <AboutPage />;
+    if (path === '/services') return <ServicesPage />;
+    if (path.startsWith('/services/')) return <ServiceDetailPage />;
+    if (path === '/transport') return <TransportPage />;
+    if (path === '/news') return <NewsPage />;
+    if (path === '/legal') return <LegalPage />;
+    if (path === '/contact') return <ContactPage />;
+    if (path === '/admin') return <AdminPage />;
+    return <HomePage />;
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0B1F3A]">
+      {!isAdmin && <Navbar />}
+      <main>{renderPage()}</main>
+      {!isAdmin && <Footer />}
+    </div>
+  );
+};
+
+export default AppLayout;
