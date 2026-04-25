@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Clock, ArrowRight, Tag } from 'lucide-react';
 import { newsArticles } from '@/data/news';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { PageHeader } from '@/components/section-primitives';
 
 const categories = ['All', 'Company News', 'Sustainability', 'Industry Insights', 'Transport', 'Engineering', 'Technology', 'Healthcare', 'Giving'];
 
@@ -16,21 +17,12 @@ const NewsPage: React.FC = () => {
 
   return (
     <div className="bg-brand-ivory">
-      {/* Hero */}
-      <section className="relative pt-32 pb-16 overflow-hidden">
-        <div className="absolute top-20 right-0 w-96 h-96 bg-brand-accent/10 rounded-full blur-3xl" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <span className="text-brand-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">
-            Stay Informed
-          </span>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-brand-ink mb-6 leading-tight">
-            News & <span className="italic text-brand-accent">Insights</span>
-          </h1>
-          <p className="text-xl text-brand-ink-2 max-w-3xl leading-relaxed">
-            The latest company announcements, industry analysis, and thought leadership from Golden Dimensions.
-          </p>
-        </div>
-      </section>
+      <PageHeader
+        eyebrow="Insights"
+        index="N.01"
+        title={<>Company news, industry analysis, and <span className="font-editorial italic text-brand-accent">thought leadership</span>.</>}
+        subtitle="Practitioner perspectives from across the firm — engineering, finance, technology, and institutional development."
+      />
 
       {/* Category Filter */}
       <section className="pb-8">

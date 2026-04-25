@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Clock, Send, Check, Globe2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
+import { PageHeader } from '@/components/section-primitives';
 
 const offices = [
   { city: 'London', country: 'United Kingdom', type: 'Headquarters', timezone: 'GMT' },
@@ -52,19 +53,12 @@ const ContactPage: React.FC = () => {
 
   return (
     <div className="bg-brand-ivory">
-      {/* Hero */}
-      <section className="relative pt-32 pb-16 overflow-hidden">
-        <div className="absolute top-20 right-0 w-96 h-96 bg-brand-accent/10 rounded-full blur-3xl" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <span className="text-brand-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">Get in Touch</span>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-brand-ink mb-6 leading-tight">
-            Contact <span className="italic text-brand-accent">Us</span>
-          </h1>
-          <p className="text-xl text-brand-ink-2 max-w-3xl leading-relaxed">
-            Ready to discuss how Golden Dimensions can help your organization? We'd love to hear from you.
-          </p>
-        </div>
-      </section>
+      <PageHeader
+        eyebrow="Get in Touch"
+        index="C.01"
+        title={<>Discuss your next <span className="font-editorial italic text-brand-accent">transformation</span> programme.</>}
+        subtitle="Tell us about the institutional outcome you're working toward. We'll respond within one business day with a partner-led conversation, not a sales pitch."
+      />
 
       {/* Contact Section */}
       <section className="py-16 pb-24">

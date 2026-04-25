@@ -264,6 +264,59 @@ export const Metric: React.FC<{
 };
 
 // =============================================================================
+// PageHeader — standard banner used at the top of every secondary page
+// (Transport, Contact, News, Legal, Service Detail, NotFound, ...).
+// Renders a paper-style masthead row, eyebrow + index, large serif headline,
+// and an optional subtitle + CTA cluster. Adds the right top padding to
+// clear the navbar.
+// =============================================================================
+
+export const PageHeader: React.FC<{
+  eyebrow: string;
+  index?: string;
+  title: React.ReactNode;
+  subtitle?: React.ReactNode;
+  children?: React.ReactNode;
+  tone?: 'ivory' | 'paper' | 'stone';
+  className?: string;
+}> = ({ eyebrow, index, title, subtitle, children, tone = 'ivory', className = '' }) => {
+  const toneCls = {
+    ivory: 'bg-brand-ivory',
+    paper: 'bg-brand-paper',
+    stone: 'bg-brand-stone',
+  }[tone];
+
+  return (
+    <section className={`relative ${toneCls} pt-[120px] md:pt-[140px] pb-16 md:pb-20 border-b border-brand-hair ${className}`}>
+      <Container size="wide">
+        {/* Paper masthead row */}
+        <div className="flex items-baseline justify-between pb-4 mb-12 border-b border-brand-hair-strong">
+          <span className="label-technical text-brand-mute">
+            <span className="text-brand-accent">Capability Brief</span> · Golden Dimensions Ltd
+          </span>
+          <span className="hidden sm:inline label-technical text-brand-mute font-mono-tab">
+            {new Date().toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }).toUpperCase()}
+          </span>
+        </div>
+
+        <div className="max-w-5xl">
+          <TechnicalLabel index={index}>{eyebrow}</TechnicalLabel>
+          <h1 className="mt-8 font-display text-[36px] sm:text-[44px] md:text-[56px] lg:text-[64px] font-medium leading-[1.05] tracking-[-0.015em] text-brand-ink">
+            {title}
+          </h1>
+          {subtitle && (
+            <div className="mt-7 max-w-3xl text-[16px] md:text-[18px] leading-[1.6] text-brand-ink-2">
+              {subtitle}
+            </div>
+          )}
+          {children && <div className="mt-9">{children}</div>}
+        </div>
+      </Container>
+    </section>
+  );
+};
+
+// =============================================================================
 // HairRule
 // =============================================================================
 export const HairRule: React.FC<{ tone?: Tone; className?: string }> = ({

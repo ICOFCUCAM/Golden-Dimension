@@ -3,6 +3,7 @@ import { Plane, Ship, Truck, Package, Check, Send } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
+import { PageHeader } from '@/components/section-primitives';
 
 const transportServices = [
   {
@@ -65,25 +66,12 @@ const TransportPage: React.FC = () => {
 
   return (
     <div className="bg-brand-ivory">
-      {/* Hero */}
-      <section className="relative pt-20 overflow-hidden">
-        <div className="h-[500px] relative">
-          <img src="https://d64gsuwffb70l.cloudfront.net/69ad7b9650a26a8c1a6eecd1_1772977387826_06abad98.jpg" alt="Maritime cargo logistics" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-brand-ivory via-brand-ivory to-brand-ivory" />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-ivory to-transparent" />
-        </div>
-        <div className="absolute inset-0 flex items-center">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-20">
-            <span className="text-brand-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">Transport & Logistics</span>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-brand-ink mb-4 leading-tight">
-              Golden <span className="italic text-brand-accent">Transport</span>
-            </h1>
-            <p className="text-xl text-brand-ink-2 max-w-2xl leading-relaxed">
-              Comprehensive logistics solutions spanning air, sea, and land. We move your cargo safely, efficiently, and on time — anywhere in the world.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHeader
+        eyebrow="Transport & Logistics"
+        index="T.01"
+        title={<>End-to-end <span className="font-editorial italic text-brand-accent">logistics</span> across air, sea, and land.</>}
+        subtitle="Multidisciplinary freight, mobility, and supply-chain capability for institutional clients moving cargo across regulated jurisdictions."
+      />
 
       {/* Transport Services */}
       <section className="py-24" ref={ref}>

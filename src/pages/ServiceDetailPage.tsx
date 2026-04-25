@@ -3,6 +3,7 @@ import { Link, useParams, Navigate } from 'react-router-dom';
 import { ArrowRight, ArrowLeft, Check, ChevronRight } from 'lucide-react';
 import { services } from '@/data/services';
 import ServiceIcon from '@/components/ServiceIcon';
+import { PageHeader } from '@/components/section-primitives';
 
 const ServiceDetailPage: React.FC = () => {
   const { serviceId } = useParams<{ serviceId: string }>();
@@ -17,40 +18,30 @@ const ServiceDetailPage: React.FC = () => {
 
   return (
     <div className="bg-brand-ivory">
-      {/* Hero Banner */}
-      <section className="relative pt-20 overflow-hidden">
-        <div className="h-[400px] relative">
-          <img
-            src={service.image}
-            alt={service.title}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-brand-ivory via-brand-ivory to-brand-ivory" />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-ivory to-transparent" />
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-            {/* Breadcrumb */}
-            <div className="flex items-center gap-2 text-sm text-brand-mute mb-6">
+      <PageHeader
+        eyebrow="Capability Detail"
+        index={`SVC.${String(currentIndex + 1).padStart(2, '0')}`}
+        title={
+          <span className="inline-flex items-center gap-5 flex-wrap">
+            <span className="w-12 h-12 md:w-14 md:h-14 border border-brand-ink flex items-center justify-center text-brand-ink shrink-0">
+              <ServiceIcon icon={service.icon} size={22} />
+            </span>
+            <span>{service.title}</span>
+          </span>
+        }
+        subtitle={
+          <div>
+            <div className="flex items-center gap-2 text-[12px] tracking-tight text-brand-mute mb-4">
               <Link to="/" className="hover:text-brand-accent transition-colors">Home</Link>
-              <ChevronRight size={14} />
-              <Link to="/services" className="hover:text-brand-accent transition-colors">Services</Link>
-              <ChevronRight size={14} />
-              <span className="text-brand-accent">{service.title}</span>
+              <ChevronRight size={12} />
+              <Link to="/services" className="hover:text-brand-accent transition-colors">Capabilities</Link>
+              <ChevronRight size={12} />
+              <span className="text-brand-ink">{service.title}</span>
             </div>
-
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-16 h-16 rounded-2xl bg-brand-accent/10 border border-brand-accent/30 flex items-center justify-center text-brand-accent">
-                <ServiceIcon icon={service.icon} size={28} />
-              </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-brand-ink">
-                {service.title}
-              </h1>
-            </div>
+            {service.shortDescription}
           </div>
-        </div>
-      </section>
+        }
+      />
 
       {/* Content */}
       <section className="py-20">

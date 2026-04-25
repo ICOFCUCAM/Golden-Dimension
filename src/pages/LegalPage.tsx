@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Scale, FileText, Shield, AlertTriangle, BookOpen, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { PageHeader } from '@/components/section-primitives';
 
 const legalTopics = [
   {
@@ -65,21 +66,12 @@ const LegalPage: React.FC = () => {
 
   return (
     <div className="bg-brand-ivory">
-      {/* Hero */}
-      <section className="relative pt-32 pb-16 overflow-hidden">
-        <div className="absolute top-20 left-0 w-96 h-96 bg-brand-accent/10 rounded-full blur-3xl" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <span className="text-brand-accent text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">
-            Legal Advisory
-          </span>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-brand-ink mb-6 leading-tight">
-            Legal <span className="italic text-brand-accent">Issues</span>
-          </h1>
-          <p className="text-xl text-brand-ink-2 max-w-3xl leading-relaxed">
-            Expert legal guidance, compliance updates, and regulatory advisory services to protect and empower your business.
-          </p>
-        </div>
-      </section>
+      <PageHeader
+        eyebrow="Legal Advisory"
+        index="L.01"
+        title={<>Corporate, regulatory, and <span className="font-editorial italic text-brand-accent">cross-jurisdictional counsel</span>.</>}
+        subtitle="Legal guidance, compliance updates, and regulatory advisory for institutional clients operating across multiple jurisdictions."
+      />
 
       {/* Legal Services Accordion */}
       <section className="py-16" ref={ref}>

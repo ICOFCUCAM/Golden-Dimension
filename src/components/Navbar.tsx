@@ -30,84 +30,87 @@ const Navbar: React.FC = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-200 ${
-        scrolled
-          ? 'bg-brand-ivory/95 backdrop-blur-md border-b border-brand-hair'
-          : 'bg-brand-ivory border-b border-transparent'
+      className={`fixed top-0 left-0 right-0 z-50 transition-shadow duration-200 ${
+        scrolled ? 'shadow-[0_1px_0_rgba(0,0,0,0.06)]' : ''
       }`}
     >
-      {/* Slim technical bar above the navbar */}
-      <div className="border-b border-brand-hair">
+      {/* Slim dark technical bar — gives the whole nav a publication-header
+          feel and ensures the bar is always visible against the ivory body. */}
+      <div className="bg-brand-ink text-brand-on-dark">
         <div className="max-w-[88rem] mx-auto px-6 lg:px-10 h-7 flex items-center justify-between">
-          <span className="label-technical text-brand-mute">
-            <span className="text-brand-accent">EST.</span> 2003 / GLOBAL · MULTIDISCIPLINARY
+          <span className="label-technical text-brand-on-dark-2">
+            <span className="text-brand-accent-soft">EST.</span> 2003 / GLOBAL · MULTIDISCIPLINARY
           </span>
-          <span className="hidden md:inline label-technical text-brand-mute">
+          <span className="hidden md:inline label-technical text-brand-on-dark-2">
             EN · GMT+0
           </span>
         </div>
       </div>
 
-      <div className="max-w-[88rem] mx-auto px-6 lg:px-10">
-        <div className="flex items-center justify-between h-[68px]">
-          {/* Logo / Wordmark */}
-          <Link to="/" className="flex items-center gap-3 group shrink-0">
-            <div className="relative w-9 h-9 bg-brand-ink flex items-center justify-center">
-              <span className="absolute inset-1 border border-brand-accent" aria-hidden />
-              <span className="relative text-brand-ivory font-display font-semibold text-[12px] tracking-[0.05em]">
-                GD
-              </span>
-            </div>
-            <div className="hidden sm:block leading-none">
-              <span className="block text-brand-ink font-display font-semibold text-[16px] tracking-[-0.02em] group-hover:text-brand-accent transition-colors">
-                Golden Dimensions
-              </span>
-              <span className="block mt-1.5 label-technical text-brand-mute">
-                LTD · Multidisciplinary Consulting
-              </span>
-            </div>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden xl:flex items-center">
-            {navLinks.map((link) => {
-              const active =
-                location.pathname === link.path ||
-                (link.path !== '/' && location.pathname.startsWith(link.path));
-              return (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={`px-3.5 py-2 text-[13px] font-medium tracking-[-0.01em] transition-colors relative ${
-                    active ? 'text-brand-ink' : 'text-brand-ink-2 hover:text-brand-ink'
-                  }`}
-                >
-                  {link.label}
-                  <span
-                    className={`absolute left-3.5 right-3.5 -bottom-[24px] h-px bg-brand-accent transition-opacity ${
-                      active ? 'opacity-100' : 'opacity-0'
-                    }`}
-                  />
-                </Link>
-              );
-            })}
-            <Link
-              to="/contact"
-              className="ml-4 group inline-flex items-center gap-2 px-5 py-2.5 bg-brand-ink text-brand-ivory text-[13px] font-medium tracking-[-0.01em] hover:bg-brand-accent transition-colors"
-            >
-              Request Consultation
-              <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+      {/* Main navigation bar — paper-white so it sits visibly above the
+          warm-ivory page surface. */}
+      <div className="bg-brand-paper border-b border-brand-hair">
+        <div className="max-w-[88rem] mx-auto px-6 lg:px-10">
+          <div className="flex items-center justify-between h-[68px]">
+            {/* Logo / Wordmark */}
+            <Link to="/" className="flex items-center gap-3 group shrink-0">
+              <div className="relative w-9 h-9 bg-brand-ink flex items-center justify-center">
+                <span className="absolute inset-1 border border-brand-accent" aria-hidden />
+                <span className="relative text-brand-ivory font-display font-semibold text-[12px] tracking-[0.05em]">
+                  GD
+                </span>
+              </div>
+              <div className="hidden sm:block leading-none">
+                <span className="block text-brand-ink font-display font-semibold text-[16px] tracking-[-0.02em] group-hover:text-brand-accent transition-colors">
+                  Golden Dimensions
+                </span>
+                <span className="block mt-1.5 label-technical text-brand-mute">
+                  LTD · Multidisciplinary Consulting
+                </span>
+              </div>
             </Link>
-          </div>
 
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="xl:hidden text-brand-ink p-2 hover:text-brand-accent transition-colors"
-            aria-label={isOpen ? 'Close menu' : 'Open menu'}
-          >
-            {isOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
+            {/* Desktop Navigation */}
+            <div className="hidden xl:flex items-center">
+              {navLinks.map((link) => {
+                const active =
+                  location.pathname === link.path ||
+                  (link.path !== '/' && location.pathname.startsWith(link.path));
+                return (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    className={`px-3.5 py-2 text-[13px] font-medium tracking-[-0.01em] transition-colors relative ${
+                      active ? 'text-brand-ink' : 'text-brand-ink-2 hover:text-brand-ink'
+                    }`}
+                  >
+                    {link.label}
+                    <span
+                      className={`absolute left-3.5 right-3.5 -bottom-[24px] h-px bg-brand-accent transition-opacity ${
+                        active ? 'opacity-100' : 'opacity-0'
+                      }`}
+                    />
+                  </Link>
+                );
+              })}
+              <Link
+                to="/contact"
+                className="ml-4 group inline-flex items-center gap-2 px-5 py-2.5 bg-brand-ink text-brand-ivory text-[13px] font-medium tracking-[-0.01em] hover:bg-brand-accent transition-colors"
+              >
+                Request Consultation
+                <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+              </Link>
+            </div>
+
+            {/* Mobile menu button */}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="xl:hidden text-brand-ink p-2 hover:text-brand-accent transition-colors"
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            >
+              {isOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
         </div>
       </div>
 
