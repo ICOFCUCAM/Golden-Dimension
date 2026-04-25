@@ -23,6 +23,8 @@ npm run dev
    - **anon public** key → `VITE_SUPABASE_ANON_KEY`
 4. Put both in `.env` for local dev, and into your Vercel project's
    **Settings → Environment Variables** for deployments.
+5. **Authentication → Users → Add user** (with "Auto Confirm User" enabled) to
+   create the admin account. Sign in at `/admin`.
 
 ## Deploy to Vercel
 

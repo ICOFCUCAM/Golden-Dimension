@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Truck, RefreshCw, CheckCircle, Eye, Clock, ArrowLeft, Inbox } from 'lucide-react';
+import { Mail, Truck, RefreshCw, CheckCircle, Eye, Clock, ArrowLeft, Inbox, LogOut } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
+import { useAuth } from '@/contexts/AuthContext';
+import AdminLogin from '@/components/AdminLogin';
 
 interface ContactMessage {
   id: string;
@@ -35,6 +37,7 @@ const statusIcons: Record<string, React.ReactNode> = {
 };
 
 const AdminPage: React.FC = () => {
+  const { session, loading: authLoading, signOut } = useAuth();
   const [activeTab, setActiveTab] = useState<'contacts' | 'shipments'>('contacts');
   const [contacts, setContacts] = useState<ContactMessage[]>([]);
   const [shipments, setShipments] = useState<ShipmentRequest[]>([]);
@@ -48,6 +51,8 @@ const AdminPage: React.FC = () => {
         supabase.from('contact_messages').select('*').order('created_at', { ascending: false }),
         supabase.from('shipment_requests').select('*').order('created_at', { ascending: false }),
       ]);
+      if (contactRes.error) throw contactRes.error;
+      if (shipmentRes.error) throw shipmentRes.error;
       if (contactRes.data) setContacts(contactRes.data);
       if (shipmentRes.data) setShipments(shipmentRes.data);
     } catch (err) {
@@ -57,7 +62,19 @@ const AdminPage: React.FC = () => {
     }
   };
 
-  useEffect(() => { fetchData(); }, []);
+  useEffect(() => {
+    if (session) fetchData();
+  }, [session]);
+
+  if (authLoading) {
+    return (
+      <div className="bg-[#0B1F3A] min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#C8A44D]/30 border-t-[#C8A44D] rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!session) return <AdminLogin />;
 
   const updateStatus = async (table: string, id: string, newStatus: string) => {
     try {
@@ -96,9 +113,14 @@ const AdminPage: React.FC = () => {
             </h1>
             <p className="text-white/50 mt-1">Manage incoming inquiries and shipment requests</p>
           </div>
-          <button onClick={fetchData} disabled={loading} className="flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm disabled:opacity-50">
-            <RefreshCw size={16} className={loading ? 'animate-spin' : ''} /> Refresh
-          </button>
+          <div className="flex items-center gap-2">
+            <button onClick={fetchData} disabled={loading} className="flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm disabled:opacity-50">
+              <RefreshCw size={16} className={loading ? 'animate-spin' : ''} /> Refresh
+            </button>
+            <button onClick={signOut} className="flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-all text-sm">
+              <LogOut size={16} /> Sign out
+            </button>
+          </div>
         </div>
 
         {/* Stats */}

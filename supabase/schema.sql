@@ -29,11 +29,10 @@ create table if not exists public.shipment_requests (
 -- =========================================================================
 -- Row Level Security
 -- =========================================================================
--- The current AdminPage at /admin has no login, so it talks to Supabase
--- with the anon key. To keep it working, we allow anon to insert / select /
--- update on both tables. This means anyone who knows the URL could read or
--- modify rows. To lock it down later: add Supabase Auth, gate /admin behind
--- a login, and replace the "anon can ..." policies with "authenticated".
+-- Public visitors (anon) can submit forms (insert only).
+-- Reading and updating rows requires a logged-in admin (authenticated).
+-- Create the admin user in Supabase: Authentication → Users → Add user.
+-- Sign in at /admin in the app.
 
 alter table public.contact_messages enable row level security;
 alter table public.shipment_requests enable row level security;
@@ -43,23 +42,29 @@ drop policy if exists "anon insert contact_messages" on public.contact_messages;
 create policy "anon insert contact_messages"
   on public.contact_messages for insert to anon with check (true);
 
-drop policy if exists "anon select contact_messages" on public.contact_messages;
-create policy "anon select contact_messages"
-  on public.contact_messages for select to anon using (true);
+drop policy if exists "auth select contact_messages" on public.contact_messages;
+create policy "auth select contact_messages"
+  on public.contact_messages for select to authenticated using (true);
 
-drop policy if exists "anon update contact_messages" on public.contact_messages;
-create policy "anon update contact_messages"
-  on public.contact_messages for update to anon using (true) with check (true);
+drop policy if exists "auth update contact_messages" on public.contact_messages;
+create policy "auth update contact_messages"
+  on public.contact_messages for update to authenticated using (true) with check (true);
 
 -- shipment_requests
 drop policy if exists "anon insert shipment_requests" on public.shipment_requests;
 create policy "anon insert shipment_requests"
   on public.shipment_requests for insert to anon with check (true);
 
-drop policy if exists "anon select shipment_requests" on public.shipment_requests;
-create policy "anon select shipment_requests"
-  on public.shipment_requests for select to anon using (true);
+drop policy if exists "auth select shipment_requests" on public.shipment_requests;
+create policy "auth select shipment_requests"
+  on public.shipment_requests for select to authenticated using (true);
 
+drop policy if exists "auth update shipment_requests" on public.shipment_requests;
+create policy "auth update shipment_requests"
+  on public.shipment_requests for update to authenticated using (true) with check (true);
+
+-- Clean up old open-access policies (if you ran the previous version of this file)
+drop policy if exists "anon select contact_messages" on public.contact_messages;
+drop policy if exists "anon update contact_messages" on public.contact_messages;
+drop policy if exists "anon select shipment_requests" on public.shipment_requests;
 drop policy if exists "anon update shipment_requests" on public.shipment_requests;
-create policy "anon update shipment_requests"
-  on public.shipment_requests for update to anon using (true) with check (true);
