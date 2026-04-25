@@ -43,19 +43,23 @@ const Footer: React.FC = () => {
         {/* Capability columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 mb-16">
           <div className="lg:col-span-3">
-            <Link to="/" className="inline-flex items-center gap-3">
-              <div className="relative w-9 h-9 bg-brand-on-dark text-brand-ink flex items-center justify-center">
-                <span className="absolute inset-1 border border-brand-accent" aria-hidden />
-                <span className="relative font-display font-semibold text-[12px] tracking-[0.05em]">GD</span>
-              </div>
-              <div className="leading-none">
-                <span className="block font-display font-semibold text-[16px] text-brand-on-dark tracking-[-0.02em]">
-                  Golden Dimensions
-                </span>
-                <span className="block mt-1.5 label-technical text-brand-on-dark-2">
-                  LTD · EST. 2003
-                </span>
-              </div>
+            <Link to="/" className="inline-flex flex-col items-start gap-4">
+              <span className="inline-flex items-center gap-3">
+                <img
+                  src="https://ousjmnfvtdnztyqqyvay.supabase.co/storage/v1/object/public/Golden%20Dimension/GD.png"
+                  alt=""
+                  aria-hidden
+                  className="block h-10 w-auto"
+                />
+                <img
+                  src="https://ousjmnfvtdnztyqqyvay.supabase.co/storage/v1/object/public/Golden%20Dimension/Golden.png"
+                  alt="Golden Dimensions"
+                  className="block h-6 w-auto"
+                />
+              </span>
+              <span className="block label-technical text-brand-on-dark-2">
+                LTD · EST. 2003
+              </span>
             </Link>
             <p className="mt-6 max-w-sm text-[13.5px] leading-[1.6] text-brand-on-dark-2">
               Multidisciplinary consulting and engineering capability for

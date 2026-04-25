@@ -52,22 +52,30 @@ const Navbar: React.FC = () => {
       <div className="bg-brand-paper border-b border-brand-hair">
         <div className="max-w-[88rem] mx-auto px-6 lg:px-10">
           <div className="flex items-center justify-between h-[68px]">
-            {/* Logo / Wordmark */}
+            {/* Logo / Wordmark — uses the brand PNGs (monogram + wordmark)
+                hosted on Supabase. Heights tuned to sit on the 68px nav row. */}
             <Link to="/" className="flex items-center gap-3 group shrink-0">
-              <div className="relative w-9 h-9 bg-brand-ink flex items-center justify-center">
-                <span className="absolute inset-1 border border-brand-accent" aria-hidden />
-                <span className="relative text-brand-ivory font-display font-semibold text-[12px] tracking-[0.05em]">
-                  GD
-                </span>
-              </div>
-              <div className="hidden sm:block leading-none">
-                <span className="block text-brand-ink font-display font-semibold text-[16px] tracking-[-0.02em] group-hover:text-brand-accent transition-colors">
-                  Golden Dimensions
-                </span>
-                <span className="block mt-1.5 label-technical text-brand-mute">
+              <img
+                src="https://ousjmnfvtdnztyqqyvay.supabase.co/storage/v1/object/public/Golden%20Dimension/GD.png"
+                alt=""
+                aria-hidden
+                className="block h-9 w-auto"
+              />
+              <span className="hidden sm:flex items-center">
+                <img
+                  src="https://ousjmnfvtdnztyqqyvay.supabase.co/storage/v1/object/public/Golden%20Dimension/Golden.png"
+                  alt="Golden Dimensions"
+                  className="block h-6 w-auto"
+                />
+              </span>
+              <span className="hidden md:block ml-2 pl-3 border-l border-brand-hair leading-none">
+                <span className="block label-technical text-brand-mute">
                   LTD · Multidisciplinary Consulting
                 </span>
-              </div>
+                <span className="block mt-1.5 label-technical text-brand-accent">
+                  Established 2003
+                </span>
+              </span>
             </Link>
 
             {/* Desktop Navigation */}
