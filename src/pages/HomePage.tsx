@@ -41,21 +41,29 @@ const engagementModels = [
   {
     name: 'Advisory',
     appliesWhen: 'Framing the case',
+    scope: 'Discrete advisory mandate',
+    duration: '4 – 12 weeks',
     description: 'Short-form expert engagements that frame strategy, decisions, and business cases.',
   },
   {
     name: 'Programme Delivery',
     appliesWhen: 'Executing the programme',
+    scope: 'Full multidisciplinary delivery',
+    duration: '12 – 36 months',
     description: 'Multidisciplinary teams executing major transformations end to end.',
   },
   {
     name: 'Managed Services',
     appliesWhen: 'Running the system',
+    scope: 'Operational ownership',
+    duration: 'Ongoing — multi-year',
     description: 'Long-term operation of systems, networks, and back-office functions.',
   },
   {
     name: 'Capability Transfer',
     appliesWhen: 'Handing over to client teams',
+    scope: 'Embedded knowledge transfer',
+    duration: '6 – 18 months',
     description: 'Embedded teams that transfer skills and operating models to client organisations.',
   },
 ];
@@ -81,11 +89,13 @@ const HomePage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
             <div className="lg:col-span-8">
               <TechnicalLabel index="01">Multidisciplinary Consulting & Engineering</TechnicalLabel>
-              <h1 className="mt-8 font-display text-[40px] sm:text-[52px] md:text-[64px] lg:text-[76px] font-semibold leading-[0.98] tracking-[-0.03em] text-brand-ink">
-                Integrated capability for institutions, enterprises, and{' '}
-                <span className="font-editorial italic font-medium text-brand-accent">
-                  governments
-                </span>{' '}
+              <h1 className="mt-8 font-display text-[40px] sm:text-[52px] md:text-[64px] lg:text-[76px] font-medium leading-[1.02] tracking-[-0.015em] text-brand-ink">
+                Integrated{' '}
+                <span className="font-editorial italic text-brand-accent">capability</span>{' '}
+                for{' '}
+                <span className="font-editorial italic text-brand-accent">institutions</span>,
+                enterprises, and{' '}
+                <span className="font-editorial italic text-brand-accent">governments</span>{' '}
                 worldwide.
               </h1>
               <p className="mt-8 max-w-2xl text-[17px] md:text-[19px] leading-[1.55] text-brand-ink-2">
@@ -98,6 +108,37 @@ const HomePage: React.FC = () => {
                 <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
                 <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
                 <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
+              </div>
+
+              {/* Micro credibility rail — the four institutional disciplines
+                  the firm operates across, immediately under hero CTAs. */}
+              <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 max-w-2xl border-t border-brand-hair pt-6">
+                {['Strategy', 'Engineering', 'Technology', 'Operations'].map((disc, idx) => (
+                  <div key={disc} className="flex items-baseline gap-3">
+                    <span className="font-mono-tab text-[10px] tracking-widest text-brand-accent">
+                      {String(idx + 1).padStart(2, '0')}
+                    </span>
+                    <span className="text-[14px] tracking-tight text-brand-ink">
+                      {disc}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Institutional metadata strip */}
+              <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 max-w-2xl">
+                {[
+                  'Established 2003',
+                  'Public + private sector delivery',
+                  'Global multidisciplinary practice',
+                ].map((item, idx, arr) => (
+                  <React.Fragment key={item}>
+                    <span className="label-technical text-brand-mute">{item}</span>
+                    {idx < arr.length - 1 && (
+                      <span className="text-brand-hair-strong" aria-hidden>·</span>
+                    )}
+                  </React.Fragment>
+                ))}
               </div>
             </div>
 
@@ -164,16 +205,14 @@ const HomePage: React.FC = () => {
             <div className="lg:col-span-2"><CountMetric value={50}  suffix="+" label="Countries served" /></div>
             <div className="lg:col-span-2"><CountMetric value={16}  suffix=""  label="Integrated disciplines" /></div>
 
-            {/* Founding-year indicator */}
+            {/* Right-aligned institutional statement */}
             <div className="col-span-2 lg:col-span-4 lg:border-l lg:border-brand-hair lg:pl-10">
-              <div className="label-technical text-brand-accent mb-3">Established</div>
-              <div className="font-display text-[40px] md:text-[56px] font-semibold leading-none tracking-[-0.03em] text-brand-ink font-mono-tab">
-                2003
-              </div>
-              <div className="mt-3 text-[13px] leading-[1.55] text-brand-ink-2 max-w-xs">
-                Two decades of multidisciplinary practice — supporting public
-                and private institutions through complex transformation.
-              </div>
+              <div className="label-technical text-brand-accent mb-4">Two decades of practice</div>
+              <p className="font-display text-[20px] md:text-[24px] leading-[1.3] tracking-[-0.01em] text-brand-ink max-w-sm">
+                Two decades delivering{' '}
+                <span className="font-editorial italic text-brand-accent">transformation</span>{' '}
+                across regulated sectors.
+              </p>
             </div>
           </div>
         </Container>
@@ -318,6 +357,22 @@ const HomePage: React.FC = () => {
                       {industry.relevance}
                     </p>
                   </div>
+                  <div className="sm:col-span-2 pt-2 border-t border-brand-hair">
+                    <div className="label-technical text-brand-mute mb-3">
+                      <span className="text-brand-accent">→</span> Used by
+                    </div>
+                    <ul className="flex flex-wrap gap-x-4 gap-y-1.5">
+                      {industry.clients.map((c) => (
+                        <li
+                          key={c}
+                          className="inline-flex items-baseline gap-1.5 text-[12.5px] tracking-tight text-brand-ink"
+                        >
+                          <span className="block w-1 h-1 bg-brand-accent" aria-hidden />
+                          {c}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
                 <div className="md:col-span-1 flex md:justify-end items-start pt-2">
                   <ArrowUpRight
@@ -401,7 +456,7 @@ const HomePage: React.FC = () => {
           <div className="mt-6 flex items-center gap-3">
             <span className="block h-px w-8 bg-brand-accent" aria-hidden />
             <p className="label-technical text-brand-mute">
-              Modules deploy as a single technology practice, not isolated tracks.
+              Technology deployed as a single integrated practice, not isolated tracks.
             </p>
           </div>
         </Container>
@@ -540,7 +595,7 @@ const HomePage: React.FC = () => {
                     Phase {idx + 1} of {engagementModels.length}
                   </span>
                 </div>
-                <h3 className="font-display text-[20px] md:text-[22px] font-semibold tracking-[-0.025em] text-brand-ink leading-tight">
+                <h3 className="font-display text-[20px] md:text-[22px] font-medium tracking-[-0.01em] text-brand-ink leading-tight">
                   {model.name}
                 </h3>
                 <div className="mt-3 mb-4 inline-flex items-center gap-2 px-2.5 py-1 border border-brand-hair-strong">
@@ -552,6 +607,22 @@ const HomePage: React.FC = () => {
                 <p className="text-[13.5px] leading-[1.6] text-brand-ink-2">
                   {model.description}
                 </p>
+
+                {/* Scope + duration meta */}
+                <dl className="mt-5 pt-4 border-t border-brand-hair grid grid-cols-1 gap-y-3">
+                  <div>
+                    <dt className="label-technical text-brand-mute">Scope depth</dt>
+                    <dd className="mt-1 text-[13px] tracking-tight text-brand-ink">
+                      {model.scope}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="label-technical text-brand-mute">Duration profile</dt>
+                    <dd className="mt-1 text-[13px] tracking-tight text-brand-ink font-mono-tab">
+                      {model.duration}
+                    </dd>
+                  </div>
+                </dl>
 
                 {/* Forward-flow arrow on lg+ between cells */}
                 {idx < engagementModels.length - 1 && (
@@ -582,17 +653,26 @@ const HomePage: React.FC = () => {
          ============================================================ */}
       <Section tone="paper" divided>
         <Container size="narrow">
-          <TechnicalLabel index="10">Practitioner Perspective</TechnicalLabel>
-          <blockquote className="mt-8 font-editorial italic text-[26px] md:text-[36px] lg:text-[42px] font-medium leading-[1.18] tracking-[-0.015em] text-brand-ink">
-            "Multidisciplinary delivery is not a marketing claim — it's an
-            operating choice. We staff every mandate so that strategy,
-            engineering, technology, and operations are{' '}
-            <span className="text-brand-accent">in the same room</span>{' '}
-            from day one."
-          </blockquote>
-          <div className="mt-10 flex items-center gap-4">
-            <div className="w-10 h-px bg-brand-ink" />
-            <div>
+          <div className="text-center">
+            <div className="flex justify-center">
+              <TechnicalLabel index="10">Practice Perspective</TechnicalLabel>
+            </div>
+
+            {/* Thin divider above */}
+            <div className="mt-12 mx-auto w-24 h-px bg-brand-hair-strong" />
+
+            <blockquote className="mt-12 font-editorial italic text-[28px] md:text-[40px] lg:text-[46px] font-normal leading-[1.22] tracking-[-0.005em] text-brand-ink max-w-3xl mx-auto">
+              "Multidisciplinary delivery is not a marketing claim — it's an
+              operating choice. We staff every mandate so that strategy,
+              engineering, technology, and operations are{' '}
+              <span className="text-brand-accent">in the same room</span>{' '}
+              from day one."
+            </blockquote>
+
+            {/* Thin divider below */}
+            <div className="mt-12 mx-auto w-24 h-px bg-brand-hair-strong" />
+
+            <div className="mt-8">
               <div className="text-[14px] font-medium tracking-tight text-brand-ink">
                 Leadership Team
               </div>
@@ -608,24 +688,49 @@ const HomePage: React.FC = () => {
            § 11 — Final CTA
          ============================================================ */}
       <Section tone="ivory">
-        <Container size="narrow">
-          <TechnicalLabel index="11">Engage With Us</TechnicalLabel>
-          <h2 className="mt-8 font-display text-[32px] md:text-[48px] lg:text-[56px] font-semibold leading-[1.04] tracking-[-0.03em] text-brand-ink">
-            Start a transformation conversation with our{' '}
-            <span className="font-editorial italic font-medium text-brand-accent">
-              multidisciplinary team
-            </span>.
-          </h2>
-          <p className="mt-7 max-w-2xl text-[16px] leading-[1.6] text-brand-ink-2">
-            Tell us about the institutional outcome you're working toward —
-            we'll assemble the right combination of strategy, engineering,
-            technology, and operations expertise around it.
-          </p>
-          <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-3">
-            <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
-            <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
-            <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
-          </div>
+        <Container>
+          {/* Elevated container panel — bordered, raised paper, corner ticks */}
+          <DiagramFrame label="Transformation Invitation" index="11" className="bg-brand-paper">
+            <div className="p-10 md:p-16 lg:p-20">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+                <div className="lg:col-span-8">
+                  <h2 className="font-display text-[32px] md:text-[44px] lg:text-[52px] font-medium leading-[1.05] tracking-[-0.015em] text-brand-ink">
+                    Bring multidisciplinary{' '}
+                    <span className="font-editorial italic text-brand-accent">capability</span>{' '}
+                    to your next{' '}
+                    <span className="font-editorial italic text-brand-accent">transformation</span>{' '}
+                    programme.
+                  </h2>
+                  <p className="mt-6 max-w-2xl text-[16px] leading-[1.6] text-brand-ink-2">
+                    Tell us about the institutional outcome you're working toward —
+                    we'll assemble the right combination of strategy, engineering,
+                    technology, and operations expertise around it.
+                  </p>
+                </div>
+                <div className="lg:col-span-4 lg:border-l lg:border-brand-hair lg:pl-10">
+                  <div className="label-technical text-brand-accent mb-4">Engagement starts at</div>
+                  <ul className="space-y-3">
+                    {[
+                      ['Origination', 'Frame the case'],
+                      ['Execution',   'Deliver the programme'],
+                      ['Sustainment', 'Operate or hand over'],
+                    ].map(([k, v]) => (
+                      <li key={k} className="flex items-baseline justify-between gap-4 border-b border-brand-hair pb-2">
+                        <span className="text-[13px] tracking-tight text-brand-ink">{k}</span>
+                        <span className="label-technical text-brand-mute">{v}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-10 pt-8 border-t border-brand-hair flex flex-col sm:flex-row sm:items-center gap-4">
+                <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+                <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
+                <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
+              </div>
+            </div>
+          </DiagramFrame>
         </Container>
       </Section>
     </div>

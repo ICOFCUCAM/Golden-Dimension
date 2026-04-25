@@ -41,6 +41,7 @@ export interface Industry {
   impact: string;            // one-line impact statement
   scope: string;             // delivery scope example
   relevance: string;         // institutional relevance description
+  clients: string[];         // example client institution types
 }
 
 // ---------------------------------------------------------------------------
@@ -293,6 +294,7 @@ export const industries: Industry[] = [
       'Core banking replacement, treasury and payments modernisation, regulatory reporting, controls remediation.',
     relevance:
       'Tier-1 banks, insurers, capital-markets infrastructure, and financial regulators across regulated jurisdictions.',
+    clients: ['Central banks', 'Commercial banks', 'Insurers', 'Financial regulators'],
   },
   {
     id: 'infrastructure',
@@ -309,6 +311,7 @@ export const industries: Industry[] = [
       'Transport, energy, water, and built-environment programmes — feasibility through commissioning and asset operations.',
     relevance:
       'Public infrastructure agencies, capital-project sponsors, sovereign developers, and major contractors.',
+    clients: ['Transport authorities', 'Energy operators', 'Sovereign developers', 'Tier-1 contractors'],
   },
   {
     id: 'healthcare',
@@ -325,6 +328,7 @@ export const industries: Industry[] = [
       'Hospital operating models, digital health platforms, payer systems, public-health programme delivery.',
     relevance:
       'Hospitals and health systems, payers, ministries of health, and public-health agencies.',
+    clients: ['Hospital systems', 'Health payers', 'Ministries of health', 'Public-health agencies'],
   },
   {
     id: 'telecom',
@@ -341,6 +345,7 @@ export const industries: Industry[] = [
       'Fixed, mobile, and enterprise network engineering; OSS / BSS platforms; cybersecurity and managed services.',
     relevance:
       'Tier-1 network operators, large-enterprise IT, defence-grade communications, and national telecom regulators.',
+    clients: ['Tier-1 operators', 'Defence-grade comms', 'Large-enterprise IT', 'National telecom regulators'],
   },
   {
     id: 'education',
@@ -357,6 +362,7 @@ export const industries: Industry[] = [
       'Curriculum and credentialing systems, learning platforms, academic governance, institutional partnerships.',
     relevance:
       'Universities, ministries of education, vocational systems, and learning platform operators.',
+    clients: ['Universities', 'Ministries of education', 'Vocational systems', 'Learning platforms'],
   },
   {
     id: 'government',
@@ -373,6 +379,7 @@ export const industries: Industry[] = [
       'Policy and regulatory reform, citizen-services delivery, programme governance, public-finance modernisation.',
     relevance:
       'Ministries, central agencies, regulators, sovereign development bodies, and public-sector audit institutions.',
+    clients: ['Ministries', 'Central agencies', 'Regulators', 'Sovereign development bodies'],
   },
 ];
 

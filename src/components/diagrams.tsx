@@ -168,96 +168,34 @@ export const CapabilityArchitecture: React.FC<{
 };
 
 // -----------------------------------------------------------------------------
-// WorldMap — schematic dot-density world map.
-// Each landmass is rendered as a grid of small dots; ocean stays as a fainter
-// dot grid. This reads as a recognisable world map on first glance without
-// shipping kilobytes of cartographic SVG paths.
+// WorldMap — real-geometry world map.
+// Uses `react-simple-maps` (~30KB) to render proper country outlines from the
+// standard world-atlas TopoJSON dataset (fetched from jsDelivr at runtime).
+// Region pins are placed by [longitude, latitude] so they sit on the actual
+// cities rather than on a hand-tuned grid.
 // -----------------------------------------------------------------------------
+
+// `react-simple-maps` ships without bundled type declarations on v3; declared
+// inline below so TypeScript builds cleanly.
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
+
+const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 
 interface RegionPin {
   id: string;
   label: string;
-  x: number; // percent (0-100) — horizontal position in viewBox
-  y: number; // percent (0-100) — vertical position in viewBox
+  coords: [number, number]; // [lng, lat]
 }
 
-// World viewBox: 200 x 100 grid (rows x cols). Each "1" is a land cell that
-// will be rendered as a small filled dot. Built by hand to look roughly like
-// continents at low resolution. 0 = ocean, 1 = land, 2 = sparse-land/coast.
-const WORLD_GRID: string[] = [
-  // 100 cols wide, 50 rows tall
-  // Cols index           0         1         2         3         4         5         6         7         8         9
-  // Cols index           0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
-  /*  0 */               '          11                                                                                        ',
-  /*  1 */               '         1111  1                                                                                    ',
-  /*  2 */               '       11111111  111         11                                                                     ',
-  /*  3 */               '    1111111111111111111      111111                                       11                        ',
-  /*  4 */               '   11111111111111111111111  1111111   1111                       1111  1111111  111111              ',
-  /*  5 */               '   11111111111111111111111  111111   1111111111      11   111111111111111111111111111111            ',
-  /*  6 */               '    111111111111111111111   11111  1111111111111   11111111111111111111111111111111111111           ',
-  /*  7 */               '    1111111111111111111     1111  111111111111111111111111111111111111111111111111111111111  1      ',
-  /*  8 */               '     1111111111111111      11111  1111  1111111111111111111111111111111111111111111111111111111     ',
-  /*  9 */               '      11111111111111      11111   11    111111111111111111111111111111111111111111111111111111      ',
-  /* 10 */               '       11111111111        11111         1111111111111111111111111111111111111111111111111111        ',
-  /* 11 */               '        111111111         11111          111111111111111111111111111111111111111111111111111        ',
-  /* 12 */               '         11111111          111            111111111111111111111111111111111111111111111111          ',
-  /* 13 */               '          1111111          11             1111111111111111111111111111111111111111111  111          ',
-  /* 14 */               '           111111           1             1111  111111111111111111111111111111  111      11         ',
-  /* 15 */               '           111111                          11   111111111111111111111111111111   1                  ',
-  /* 16 */               '            11111                                111111111111111  11111111111                       ',
-  /* 17 */               '             111      11                          1111111111111    1111111111                       ',
-  /* 18 */               '             111      111                         111111111111      11111111                        ',
-  /* 19 */               '             111     1111                         11111111111        11111111                       ',
-  /* 20 */               '            1111    1111                          1111111111         1111111                        ',
-  /* 21 */               '            1111   1111                            11111111          1111111   111                  ',
-  /* 22 */               '            1111  1111                              111111            11111111111                   ',
-  /* 23 */               '            1111  1111                              111111             111111111                    ',
-  /* 24 */               '            111111111                                111111            11111111                     ',
-  /* 25 */               '            11111111                                  111111            1111111                     ',
-  /* 26 */               '            1111111                                   1111111            11111                      ',
-  /* 27 */               '             111111                                    11111111            11           1111        ',
-  /* 28 */               '             11111                                      111111111                      1111111      ',
-  /* 29 */               '             11111                                       1111111                       111111111    ',
-  /* 30 */               '             1111                                         1111111                      11111111111  ',
-  /* 31 */               '              111                                          111111                       1111111111  ',
-  /* 32 */               '              111                                           11111                        111111111  ',
-  /* 33 */               '              111                                            1111                          1111     ',
-  /* 34 */               '               11                                             111                                   ',
-  /* 35 */               '               11                                              11                                   ',
-  /* 36 */               '               1                                                                                    ',
-  /* 37 */               '                                                                                                    ',
-  /* 38 */               '                                                                                                    ',
-  /* 39 */               '                                                                                                    ',
-];
-
-// Translate the grid to <circle> coordinates.
-const COLS = 100;
-const ROWS = WORLD_GRID.length;
-const CELL_W = 10;
-const CELL_H = 10;
-const VIEW_W = COLS * CELL_W;  // 1000
-const VIEW_H = ROWS * CELL_H;  // 400
-
-const landDots: { cx: number; cy: number }[] = [];
-WORLD_GRID.forEach((row, r) => {
-  for (let c = 0; c < row.length; c++) {
-    if (row[c] === '1') {
-      landDots.push({
-        cx: c * CELL_W + CELL_W / 2,
-        cy: r * CELL_H + CELL_H / 2,
-      });
-    }
-  }
-});
-
 const regionPins: RegionPin[] = [
-  // Tuned to land-dot positions in the grid above.
-  { id: 'na',    label: 'North America',      x: 18, y: 30 },  // E. USA
-  { id: 'uk',    label: 'United Kingdom',     x: 47, y: 24 },  // British Isles
-  { id: 'eu',    label: 'European Union',     x: 50, y: 27 },  // Central Europe
-  { id: 'mena',  label: 'MENA',               x: 56, y: 38 },  // Egypt / Levant
-  { id: 'ssa',   label: 'Sub-Saharan Africa', x: 53, y: 56 },  // Central Africa
-  { id: 'apac',  label: 'Asia Pacific',       x: 78, y: 50 },  // Southeast Asia
+  { id: 'na',   label: 'North America',         coords: [-77.0, 38.9] },  // Washington DC
+  { id: 'uk',   label: 'United Kingdom',        coords: [-0.13, 51.51] }, // London
+  { id: 'eu',   label: 'European Union',        coords: [4.35, 50.85] },  // Brussels
+  { id: 'mena', label: 'MENA',                  coords: [31.23, 30.04] }, // Cairo
+  { id: 'ssa',  label: 'Sub-Saharan Africa',    coords: [36.82, -1.29] }, // Nairobi
+  { id: 'apac', label: 'Asia Pacific',          coords: [103.8, 1.35] },  // Singapore
 ];
 
 export const WorldMap: React.FC<{
@@ -265,59 +203,48 @@ export const WorldMap: React.FC<{
   tone?: 'light' | 'dark';
 }> = ({ className = '', tone = 'dark' }) => {
   const isDark = tone === 'dark';
-  const landDotColor  = isDark ? '#7B7C82' : '#3F4047';   // continents
-  const oceanDotColor = isDark ? 'rgba(166,167,172,0.16)' : 'rgba(116,117,123,0.18)';
-  const oceanCellSize = 22;
+  const landFill   = isDark ? '#1F1F23' : '#EFEDE7';
+  const landStroke = isDark ? '#3A3A40' : '#BCB8AB';
 
   return (
     <div className={`relative w-full ${className}`}>
-      <svg
-        viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
-        xmlns="http://www.w3.org/2000/svg"
-        className="block w-full h-auto"
-        role="img"
-        aria-label="Global delivery footprint map"
+      <ComposableMap
+        projection="geoEqualEarth"
+        projectionConfig={{ scale: 165 }}
+        width={900}
+        height={460}
+        style={{ width: '100%', height: 'auto', display: 'block' }}
       >
-        {/* Ocean dot grid background */}
-        <defs>
-          <pattern
-            id="map-ocean-grid"
-            x="0"
-            y="0"
-            width={oceanCellSize}
-            height={oceanCellSize}
-            patternUnits="userSpaceOnUse"
-          >
-            <circle cx={oceanCellSize / 2} cy={oceanCellSize / 2} r="1" fill={oceanDotColor} />
-          </pattern>
-        </defs>
-        <rect width={VIEW_W} height={VIEW_H} fill="url(#map-ocean-grid)" />
+        <Geographies geography={GEO_URL}>
+          {({ geographies }: { geographies: any[] }) =>
+            geographies.map((geo: any) => (
+              <Geography
+                key={geo.rsmKey}
+                geography={geo}
+                fill={landFill}
+                stroke={landStroke}
+                strokeWidth={0.5}
+                style={{
+                  default: { outline: 'none' },
+                  hover:   { outline: 'none', fill: landFill },
+                  pressed: { outline: 'none', fill: landFill },
+                }}
+              />
+            ))
+          }
+        </Geographies>
 
-        {/* Land dots — one per "1" in WORLD_GRID. */}
-        <g>
-          {landDots.map((d, i) => (
-            <circle key={i} cx={d.cx} cy={d.cy} r="2.4" fill={landDotColor} />
-          ))}
-        </g>
-
-        {/* Region pins */}
-        <g>
-          {regionPins.map((pin) => {
-            const cx = (pin.x / 100) * VIEW_W;
-            const cy = (pin.y / 100) * VIEW_H;
-            return (
-              <g key={pin.id}>
-                {/* Pulse ring */}
-                <circle cx={cx} cy={cy} r="14" fill="none" stroke="#C24914" strokeWidth="1" opacity="0.5" />
-                {/* Outer dot */}
-                <circle cx={cx} cy={cy} r="5.5" fill="#C24914" />
-                {/* Inner dot */}
-                <circle cx={cx} cy={cy} r="2" fill="#FAFAF7" />
-              </g>
-            );
-          })}
-        </g>
-      </svg>
+        {regionPins.map((pin) => (
+          <Marker key={pin.id} coordinates={pin.coords}>
+            {/* Pulse ring */}
+            <circle r={11} fill="none" stroke="#C24914" strokeWidth={1} opacity={0.5} />
+            {/* Outer dot */}
+            <circle r={5} fill="#C24914" />
+            {/* Inner dot */}
+            <circle r={1.8} fill="#FAFAF7" />
+          </Marker>
+        ))}
+      </ComposableMap>
 
       {/* Legend rendered as HTML below SVG so labels stay readable on small screens. */}
       <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 gap-px bg-white/10 border border-white/10">

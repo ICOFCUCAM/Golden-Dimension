@@ -65,39 +65,39 @@ export default {
           ring: 'hsl(var(--sidebar-ring))'
         },
         // ------------------------------------------------------------
-        // Infrastructure Platform Consulting palette (v3).
-        // Single signal accent (rust orange) on near-black ink over an
-        // off-white canvas. Token *names* preserved (ivory/paper/stone/
-        // ink/...) so secondary pages keep working; values updated.
+        // Editorial Consulting palette (v4).
+        // Warm white canvas, graphite ink, muted copper accent.
+        // Token *names* preserved (ivory/paper/stone/ink/...) so
+        // secondary pages keep working; values updated.
         // ------------------------------------------------------------
         brand: {
-          ivory:         '#FAFAF7',  // canvas (primary surface)
+          ivory:         '#F7F5F2',  // warm white canvas
           paper:         '#FFFFFF',  // raised paper (editorial moments)
-          stone:         '#EFEDE7',  // recessed alt surface
-          ink:           '#0A0A0B',  // primary ink + emphasis band
-          'ink-soft':    '#15151A',  // soft variant of ink
-          'ink-2':       '#3F4047',  // body text
-          mute:          '#74757B',  // tertiary text + technical labels
-          hair:          '#E2E0DA',  // hairline rules
-          'hair-strong': '#BCB8AB',  // emphasised rules
-          'on-dark':     '#FAFAF7',  // text on ink band
-          'on-dark-2':   '#A6A7AC',  // secondary text on ink
+          stone:         '#ECE7E0',  // recessed alt surface
+          ink:           '#1F1F1F',  // graphite ink + emphasis band
+          'ink-soft':    '#2A2A2A',  // soft variant of ink
+          'ink-2':       '#4A4A4A',  // body text
+          mute:          '#7A7A7A',  // tertiary text + technical labels
+          hair:          '#E7E1DA',  // hairline rules
+          'hair-strong': '#C8BFB0',  // emphasised rules
+          'on-dark':     '#F7F5F2',  // text on ink band
+          'on-dark-2':   '#A8A6A2',  // secondary text on ink
 
-          // Single signal accent — engineering rust.
-          accent:        '#C24914',
-          'accent-hover':'#A33D0F',
-          'accent-soft': '#E4754B',  // brighter — for ink band
-          'accent-tint': '#F8E7DD',  // pale wash — used sparingly
+          // Single signal accent — muted copper.
+          accent:        '#B4532A',
+          'accent-hover':'#963F1F',
+          'accent-soft': '#D4815C',  // brighter — for ink band
+          'accent-tint': '#F4E4D9',  // pale wash — used sparingly
         },
       },
       fontFamily: {
-        // Plus Jakarta Sans is the workhorse — display + UI + body.
-        // IBM Plex Serif is opt-in via .font-editorial for editorial moments.
-        // JetBrains Mono is used for technical labels & numerals.
-        display:   ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
-        sans:      ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        // IBM Plex Serif drives editorial display (h1/h2/h3 + italic
+        // accents). Inter is the body / UI workhorse. JetBrains Mono
+        // carries technical labels and tabular numerals.
+        display:   ['"IBM Plex Serif"', 'Georgia', 'serif'],
         editorial: ['"IBM Plex Serif"', 'Georgia', 'serif'],
         serif:     ['"IBM Plex Serif"', 'Georgia', 'serif'],
+        sans:      ['Inter', 'system-ui', 'sans-serif'],
         mono:      ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       borderRadius: {
