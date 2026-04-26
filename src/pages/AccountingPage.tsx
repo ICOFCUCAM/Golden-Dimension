@@ -11,6 +11,8 @@ import ReportsTab from '@/components/finance/ReportsTab';
 import TransactionDetailPanel from '@/components/finance/TransactionDetailPanel';
 import InvoicesTab from '@/components/finance/InvoicesTab';
 import PaymentSettingsTab from '@/components/finance/PaymentSettingsTab';
+import PaymentsTab from '@/components/finance/PaymentsTab';
+import { fetchPayments } from '@/lib/payments';
 import { hasAnyRole } from '@/lib/roles';
 import { useAuth } from '@/contexts/AuthContext';
 import {
@@ -25,7 +27,9 @@ import {
 } from '@/lib/finance';
 import { supabaseConfigured } from '@/lib/supabase';
 
-type TabId = 'transactions' | 'accounts' | 'engagements' | 'invoices' | 'reports' | 'settings';
+type TabId =
+  | 'transactions' | 'accounts' | 'engagements'
+  | 'invoices' | 'payments' | 'reports' | 'settings';
 
 const AccountingInner: React.FC = () => {
   const { session, roles } = useAuth();
@@ -40,6 +44,12 @@ const AccountingInner: React.FC = () => {
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<FinancialTransaction | null>(null);
   const [inspecting, setInspecting] = useState<FinancialTransaction | null>(null);
+  const [pendingPayments, setPendingPayments] = useState(0);
+
+  const refreshPendingPayments = async () => {
+    const list = await fetchPayments();
+    setPendingPayments(list.filter((p) => p.status === 'claimed').length);
+  };
 
   const refresh = async () => {
     setLoading(true);
@@ -62,7 +72,10 @@ const AccountingInner: React.FC = () => {
   };
 
   useEffect(() => {
-    if (session) void refresh();
+    if (session) {
+      void refresh();
+      void refreshPendingPayments();
+    }
   }, [session]);
 
   const draftCount = useMemo(
@@ -98,6 +111,7 @@ const AccountingInner: React.FC = () => {
           { id: 'accounts', label: 'Chart of accounts' },
           { id: 'engagements', label: 'Engagements' },
           { id: 'invoices', label: 'Invoices' },
+          { id: 'payments', label: 'Payments', badge: pendingPayments },
           { id: 'reports', label: 'Reports' },
           ...(canEditSettings ? [{ id: 'settings', label: 'Payment settings' }] : []),
         ]}
@@ -160,6 +174,16 @@ const AccountingInner: React.FC = () => {
             rates={rates}
             display={display}
             onChanged={refresh}
+          />
+        ) : activeTab === 'payments' ? (
+          <PaymentsTab
+            accounts={accounts}
+            rates={rates}
+            display={display}
+            onLedgerUpdated={() => {
+              void refresh();
+              void refreshPendingPayments();
+            }}
           />
         ) : activeTab === 'settings' ? (
           canEditSettings ? (
