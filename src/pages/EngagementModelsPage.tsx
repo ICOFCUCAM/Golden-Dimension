@@ -366,7 +366,7 @@ const EngagementModelsPage: React.FC = () => {
             questions and we'll suggest a starting point.
           </p>
           <div className="mt-9 flex flex-col sm:flex-row sm:items-center gap-3">
-            <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+            <PrimaryCta to="/contact#request-consultation">Request Consultation</PrimaryCta>
             <SecondaryCta to="/engagement-models/configurator">Open the Configurator</SecondaryCta>
             <TertiaryCta to="/methodology">Delivery Methodology</TertiaryCta>
           </div>

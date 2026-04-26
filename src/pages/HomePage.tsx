@@ -122,7 +122,7 @@ const HomePage: React.FC = () => {
 
               <RevealOnScroll delayMs={260}>
                 <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-3">
-                  <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+                  <PrimaryCta to="/contact#request-consultation">Request Consultation</PrimaryCta>
                   <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
                   <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
                 </div>
@@ -589,7 +589,7 @@ const HomePage: React.FC = () => {
             </div>
 
             <div className="lg:col-span-5 flex flex-col sm:flex-row gap-3">
-              <PrimaryCta to="/contact" tone="dark">Request Consultation</PrimaryCta>
+              <PrimaryCta to="/contact#request-consultation" tone="dark">Request Consultation</PrimaryCta>
               <SecondaryCta to="/industries" tone="dark">View Industries Served</SecondaryCta>
             </div>
           </div>
@@ -786,7 +786,7 @@ const HomePage: React.FC = () => {
               </div>
 
               <div className="mt-10 pt-8 border-t border-brand-hair flex flex-col sm:flex-row sm:items-center gap-4">
-                <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+                <PrimaryCta to="/contact#request-consultation">Request Consultation</PrimaryCta>
                 <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
                 <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
               </div>

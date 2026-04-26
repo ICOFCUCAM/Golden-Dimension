@@ -46,8 +46,23 @@ const AppLayout: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [location.pathname]);
+    // On every navigation (including clicking a Link to the page we're
+    // already on), scroll to the hash target if present, otherwise scroll
+    // to top. The setTimeout gives React a tick to mount the destination
+    // route's DOM before we look up the element.
+    const id = location.hash ? location.hash.slice(1) : '';
+    const tick = window.setTimeout(() => {
+      if (id) {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 0);
+    return () => window.clearTimeout(tick);
+  }, [location.pathname, location.hash, location.key]);
 
   const isChromeless =
     location.pathname === '/admin' ||

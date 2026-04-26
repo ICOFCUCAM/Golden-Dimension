@@ -359,7 +359,7 @@ const ConfiguratorPage: React.FC = () => {
                   </div>
 
                   <div className="mt-10 flex flex-wrap items-center gap-4">
-                    <PrimaryCta to="/contact">Discuss this engagement</PrimaryCta>
+                    <PrimaryCta to="/contact#request-consultation">Discuss this engagement</PrimaryCta>
                     <Link
                       to={`/industries/${recommendation.sector.id}`}
                       className="group inline-flex items-center gap-2 text-[13px] font-medium tracking-tight text-brand-ink border-b border-brand-ink hover:text-brand-accent hover:border-brand-accent transition-colors pb-1"
@@ -425,7 +425,7 @@ const ConfiguratorPage: React.FC = () => {
               The contact intake routes your enquiry directly to the partner accountable for your sector — no configurator required.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-3">
-              <PrimaryCta to="/contact">Open Engagement Intake</PrimaryCta>
+              <PrimaryCta to="/contact#request-consultation">Open Engagement Intake</PrimaryCta>
               <SecondaryCta to="/engagement-models">All Engagement Models</SecondaryCta>
             </div>
           </div>

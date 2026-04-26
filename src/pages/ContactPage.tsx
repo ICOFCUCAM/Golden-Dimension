@@ -38,7 +38,7 @@ const ContactPage: React.FC = () => {
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
             {/* Multi-step intake */}
-            <div className="lg:col-span-7">
+            <div id="request-consultation" className="lg:col-span-7 scroll-mt-28">
               <TechnicalLabel index="01">Engagement Intake</TechnicalLabel>
               <h2 className="mt-7 font-display text-[26px] md:text-[32px] font-medium tracking-[-0.015em] text-brand-ink leading-tight">
                 Start the intake

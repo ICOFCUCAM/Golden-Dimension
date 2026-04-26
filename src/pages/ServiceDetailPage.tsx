@@ -125,7 +125,7 @@ const ServiceDetailPage: React.FC = () => {
                     A partner from the {service.title.toLowerCase()} practice will respond within one business day.
                   </p>
                   <div className="mt-6">
-                    <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+                    <PrimaryCta to="/contact#request-consultation">Request Consultation</PrimaryCta>
                   </div>
                 </div>
 

@@ -196,7 +196,7 @@ const CaseStudiesPage: React.FC = () => {
             </h2>
             <div className="mt-9 flex flex-col sm:flex-row sm:items-center gap-3">
               <Link
-                to="/contact"
+                to="/contact#request-consultation"
                 className="group inline-flex items-center justify-center gap-2.5 px-6 py-3 text-[13px] font-medium tracking-tight bg-brand-ink text-brand-ivory hover:bg-brand-accent transition-colors"
               >
                 Request Consultation

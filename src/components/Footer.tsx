@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
           </div>
           <div className="lg:col-span-5 flex lg:justify-end items-end">
             <Link
-              to="/contact"
+              to="/contact#request-consultation"
               className="group inline-flex items-center gap-2.5 px-6 py-3.5 bg-brand-on-dark text-brand-ink text-[14px] font-medium tracking-[-0.01em] hover:bg-brand-accent-soft hover:text-brand-ink transition-colors"
             >
               Request Consultation

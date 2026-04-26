@@ -146,7 +146,7 @@ const CaseStudyDetailPage: React.FC = () => {
                   All case studies
                 </Link>
                 <Link
-                  to="/contact"
+                  to="/contact#request-consultation"
                   className="group inline-flex items-center gap-2 text-[13px] font-medium tracking-tight text-brand-ink border-b border-brand-ink hover:text-brand-accent hover:border-brand-accent transition-colors pb-1"
                 >
                   Discuss a similar engagement
@@ -243,7 +243,7 @@ const CaseStudyDetailPage: React.FC = () => {
             <span className="font-editorial italic text-brand-accent">practice team</span>.
           </h2>
           <div className="mt-9 flex flex-col sm:flex-row sm:items-center gap-3">
-            <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+            <PrimaryCta to="/contact#request-consultation">Request Consultation</PrimaryCta>
             <SecondaryCta to="/case-studies">More Case Studies</SecondaryCta>
             <TertiaryCta to="/services">Explore Capabilities</TertiaryCta>
           </div>
