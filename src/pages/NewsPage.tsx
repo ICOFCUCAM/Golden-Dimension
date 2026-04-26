@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Clock, ArrowRight, ArrowUpRight } from 'lucide-react';
-import { newsArticles } from '@/data/news';
+import { newsArticles as staticInsights, type NewsArticle } from '@/data/news';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { useCmsCollection } from '@/lib/cms';
 import {
   PageHeader,
   Container,
@@ -15,6 +16,7 @@ const categories = ['All', 'Company News', 'Sustainability', 'Industry Insights'
 const NewsPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const { ref } = useScrollAnimation(0.05);
+  const { data: newsArticles } = useCmsCollection<NewsArticle>('insights', staticInsights);
 
   const filteredArticles =
     activeCategory === 'All'

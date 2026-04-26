@@ -7,8 +7,10 @@ import {
   Section,
 } from '@/components/section-primitives';
 import { Seo } from '@/components/Seo';
-import { caseStudies, engagementModelsById } from '@/data/caseStudies';
+import { caseStudies as staticCaseStudies, engagementModelsById } from '@/data/caseStudies';
 import { industries, pillars } from '@/data/servicesPage';
+import { useCmsCollection } from '@/lib/cms';
+import type { CaseStudy } from '@/data/caseStudies';
 
 const sectorById  = Object.fromEntries(industries.map((i) => [i.id, i] as const));
 const pillarById  = Object.fromEntries(pillars.map((p) => [p.id, p] as const));
@@ -37,6 +39,8 @@ const CaseStudiesPage: React.FC = () => {
   const [pillar, setPillar] = useState<string>('all');
   const [model, setModel]   = useState<string>('all');
 
+  const { data: caseStudies } = useCmsCollection<CaseStudy>('case_studies', staticCaseStudies);
+
   const filtered = useMemo(() => {
     return caseStudies.filter((c) => {
       if (sector !== 'all' && c.sectorId !== sector) return false;
@@ -44,7 +48,7 @@ const CaseStudiesPage: React.FC = () => {
       if (model  !== 'all' && c.engagementModelId !== model) return false;
       return true;
     });
-  }, [sector, pillar, model]);
+  }, [caseStudies, sector, pillar, model]);
 
   return (
     <div className="bg-brand-ivory">

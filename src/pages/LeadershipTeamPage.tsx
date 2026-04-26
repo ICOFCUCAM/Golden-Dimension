@@ -11,8 +11,9 @@ import {
   TertiaryCta,
 } from '@/components/section-primitives';
 import { Seo } from '@/components/Seo';
-import { practitioners } from '@/data/team';
+import { practitioners as staticPractitioners, type Practitioner } from '@/data/team';
 import { pillars } from '@/data/servicesPage';
+import { useCmsCollection } from '@/lib/cms';
 
 const pillarById = Object.fromEntries(pillars.map((p) => [p.id, p] as const));
 
@@ -37,11 +38,12 @@ const FilterChip: React.FC<{
 
 const LeadershipTeamPage: React.FC = () => {
   const [filter, setFilter] = useState<string>('all');
+  const { data: practitioners } = useCmsCollection<Practitioner>('practitioners', staticPractitioners);
 
   const filtered = useMemo(() => {
     if (filter === 'all') return practitioners;
     return practitioners.filter((p) => p.practiceArea === filter);
-  }, [filter]);
+  }, [filter, practitioners]);
 
   return (
     <div className="bg-brand-ivory">

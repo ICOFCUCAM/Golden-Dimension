@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Truck, RefreshCw, CheckCircle, Eye, Clock, ArrowLeft, Inbox, LogOut } from 'lucide-react';
+import { Mail, Truck, RefreshCw, CheckCircle, Eye, Clock, ArrowLeft, Inbox, LogOut, Database } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
 import AdminLogin from '@/components/AdminLogin';
+import AdminCms from '@/components/AdminCms';
 
 interface ContactMessage {
   id: string;
@@ -47,7 +48,7 @@ const StatTile: React.FC<{ value: number; label: string; accent?: boolean }> = (
 
 const AdminPage: React.FC = () => {
   const { session, loading: authLoading, signOut } = useAuth();
-  const [activeTab, setActiveTab] = useState<'contacts' | 'shipments'>('contacts');
+  const [activeTab, setActiveTab] = useState<'contacts' | 'shipments' | 'cms'>('contacts');
   const [contacts, setContacts] = useState<ContactMessage[]>([]);
   const [shipments, setShipments] = useState<ShipmentRequest[]>([]);
   const [loading, setLoading] = useState(true);
@@ -221,10 +222,20 @@ const AdminPage: React.FC = () => {
               </span>
             )}
           </button>
+          <button
+            onClick={() => setActiveTab('cms')}
+            className={`inline-flex items-center gap-2 px-5 py-3 text-[13px] font-medium tracking-tight transition-colors ${
+              activeTab === 'cms' ? 'bg-brand-ink text-brand-ivory' : 'bg-brand-paper text-brand-ink-2 hover:bg-brand-stone'
+            }`}
+          >
+            <Database size={13} /> CMS
+          </button>
         </div>
 
         {/* Content */}
-        {loading ? (
+        {activeTab === 'cms' ? (
+          <AdminCms />
+        ) : loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="w-8 h-8 border-2 border-brand-accent/30 border-t-brand-accent rounded-full animate-spin" />
           </div>
