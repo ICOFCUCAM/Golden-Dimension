@@ -5,6 +5,7 @@ const SITE_URL = 'https://golden-dimension.vercel.app';
 const FIRM_NAME = 'Golden Dimensions Ltd';
 const DEFAULT_DESCRIPTION =
   'Integrated consulting and engineering capabilities for institutions, enterprises, and governments worldwide. Multidisciplinary delivery across finance, infrastructure, healthcare, education, and digital systems since 2003.';
+const DEFAULT_OG_IMAGE = `${SITE_URL}/og-default.png`;
 
 interface SeoProps {
   title: string;          // page-specific title (without firm name)
@@ -37,10 +38,14 @@ export const Seo: React.FC<SeoProps> = ({
       <meta property="og:type" content={ogType} />
       <meta property="og:url" content={canonical} />
       <meta property="og:site_name" content={FIRM_NAME} />
+      <meta property="og:image" content={DEFAULT_OG_IMAGE} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
 
-      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={DEFAULT_OG_IMAGE} />
     </Helmet>
   );
 };
