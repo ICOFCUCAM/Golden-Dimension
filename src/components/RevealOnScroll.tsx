@@ -65,7 +65,6 @@ const RevealOnScroll: React.FC<RevealProps> = ({
   return React.createElement(
     Tag,
     {
-      // @ts-expect-error – ref typing on dynamic Tag
       ref,
       className: `transition-[opacity,transform] ease-out ${durationClass} ${
         visible ? 'opacity-100 translate-y-0' : 'opacity-0'
@@ -74,7 +73,7 @@ const RevealOnScroll: React.FC<RevealProps> = ({
         transform: visible ? undefined : `translateY(${offset}px)`,
         transitionDelay: visible ? `${delayMs}ms` : '0ms',
       },
-    },
+    } as React.HTMLAttributes<HTMLElement> & { ref: typeof ref },
     children
   );
 };

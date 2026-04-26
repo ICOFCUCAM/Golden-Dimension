@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Clock } from 'lucide-react';
+import { Mail, Phone, MapPin as MapPinIcon, Clock } from 'lucide-react';
 import { PageHeader, Container, Section, TechnicalLabel } from '@/components/section-primitives';
 import { Seo } from '@/components/Seo';
 import { EngagementIntakeForm } from '@/components/EngagementIntakeForm';
@@ -96,7 +96,7 @@ const ContactPage: React.FC = () => {
                 </div>
                 <div className="grid grid-cols-[auto_1fr] gap-x-8 py-5 items-baseline">
                   <dt className="label-technical text-brand-mute flex items-center gap-2">
-                    <MapPin size={11} /> HQ
+                    <MapPinIcon size={11} /> HQ
                   </dt>
                   <dd className="text-[14.5px] tracking-tight text-brand-ink leading-snug">
                     Golden Dimensions Ltd<br />London, United Kingdom

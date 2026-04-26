@@ -17,8 +17,8 @@ class MockIntersectionObserver {
   rootMargin = '';
   thresholds = [];
 }
-// @ts-expect-error – test-only global
-globalThis.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+(globalThis as unknown as { IntersectionObserver: typeof IntersectionObserver }).IntersectionObserver =
+  MockIntersectionObserver as unknown as typeof IntersectionObserver;
 
 // matchMedia stub for prefers-reduced-motion checks.
 Object.defineProperty(window, 'matchMedia', {
