@@ -14,12 +14,15 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
-    /* Linting */
-    "strict": false,
+    /* Linting — strict on, but unused-locals/params left off so existing
+       code that retains placeholder vars doesn't break (the unused-import
+       cleanup will be handled by a future ESLint rule pass). */
+    "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noImplicitAny": false,
-    "noFallthroughCasesInSwitch": false,
+    "noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
 
     "baseUrl": ".",
     "paths": {

@@ -1,174 +1,176 @@
 import React, { useState } from 'react';
-import { Clock, ArrowRight, Tag } from 'lucide-react';
-import { newsArticles } from '@/data/news';
+import { Link } from 'react-router-dom';
+import { Clock, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { newsArticles as staticInsights, type NewsArticle } from '@/data/news';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { useCmsCollection } from '@/lib/cms';
+import {
+  PageHeader,
+  Container,
+  Section,
+} from '@/components/section-primitives';
+import { Seo } from '@/components/Seo';
 
 const categories = ['All', 'Company News', 'Sustainability', 'Industry Insights', 'Transport', 'Engineering', 'Technology', 'Healthcare', 'Giving'];
 
 const NewsPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('All');
-  const [expandedArticle, setExpandedArticle] = useState<string | null>(null);
-  const { ref, isVisible } = useScrollAnimation(0.05);
+  const { ref } = useScrollAnimation(0.05);
+  const { data: newsArticles } = useCmsCollection<NewsArticle>('insights', staticInsights);
 
-  const filteredArticles = activeCategory === 'All'
-    ? newsArticles
-    : newsArticles.filter((a) => a.category === activeCategory);
+  const filteredArticles =
+    activeCategory === 'All'
+      ? newsArticles
+      : newsArticles.filter((a) => a.category === activeCategory);
+
+  const featured = activeCategory === 'All' ? filteredArticles[0] : null;
+  const grid = activeCategory === 'All' ? filteredArticles.slice(1) : filteredArticles;
 
   return (
-    <div className="bg-[#0B1F3A]">
-      {/* Hero */}
-      <section className="relative pt-32 pb-16 overflow-hidden">
-        <div className="absolute top-20 right-0 w-96 h-96 bg-[#C8A44D]/5 rounded-full blur-3xl" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <span className="text-[#C8A44D] text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">
-            Stay Informed
-          </span>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            News & <span className="bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent">Insights</span>
-          </h1>
-          <p className="text-xl text-white/60 max-w-3xl leading-relaxed">
-            The latest company announcements, industry analysis, and thought leadership from Golden Dimensions.
-          </p>
-        </div>
-      </section>
+    <div className="bg-brand-ivory">
+      <Seo
+        title="Insights — practitioner perspectives from the firm"
+        description="Practitioner perspectives across engineering, finance, technology, and institutional development — company news, industry analysis, and thought leadership."
+        path="/news"
+      />
+      <PageHeader
+        eyebrow="Insights"
+        index="N.01"
+        title={<>Company news, industry analysis, and <span className="font-editorial italic text-brand-accent">thought leadership</span>.</>}
+        subtitle="Practitioner perspectives from across the firm — engineering, finance, technology, and institutional development."
+      />
 
-      {/* Category Filter */}
-      <section className="pb-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap gap-2">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                  activeCategory === cat
-                    ? 'bg-[#C8A44D] text-[#0B1F3A]'
-                    : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white/80'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+      {/* Category filter */}
+      <section className="bg-brand-ivory border-b border-brand-hair">
+        <Container>
+          <div className="py-6 flex items-baseline gap-6 overflow-x-auto">
+            <span className="label-technical text-brand-mute shrink-0">Filter by</span>
+            <div className="flex flex-wrap gap-2">
+              {categories.map((cat) => {
+                const active = activeCategory === cat;
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`px-3 py-1.5 text-[12.5px] font-medium tracking-tight border transition-colors ${
+                      active
+                        ? 'bg-brand-ink border-brand-ink text-brand-ivory'
+                        : 'bg-brand-paper border-brand-hair-strong text-brand-ink-2 hover:border-brand-ink hover:text-brand-ink'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* Articles Grid */}
-      <section className="py-12 pb-24" ref={ref}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Articles */}
+      <Section tone="paper">
+        <Container>
           {filteredArticles.length === 0 ? (
-            <div className="text-center py-16">
-              <p className="text-white/50 text-lg">No articles found in this category.</p>
+            <div className="py-16 text-center">
+              <p className="text-brand-mute text-[15px]">No articles in this category.</p>
               <button
                 onClick={() => setActiveCategory('All')}
-                className="mt-4 text-[#C8A44D] hover:underline"
+                className="mt-4 text-[13px] font-medium text-brand-ink border-b border-brand-ink hover:text-brand-accent hover:border-brand-accent transition-colors pb-1"
               >
                 View all articles
               </button>
             </div>
           ) : (
-            <>
-              {/* Featured Article */}
-              {activeCategory === 'All' && (
-                <div
-                  className={`mb-12 grid grid-cols-1 lg:grid-cols-2 gap-8 p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-[#C8A44D]/20 transition-all duration-700 cursor-pointer ${
-                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                  }`}
-                  onClick={() => setExpandedArticle(expandedArticle === filteredArticles[0].id ? null : filteredArticles[0].id)}
+            <div ref={ref}>
+              {/* Featured article */}
+              {featured && (
+                <Link
+                  to={`/news/${featured.slug}`}
+                  className="group grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 pb-14 mb-14 border-b-2 border-brand-ink"
                 >
-                  <div className="rounded-xl overflow-hidden h-72">
-                    <img
-                      src={filteredArticles[0].image}
-                      alt={filteredArticles[0].title}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                    />
+                  <div className="lg:col-span-5">
+                    <div className="aspect-[4/3] overflow-hidden bg-brand-stone">
+                      <img
+                        src={featured.image}
+                        alt={featured.title}
+                        className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-[filter] duration-500"
+                      />
+                    </div>
                   </div>
-                  <div className="flex flex-col justify-center">
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className="px-3 py-1 rounded-full bg-[#C8A44D]/10 text-[#C8A44D] text-xs font-medium">
-                        {filteredArticles[0].category}
-                      </span>
-                      <span className="text-white/30 text-sm flex items-center gap-1">
-                        <Clock size={14} /> {filteredArticles[0].readTime}
+                  <div className="lg:col-span-7 flex flex-col justify-center">
+                    <div className="flex items-center gap-3 mb-5">
+                      <span className="label-technical text-brand-accent">Featured · {featured.category}</span>
+                      <span className="label-technical text-brand-mute flex items-center gap-1.5">
+                        <Clock size={11} /> {featured.readTime}
                       </span>
                     </div>
-                    <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 hover:text-[#C8A44D] transition-colors">
-                      {filteredArticles[0].title}
+                    <h2 className="font-display text-[28px] md:text-[36px] lg:text-[42px] font-medium tracking-[-0.015em] text-brand-ink leading-[1.1] group-hover:text-brand-accent transition-colors">
+                      {featured.title}
                     </h2>
-                    <p className="text-white/50 leading-relaxed mb-4">
-                      {filteredArticles[0].excerpt}
+                    <p className="mt-5 max-w-2xl text-[15.5px] md:text-[16.5px] leading-[1.65] text-brand-ink-2">
+                      {featured.excerpt}
                     </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-white/30 text-sm">{filteredArticles[0].date}</span>
-                      <span className="text-[#C8A44D] text-sm font-medium flex items-center gap-1">
-                        Read More <ArrowRight size={14} />
+                    <div className="mt-7 flex items-center justify-between">
+                      <span className="label-technical text-brand-mute font-mono-tab">
+                        {featured.date}
+                      </span>
+                      <span className="group/link inline-flex items-center gap-2 text-[13px] font-medium tracking-tight text-brand-ink border-b border-brand-ink pb-1">
+                        Read article
+                        <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
                       </span>
                     </div>
-                    {expandedArticle === filteredArticles[0].id && (
-                      <div className="mt-6 pt-6 border-t border-white/10">
-                        <p className="text-white/60 leading-relaxed">
-                          This is an expanded view of the article. In a full implementation, this would contain the complete article content with rich formatting, images, and related resources. Golden Dimensions is committed to keeping our stakeholders informed about our latest developments and industry insights.
-                        </p>
-                      </div>
-                    )}
                   </div>
-                </div>
+                </Link>
               )}
 
-              {/* Article Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {(activeCategory === 'All' ? filteredArticles.slice(1) : filteredArticles).map((article, i) => (
-                  <div
+              {/* Article grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l border-brand-hair">
+                {grid.map((article, idx) => (
+                  <Link
                     key={article.id}
-                    className={`group rounded-2xl overflow-hidden bg-white/[0.03] border border-white/[0.06] hover:border-[#C8A44D]/20 transition-all duration-500 hover:-translate-y-1 cursor-pointer ${
-                      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                    }`}
-                    style={{ transitionDelay: `${i * 80}ms` }}
-                    onClick={() => setExpandedArticle(expandedArticle === article.id ? null : article.id)}
+                    to={`/news/${article.slug}`}
+                    className="group border-r border-b border-brand-hair bg-brand-paper hover:bg-brand-stone transition-colors"
                   >
-                    <div className="h-48 overflow-hidden">
+                    <div className="aspect-[16/10] overflow-hidden bg-brand-stone">
                       <img
                         src={article.image}
                         alt={article.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-[filter] duration-500"
                       />
                     </div>
-                    <div className="p-6">
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className="px-3 py-1 rounded-full bg-[#C8A44D]/10 text-[#C8A44D] text-xs font-medium">
-                          {article.category}
+
+                    <div className="p-7">
+                      <div className="flex items-baseline justify-between mb-4">
+                        <span className="label-technical text-brand-accent">
+                          N.{String(idx + (featured ? 2 : 1)).padStart(2, '0')} · {article.category}
                         </span>
-                        <span className="text-white/30 text-xs flex items-center gap-1">
-                          <Clock size={12} /> {article.readTime}
+                        <span className="label-technical text-brand-mute font-mono-tab">
+                          {article.readTime.replace(/\s*read/i, '')}
                         </span>
                       </div>
-                      <h3 className="text-lg font-bold text-white mb-3 group-hover:text-[#C8A44D] transition-colors line-clamp-2">
+
+                      <h3 className="font-display text-[18px] md:text-[20px] font-medium tracking-[-0.015em] text-brand-ink leading-snug line-clamp-2 group-hover:text-brand-accent transition-colors">
                         {article.title}
                       </h3>
-                      <p className="text-white/40 text-sm leading-relaxed line-clamp-3 mb-4">
+
+                      <p className="mt-3 text-[13.5px] leading-[1.6] text-brand-ink-2 line-clamp-3">
                         {article.excerpt}
                       </p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-white/30 text-xs">{article.date}</span>
-                        <span className="text-[#C8A44D] text-sm font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          Read <ArrowRight size={14} />
+
+                      <div className="mt-5 pt-4 border-t border-brand-hair flex items-center justify-between">
+                        <span className="label-technical text-brand-mute font-mono-tab">
+                          {article.date}
                         </span>
+                        <ArrowUpRight size={14} className="text-brand-mute group-hover:text-brand-accent group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all" />
                       </div>
-                      {expandedArticle === article.id && (
-                        <div className="mt-4 pt-4 border-t border-white/10">
-                          <p className="text-white/60 text-sm leading-relaxed">
-                            Full article content would appear here with detailed analysis, expert commentary, and actionable insights from the Golden Dimensions team.
-                          </p>
-                        </div>
-                      )}
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
-            </>
+            </div>
           )}
-        </div>
-      </section>
+        </Container>
+      </Section>
     </div>
   );
 };

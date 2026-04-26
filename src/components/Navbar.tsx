@@ -1,125 +1,184 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ArrowRight, Search } from 'lucide-react';
+import { SiteSearch } from '@/components/SiteSearch';
 
 const navLinks = [
   { label: 'Home', path: '/' },
+  { label: 'Capabilities', path: '/services' },
+  { label: 'Industries', path: '/industries' },
+  { label: 'Transport Logistics', path: '/transport' },
+  { label: 'Insights', path: '/news' },
+  { label: 'Legal Advisory', path: '/legal' },
   { label: 'About', path: '/about' },
-  { label: 'Services', path: '/services' },
-  { label: 'Transport', path: '/transport' },
-  { label: 'News & Insights', path: '/news' },
-  { label: 'Legal Issues', path: '/legal' },
   { label: 'Contact', path: '/contact' },
 ];
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
     setIsOpen(false);
+    setSearchOpen(false);
   }, [location]);
+
+  // ⌘K / Ctrl+K toggles the site search palette.
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setSearchOpen((prev) => !prev);
+      }
+      if (e.key === 'Escape') setSearchOpen(false);
+    };
+    document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, []);
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? 'bg-[#0B1F3A]/95 backdrop-blur-md shadow-lg shadow-black/10'
-          : 'bg-transparent'
+      className={`fixed top-0 left-0 right-0 z-50 transition-shadow duration-200 ${
+        scrolled ? 'shadow-[0_1px_0_rgba(0,0,0,0.06)]' : ''
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#C8A44D] to-[#E8C96D] flex items-center justify-center shadow-lg">
-              <span className="text-[#0B1F3A] font-bold text-lg">GD</span>
-            </div>
-            <div className="hidden sm:block">
-              <span className="text-white font-semibold text-lg tracking-wide group-hover:text-[#C8A44D] transition-colors">
-                Golden Dimensions
-              </span>
-              <span className="block text-[#C8A44D] text-[10px] tracking-[0.2em] uppercase">
-                Ltd
-              </span>
-            </div>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`px-4 py-2 text-sm font-medium transition-all duration-300 relative group ${
-                  location.pathname === link.path
-                    ? 'text-[#C8A44D]'
-                    : 'text-white/80 hover:text-white'
-                }`}
-              >
-                {link.label}
-                <span
-                  className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-[#C8A44D] transition-all duration-300 ${
-                    location.pathname === link.path ? 'w-full' : 'w-0 group-hover:w-full'
-                  }`}
-                />
-              </Link>
-            ))}
-            <Link
-              to="/contact"
-              className="ml-4 px-6 py-2.5 bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] text-[#0B1F3A] text-sm font-semibold rounded-lg hover:shadow-lg hover:shadow-[#C8A44D]/25 transition-all duration-300 hover:-translate-y-0.5"
-            >
-              Get in Touch
-            </Link>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden text-white p-2 hover:text-[#C8A44D] transition-colors"
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+      {/* Slim dark technical bar — gives the whole nav a publication-header
+          feel and ensures the bar is always visible against the ivory body. */}
+      <div className="bg-brand-ink text-brand-on-dark">
+        <div className="max-w-[88rem] mx-auto px-6 lg:px-10 h-7 flex items-center justify-between">
+          <span className="label-technical text-brand-on-dark-2">
+            <span className="text-brand-accent-soft">EST.</span> 2003 / GLOBAL · MULTIDISCIPLINARY
+          </span>
+          <span className="hidden md:inline label-technical text-brand-on-dark-2">
+            EN · GMT+0
+          </span>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Main navigation bar — paper-white so it sits visibly above the
+          warm-ivory page surface. */}
+      <div className="bg-brand-paper border-b border-brand-hair">
+        <div className="max-w-[88rem] mx-auto px-6 lg:px-10">
+          <div className="flex items-center justify-between h-[68px]">
+            {/* Logo — GD monogram (PNG) + typeset wordmark next to it. */}
+            <Link to="/" className="flex items-center gap-3 group shrink-0">
+              <img
+                src="https://ousjmnfvtdnztyqqyvay.supabase.co/storage/v1/object/public/Golden%20Dimension/GD.png"
+                alt="Golden Dimensions"
+                className="block h-9 w-auto"
+              />
+              <span className="hidden sm:block leading-none">
+                <span className="block text-brand-ink font-display font-medium text-[17px] tracking-[-0.015em] group-hover:text-brand-accent transition-colors">
+                  Golden Dimensions
+                </span>
+                <span className="block mt-1.5 label-technical text-brand-mute">
+                  LTD · Established 2003
+                </span>
+              </span>
+            </Link>
+
+            {/* Desktop Navigation */}
+            <div className="hidden xl:flex items-center" role="navigation" aria-label="Primary">
+              {navLinks.map((link) => {
+                const active =
+                  location.pathname === link.path ||
+                  (link.path !== '/' && location.pathname.startsWith(link.path));
+                return (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    aria-current={active ? 'page' : undefined}
+                    className={`px-3.5 py-2 text-[13px] font-medium tracking-[-0.01em] transition-colors relative ${
+                      active ? 'text-brand-ink' : 'text-brand-ink-2 hover:text-brand-ink'
+                    }`}
+                  >
+                    {link.label}
+                    <span
+                      className={`absolute left-3.5 right-3.5 -bottom-[24px] h-px bg-brand-accent transition-opacity ${
+                        active ? 'opacity-100' : 'opacity-0'
+                      }`}
+                    />
+                  </Link>
+                );
+              })}
+              <button
+                type="button"
+                onClick={() => setSearchOpen(true)}
+                aria-label="Open site search"
+                className="ml-2 group inline-flex items-center gap-2 px-3 py-2 text-brand-ink-2 hover:text-brand-ink text-[13px] font-medium tracking-[-0.01em] border border-transparent hover:border-brand-hair-strong transition-colors"
+              >
+                <Search size={14} />
+                <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1 py-px border border-brand-hair-strong text-[10px] font-mono-tab text-brand-mute">
+                  ⌘K
+                </kbd>
+              </button>
+              <Link
+                to="/contact"
+                className="ml-2 group inline-flex items-center gap-2 px-5 py-2.5 bg-brand-ink text-brand-ivory text-[13px] font-medium tracking-[-0.01em] hover:bg-brand-accent transition-colors"
+              >
+                Request Consultation
+                <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+              </Link>
+            </div>
+
+            {/* Mobile menu button */}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="xl:hidden text-brand-ink p-2 hover:text-brand-accent transition-colors"
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            >
+              {isOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
       <div
-        className={`lg:hidden transition-all duration-500 overflow-hidden ${
-          isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+        className={`xl:hidden transition-all duration-300 overflow-hidden ${
+          isOpen ? 'max-h-[640px] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <div className="bg-[#0B1F3A]/98 backdrop-blur-md border-t border-white/10 px-4 py-4 space-y-1">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all ${
-                location.pathname === link.path
-                  ? 'text-[#C8A44D] bg-white/5'
-                  : 'text-white/80 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+        <div className="bg-brand-paper border-t border-brand-hair px-6 py-6">
+          <div className="space-y-1">
+            {navLinks.map((link, idx) => {
+              const active = location.pathname === link.path;
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`flex items-center gap-4 py-3 text-[15px] font-medium tracking-[-0.01em] border-b border-brand-hair last:border-0 transition-colors ${
+                    active ? 'text-brand-ink' : 'text-brand-ink-2 hover:text-brand-ink'
+                  }`}
+                >
+                  <span className="label-technical text-brand-accent w-8">
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+                  {link.label}
+                </Link>
+              );
+            })}
+          </div>
           <Link
             to="/contact"
-            className="block mx-4 mt-3 px-6 py-3 bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] text-[#0B1F3A] text-sm font-semibold rounded-lg text-center"
+            className="mt-6 inline-flex items-center justify-center gap-2 w-full px-5 py-3 bg-brand-ink text-brand-ivory text-[14px] font-medium hover:bg-brand-accent transition-colors"
           >
-            Get in Touch
+            Request Consultation
+            <ArrowRight size={14} />
           </Link>
         </div>
       </div>
+
+      {/* Site search palette (⌘K / Ctrl+K) */}
+      <SiteSearch open={searchOpen} onOpenChange={setSearchOpen} />
     </nav>
   );
 };

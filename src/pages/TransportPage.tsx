@@ -1,48 +1,71 @@
 import React, { useState } from 'react';
-import { Plane, Ship, Truck, Package, Check, Send } from 'lucide-react';
-import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { Plane, Ship, Truck, Package, Check, Send, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
+import {
+  PageHeader,
+  Container,
+  Section,
+  TechnicalLabel,
+  SectionHeader,
+} from '@/components/section-primitives';
+import { Seo } from '@/components/Seo';
 
 const transportServices = [
   {
-    icon: <Plane size={28} />, title: 'Air Freight',
-    desc: 'Fast, reliable air cargo services connecting major airports worldwide. Ideal for time-sensitive shipments and high-value goods.',
-    image: 'https://d64gsuwffb70l.cloudfront.net/69ad7b9650a26a8c1a6eecd1_1772977465594_6c17eb87.png',
-    features: ['Express delivery options', 'Temperature-controlled cargo', 'Real-time tracking', 'Customs clearance support']
+    id: 'air',
+    icon: <Plane size={20} />,
+    title: 'Air Freight',
+    desc: 'Time-critical air cargo across major international hubs — for high-value, perishable, or schedule-sensitive shipments.',
+    features: ['Express delivery options', 'Temperature-controlled cargo', 'Real-time tracking', 'Customs clearance support'],
   },
   {
-    icon: <Ship size={28} />, title: 'Maritime Cargo',
-    desc: 'Cost-effective ocean freight solutions for bulk and containerized cargo. Our maritime network spans all major global ports.',
-    image: 'https://d64gsuwffb70l.cloudfront.net/69ad7b9650a26a8c1a6eecd1_1772977387826_06abad98.jpg',
-    features: ['Full container load (FCL)', 'Less than container load (LCL)', 'Port-to-port service', 'Cargo insurance']
+    id: 'sea',
+    icon: <Ship size={20} />,
+    title: 'Maritime Cargo',
+    desc: 'Ocean freight for bulk and containerised cargo across all major global ports — full and less-than-container loads.',
+    features: ['Full container load (FCL)', 'Less than container load (LCL)', 'Port-to-port service', 'Cargo insurance'],
   },
   {
-    icon: <Truck size={28} />, title: 'Ground Transportation',
-    desc: 'Comprehensive road freight services including full truckload, partial load, and last-mile delivery across all major routes.',
-    image: 'https://d64gsuwffb70l.cloudfront.net/69ad7b9650a26a8c1a6eecd1_1772977554897_3c0c7791.jpg',
-    features: ['Full & partial truckload', 'Last-mile delivery', 'Cross-border transport', 'Fleet management']
+    id: 'land',
+    icon: <Truck size={20} />,
+    title: 'Ground Transportation',
+    desc: 'Road freight, cross-border haulage, and last-mile delivery across major continental routes.',
+    features: ['Full & partial truckload', 'Last-mile delivery', 'Cross-border transport', 'Fleet management'],
   },
   {
-    icon: <Package size={28} />, title: 'Heavy Cargo',
-    desc: 'Specialized logistics for oversized, heavy, and project cargo. Expert handling of complex shipments requiring special equipment.',
-    image: 'https://d64gsuwffb70l.cloudfront.net/69ad7b9650a26a8c1a6eecd1_1772977387826_06abad98.jpg',
-    features: ['Project cargo management', 'Oversized load handling', 'Route planning & permits', 'Specialized equipment']
-  }
+    id: 'project',
+    icon: <Package size={20} />,
+    title: 'Project & Heavy Cargo',
+    desc: 'Specialised logistics for oversized, heavy, or project cargo requiring permits, escorts, or specialised equipment.',
+    features: ['Project cargo management', 'Oversized load handling', 'Route planning & permits', 'Specialised equipment'],
+  },
 ];
+
+const inputClass = (hasError: boolean) =>
+  `w-full px-4 py-3 bg-brand-paper border text-[15px] text-brand-ink placeholder:text-brand-mute focus:outline-none transition-colors ${
+    hasError ? 'border-red-500/60 focus:border-red-600' : 'border-brand-hair-strong focus:border-brand-ink'
+  }`;
 
 const TransportPage: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', details: '' });
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const { ref, isVisible } = useScrollAnimation();
+
+  const validate = () => {
+    const e: Record<string, string> = {};
+    if (!formData.name.trim()) e.name = 'Name is required';
+    if (!formData.email.trim()) e.email = 'Email is required';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) e.email = 'Invalid email address';
+    if (!formData.details.trim()) e.details = 'Shipment details are required';
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.details) {
-      toast.error('Please fill in all fields');
-      return;
-    }
+    if (!validate()) return;
     setIsSubmitting(true);
     try {
       const { error } = await supabase.from('shipment_requests').insert({
@@ -52,9 +75,9 @@ const TransportPage: React.FC = () => {
       });
       if (error) throw error;
       setSubmitted(true);
-      toast.success('Shipment request submitted successfully!');
+      toast.success('Shipment request submitted. Our logistics team will respond shortly.');
       setFormData({ name: '', email: '', details: '' });
-      setTimeout(() => setSubmitted(false), 3000);
+      setTimeout(() => setSubmitted(false), 5000);
     } catch (err: any) {
       toast.error('Failed to submit request. Please try again.');
       console.error(err);
@@ -64,85 +87,178 @@ const TransportPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#0B1F3A]">
-      {/* Hero */}
-      <section className="relative pt-20 overflow-hidden">
-        <div className="h-[500px] relative">
-          <img src="https://d64gsuwffb70l.cloudfront.net/69ad7b9650a26a8c1a6eecd1_1772977387826_06abad98.jpg" alt="Maritime cargo logistics" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3A] via-[#0B1F3A]/70 to-[#0B1F3A]/30" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A]/90 to-transparent" />
-        </div>
-        <div className="absolute inset-0 flex items-center">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-20">
-            <span className="text-[#C8A44D] text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">Transport & Logistics</span>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4 leading-tight">
-              Golden <span className="bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent">Transport</span>
-            </h1>
-            <p className="text-xl text-white/60 max-w-2xl leading-relaxed">
-              Comprehensive logistics solutions spanning air, sea, and land. We move your cargo safely, efficiently, and on time — anywhere in the world.
-            </p>
-          </div>
-        </div>
-      </section>
+    <div className="bg-brand-ivory">
+      <Seo
+        title="Transport Logistics — air, sea, and ground freight"
+        description="End-to-end logistics across air, sea, and land for institutional clients moving cargo across regulated jurisdictions."
+        path="/transport"
+      />
+      <PageHeader
+        eyebrow="Transport & Logistics"
+        index="T.01"
+        title={<>End-to-end <span className="font-editorial italic text-brand-accent">logistics</span> across air, sea, and land.</>}
+        subtitle="Multidisciplinary freight, mobility, and supply-chain capability for institutional clients moving cargo across regulated jurisdictions."
+      />
 
-      {/* Transport Services */}
-      <section className="py-24" ref={ref}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="text-[#C8A44D] text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">Our Capabilities</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Logistics Services</h2>
-          </div>
-          <div className="space-y-8">
-            {transportServices.map((service, i) => (
-              <div key={i} className={`grid grid-cols-1 lg:grid-cols-2 gap-8 items-center p-6 md:p-8 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-[#C8A44D]/20 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: `${i * 100}ms` }}>
-                <div className={`${i % 2 === 1 ? 'lg:order-2' : ''}`}>
-                  <div className="rounded-xl overflow-hidden h-64">
-                    <img src={service.image} alt={service.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-                  </div>
+      {/* Logistics services — editorial rule grid */}
+      <Section tone="paper">
+        <Container>
+          <SectionHeader
+            eyebrow="Logistics Services"
+            index="02"
+            title={
+              <>
+                Four delivery modes,{' '}
+                <span className="font-editorial italic text-brand-accent">one logistics practice</span>.
+              </>
+            }
+            intro="Each mode is operated by the same logistics team — so multimodal shipments handed across air, sea, and land remain accountable to a single delivery lead."
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 border-t border-l border-brand-hair">
+            {transportServices.map((s, idx) => (
+              <article key={s.id} className="border-r border-b border-brand-hair p-8 md:p-10 bg-brand-paper">
+                <div className="flex items-baseline justify-between mb-6">
+                  <span className="label-technical text-brand-accent font-mono-tab">
+                    L.{String(idx + 1).padStart(2, '0')}
+                  </span>
+                  <span className="text-brand-mute">{s.icon}</span>
                 </div>
-                <div className={`${i % 2 === 1 ? 'lg:order-1' : ''}`}>
-                  <div className="w-14 h-14 rounded-xl bg-[#C8A44D]/10 flex items-center justify-center text-[#C8A44D] mb-4">{service.icon}</div>
-                  <h3 className="text-2xl font-bold text-white mb-3">{service.title}</h3>
-                  <p className="text-white/60 leading-relaxed mb-6">{service.desc}</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {service.features.map((f, j) => (
-                      <div key={j} className="flex items-center gap-2 text-white/50 text-sm"><Check size={14} className="text-[#C8A44D] flex-shrink-0" />{f}</div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+                <h3 className="font-display text-[22px] md:text-[26px] font-medium tracking-[-0.015em] text-brand-ink leading-tight">
+                  {s.title}
+                </h3>
+                <p className="mt-4 text-[15px] leading-[1.65] text-brand-ink-2">
+                  {s.desc}
+                </p>
+
+                <ul className="mt-6 pt-5 border-t border-brand-hair space-y-2.5">
+                  {s.features.map((f) => (
+                    <li key={f} className="flex items-baseline gap-3 text-[13.5px] text-brand-ink">
+                      <Check size={12} className="text-brand-accent shrink-0" />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </article>
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* Shipment Request Form */}
-      <section className="py-24 bg-[#0a1a30]">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <span className="text-[#C8A44D] text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">Get Started</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Shipment Request</h2>
-            <p className="text-white/50 text-lg">Submit your shipment details and our logistics team will provide a customized quote.</p>
+      {/* Shipment request form */}
+      <Section tone="ivory" divided>
+        <Container>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+            <aside className="lg:col-span-4">
+              <TechnicalLabel index="03">Shipment Request</TechnicalLabel>
+              <h2 className="mt-7 font-display text-[26px] md:text-[34px] font-medium tracking-[-0.015em] text-brand-ink leading-tight">
+                Submit shipment details
+              </h2>
+              <p className="mt-5 text-[15px] leading-[1.65] text-brand-ink-2">
+                Provide origin, destination, cargo type, weight, and timeline.
+                Our logistics team will respond with a tailored quotation and
+                routing recommendation within one business day.
+              </p>
+
+              <ul className="mt-8 space-y-3 text-[13.5px] text-brand-ink-2">
+                {[
+                  'Multimodal — air, sea, ground, project',
+                  'Customs and regulatory support included',
+                  'Cargo insurance available',
+                  'Real-time tracking after dispatch',
+                ].map((item) => (
+                  <li key={item} className="flex items-baseline gap-3">
+                    <span className="block w-1 h-1 bg-brand-accent" aria-hidden />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </aside>
+
+            <div className="lg:col-span-8">
+              <form onSubmit={handleSubmit} className="space-y-7 bg-brand-paper border border-brand-hair-strong p-8 md:p-10">
+                <div>
+                  <label className="label-technical text-brand-mute mb-2 block">Full name</label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => { setFormData({ ...formData, name: e.target.value }); if (errors.name) setErrors({ ...errors, name: '' }); }}
+                    placeholder="Your name"
+                    className={inputClass(!!errors.name)}
+                  />
+                  {errors.name && (
+                    <p className="mt-2 inline-flex items-center gap-2 text-[12.5px] text-red-600">
+                      <AlertCircle size={12} /> {errors.name}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="label-technical text-brand-mute mb-2 block">Email address</label>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => { setFormData({ ...formData, email: e.target.value }); if (errors.email) setErrors({ ...errors, email: '' }); }}
+                    placeholder="you@organisation.com"
+                    className={inputClass(!!errors.email)}
+                  />
+                  {errors.email && (
+                    <p className="mt-2 inline-flex items-center gap-2 text-[12.5px] text-red-600">
+                      <AlertCircle size={12} /> {errors.email}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="label-technical text-brand-mute mb-2 block">Shipment details</label>
+                  <textarea
+                    value={formData.details}
+                    onChange={(e) => { setFormData({ ...formData, details: e.target.value }); if (errors.details) setErrors({ ...errors, details: '' }); }}
+                    placeholder="Origin · destination · cargo type · weight · timeline · any special handling requirements."
+                    rows={7}
+                    className={`${inputClass(!!errors.details)} resize-none`}
+                  />
+                  {errors.details && (
+                    <p className="mt-2 inline-flex items-center gap-2 text-[12.5px] text-red-600">
+                      <AlertCircle size={12} /> {errors.details}
+                    </p>
+                  )}
+                </div>
+
+                {submitted && (
+                  <div className="flex items-start gap-3 px-4 py-3 border border-brand-accent bg-brand-accent-tint">
+                    <Check size={16} className="text-brand-accent mt-0.5 shrink-0" />
+                    <div>
+                      <div className="text-[14px] font-medium text-brand-ink">Request received.</div>
+                      <div className="text-[13px] text-brand-ink-2 mt-0.5">Our logistics team will respond within one business day.</div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 bg-brand-ink text-brand-ivory text-[14px] font-medium tracking-tight hover:bg-brand-accent transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <span className="w-4 h-4 border border-brand-ivory/30 border-t-brand-ivory rounded-full animate-spin" />
+                        Submitting…
+                      </>
+                    ) : (
+                      <>
+                        <Send size={14} />
+                        Submit Shipment Request
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label className="block text-white/70 text-sm font-medium mb-2">Full Name</label>
-              <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Enter your full name" className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#C8A44D]/50 focus:bg-white/[0.08] transition-all" required />
-            </div>
-            <div>
-              <label className="block text-white/70 text-sm font-medium mb-2">Email Address</label>
-              <input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="Enter your email address" className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#C8A44D]/50 focus:bg-white/[0.08] transition-all" required />
-            </div>
-            <div>
-              <label className="block text-white/70 text-sm font-medium mb-2">Shipment Details</label>
-              <textarea value={formData.details} onChange={(e) => setFormData({ ...formData, details: e.target.value })} placeholder="Describe your shipment requirements (origin, destination, cargo type, weight, timeline, etc.)" rows={6} className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#C8A44D]/50 focus:bg-white/[0.08] transition-all resize-none" required />
-            </div>
-            <button type="submit" disabled={isSubmitting} className="w-full flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] text-[#0B1F3A] font-semibold rounded-xl hover:shadow-xl hover:shadow-[#C8A44D]/25 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed">
-              {isSubmitting ? <div className="w-5 h-5 border-2 border-[#0B1F3A]/30 border-t-[#0B1F3A] rounded-full animate-spin" /> : submitted ? <><Check size={18} /> Request Submitted</> : <><Send size={18} /> Submit Shipment Request</>}
-            </button>
-          </form>
-        </div>
-      </section>
+        </Container>
+      </Section>
     </div>
   );
 };

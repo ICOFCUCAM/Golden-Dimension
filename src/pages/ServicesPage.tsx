@@ -1,123 +1,254 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Search } from 'lucide-react';
-import { services } from '@/data/services';
-import ServiceIcon from '@/components/ServiceIcon';
-import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import {
+  TechnicalLabel,
+  SectionHeader,
+  PrimaryCta,
+  SecondaryCta,
+  TertiaryCta,
+  Container,
+  Section,
+} from '@/components/section-primitives';
+import { LayerStack } from '@/components/diagrams';
+import {
+  capabilityModel,
+  pillars,
+  methodology,
+  industries,
+} from '@/data/servicesPage';
+import { Seo } from '@/components/Seo';
+import { PillarIllustration } from '@/components/PillarIllustrations';
 
 const ServicesPage: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const { ref, isVisible } = useScrollAnimation(0.05);
-
-  const filteredServices = services.filter(
-    (s) =>
-      s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.shortDescription.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   return (
-    <div className="bg-[#0B1F3A]">
+    <div>
+      <Seo
+        title="Capabilities — five consulting pillars, sixteen disciplines"
+        description="Capability architecture spanning Engineering & Infrastructure, Financial & Legal Advisory, Digital Transformation & Technology, Education & Institutional Development, and Enterprise Strategy — under one delivery framework."
+        path="/services"
+      />
       {/* Hero */}
-      <section className="relative pt-32 pb-16 overflow-hidden">
-        <div className="absolute top-20 left-0 w-96 h-96 bg-[#C8A44D]/5 rounded-full blur-3xl" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <span className="text-[#C8A44D] text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">
-            Our Expertise
-          </span>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            Our <span className="bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent">Services</span>
+      <section className="bg-brand-ivory pt-[140px] md:pt-[160px] pb-20 md:pb-28 border-b border-brand-hair">
+        <Container size="wide">
+          <TechnicalLabel index="01">Capabilities</TechnicalLabel>
+          <h1 className="mt-8 font-display text-[40px] sm:text-[52px] md:text-[64px] lg:text-[76px] font-semibold leading-[0.98] tracking-[-0.03em] text-brand-ink max-w-5xl">
+            Integrated consulting and engineering capabilities for{' '}
+            <span className="font-editorial italic font-medium text-brand-accent">
+              institutions, enterprises, and governments
+            </span>{' '}
+            worldwide.
           </h1>
-          <p className="text-xl text-white/60 max-w-3xl leading-relaxed mb-10">
-            Comprehensive professional services spanning 16 disciplines. From accounting to web development, we deliver excellence across every domain.
+          <p className="mt-8 max-w-3xl text-[17px] md:text-[19px] leading-[1.55] text-brand-ink-2">
+            Five consulting pillars and sixteen disciplines under one firm —
+            staffed jointly so engagements span strategy through systems
+            without vendor handoffs in between.
           </p>
-
-          {/* Search */}
-          <div className="max-w-md relative">
-            <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
-            <input
-              type="text"
-              placeholder="Search services..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#C8A44D]/50 focus:bg-white/[0.08] transition-all"
-            />
+          <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-3">
+            <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+            <SecondaryCta to="#pillars">Explore Capability Areas</SecondaryCta>
+            <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* Services Grid */}
-      <section className="py-16 pb-24" ref={ref}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {filteredServices.length === 0 ? (
-            <div className="text-center py-16">
-              <p className="text-white/50 text-lg">No services found matching "{searchQuery}"</p>
-              <button
-                onClick={() => setSearchQuery('')}
-                className="mt-4 text-[#C8A44D] hover:underline"
-              >
-                Clear search
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredServices.map((service, index) => (
-                <Link
-                  key={service.id}
-                  to={`/services/${service.id}`}
-                  className={`group relative rounded-2xl overflow-hidden bg-white/[0.03] border border-white/[0.06] hover:border-[#C8A44D]/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-[#C8A44D]/5 ${
-                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                  }`}
-                  style={{ transitionDelay: `${index * 40}ms` }}
-                >
-                  {/* Image */}
-                  <div className="h-44 overflow-hidden">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3A] via-[#0B1F3A]/30 to-transparent" />
-                  </div>
+      {/* Capability Layer Stack — diagrammatic systems view */}
+      <Section tone="paper" id="capabilities">
+        <Container>
+          <SectionHeader
+            eyebrow="Our Capability Model"
+            index="02"
+            title={
+              <>
+                Six layers that frame every{' '}
+                <span className="font-editorial italic font-medium text-brand-accent">
+                  institutional engagement
+                </span>.
+              </>
+            }
+            intro="Each engagement combines these layers in proportions tuned to the client's transformation agenda — from strategic framing through long-term operational support."
+          />
 
-                  {/* Content */}
-                  <div className="relative p-6">
-                    <div className="w-12 h-12 rounded-xl bg-[#C8A44D]/10 flex items-center justify-center text-[#C8A44D] mb-4 -mt-12 relative z-10 border border-[#C8A44D]/20 backdrop-blur-sm group-hover:bg-[#C8A44D]/20 transition-colors">
-                      <ServiceIcon icon={service.icon} size={22} />
-                    </div>
-                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#C8A44D] transition-colors">
-                      {service.title}
-                    </h3>
-                    <p className="text-white/40 text-sm leading-relaxed line-clamp-3">
-                      {service.shortDescription}
-                    </p>
-                    <div className="mt-4 flex items-center gap-2 text-[#C8A44D] text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-0 group-hover:translate-x-1">
-                      View Details <ArrowRight size={14} />
-                    </div>
+          <LayerStack
+            layers={capabilityModel.map((l, idx) => ({
+              index: `L1.${String(idx + 1).padStart(2, '0')}`,
+              name: l.name,
+              description: l.description,
+            }))}
+          />
+        </Container>
+      </Section>
+
+      {/* Capability Pillars — numbered editorial blocks with rule-grid services */}
+      <Section tone="ivory" id="pillars">
+        <Container>
+          <SectionHeader
+            eyebrow="Capability Pillars"
+            index="03"
+            title={
+              <>
+                Sixteen disciplines, organised into five{' '}
+                <span className="font-editorial italic font-medium text-brand-accent">
+                  consulting pillars
+                </span>.
+              </>
+            }
+            intro="Each pillar groups complementary capabilities so engagements are scoped, staffed, and governed as a coherent transformation programme."
+          />
+
+          <div className="space-y-20 md:space-y-24">
+            {pillars.map((pillar) => (
+              <div key={pillar.id}>
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 pb-6 mb-8 border-b border-brand-hair-strong">
+                  <div className="md:col-span-1 label-technical text-brand-accent pt-2">
+                    {pillar.index}
                   </div>
-                </Link>
+                  <div className="md:col-span-5 flex items-start gap-5">
+                    <div className="hidden md:block shrink-0 text-brand-ink-2 pt-1">
+                      <PillarIllustration pillarId={pillar.id} size={88} />
+                    </div>
+                    <h3 className="font-display text-[26px] md:text-[34px] font-semibold leading-[1.05] tracking-[-0.025em] text-brand-ink">
+                      {pillar.name}
+                    </h3>
+                  </div>
+                  <div className="md:col-span-6">
+                    <p className="text-[15px] md:text-[16px] leading-[1.65] text-brand-ink-2 md:pt-2">
+                      {pillar.tagline}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l border-brand-hair">
+                  {pillar.services.map((svc, idx) => (
+                    <Link
+                      key={svc.id}
+                      to={`/services/${svc.id}`}
+                      className="group relative border-r border-b border-brand-hair p-7 md:p-8 bg-brand-paper hover:bg-brand-stone transition-colors"
+                    >
+                      <div className="label-technical text-brand-mute mb-4">
+                        <span className="text-brand-accent">{pillar.index}</span>
+                        .{String(idx + 1).padStart(2, '0')}
+                      </div>
+                      <h4 className="font-display text-[18px] md:text-[19px] font-semibold leading-snug tracking-[-0.02em] text-brand-ink pr-8">
+                        {svc.title}
+                      </h4>
+                      <p className="mt-3 text-[13.5px] leading-[1.6] text-brand-ink-2">
+                        {svc.summary}
+                      </p>
+                      <ArrowUpRight
+                        size={16}
+                        className="absolute top-6 right-6 text-brand-mute group-hover:text-brand-accent group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all"
+                      />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      {/* How We Deliver */}
+      <Section tone="paper" id="methodology">
+        <Container>
+          <SectionHeader
+            eyebrow="How We Deliver"
+            index="04"
+            title={
+              <>
+                A six-phase methodology spanning the full{' '}
+                <span className="font-editorial italic font-medium text-brand-accent">
+                  transformation lifecycle
+                </span>.
+              </>
+            }
+            intro="From early-stage diagnostics to long-term operational support, our delivery framework is designed for institutional accountability and measurable outcomes."
+          />
+
+          <div className="relative">
+            <div className="hidden lg:block absolute top-7 left-0 right-0 h-px bg-brand-hair-strong" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-6">
+              {methodology.map((phase) => (
+                <div key={phase.index} className="flex lg:flex-col items-start gap-5">
+                  <div className="relative z-10 w-14 h-14 shrink-0 border border-brand-ink bg-brand-paper text-brand-ink font-mono-tab text-[12px] flex items-center justify-center">
+                    {phase.index}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-display text-[16px] font-semibold tracking-[-0.02em] text-brand-ink leading-tight">
+                      {phase.name}
+                    </h3>
+                    <p className="mt-2 text-[13px] leading-[1.6] text-brand-ink-2">
+                      {phase.description}
+                    </p>
+                  </div>
+                </div>
               ))}
             </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </Container>
+      </Section>
 
-      {/* CTA */}
-      <section className="py-20 bg-[#0a1a30]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            Need a Custom Solution?
+      {/* Industries summary */}
+      <Section tone="ivory" id="industries">
+        <Container>
+          <SectionHeader
+            eyebrow="Industries We Support"
+            index="05"
+            title={
+              <>
+                Multidisciplinary capabilities, applied across{' '}
+                <span className="font-editorial italic font-medium text-brand-accent">
+                  regulated sectors
+                </span>.
+              </>
+            }
+            intro="Our pillars converge differently for each industry — combining the engineering, technology, financial, and human-capital capabilities most relevant to that sector's operating reality."
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l border-brand-hair">
+            {industries.map((industry, idx) => (
+              <Link
+                key={industry.id}
+                to="/industries"
+                className="group border-r border-b border-brand-hair p-7 md:p-8 bg-brand-paper hover:bg-brand-stone transition-colors"
+              >
+                <div className="label-technical text-brand-accent mb-5">
+                  S.{String(idx + 1).padStart(2, '0')}
+                </div>
+                <h3 className="font-display text-[19px] md:text-[20px] font-semibold tracking-[-0.025em] text-brand-ink leading-tight">
+                  {industry.name}
+                </h3>
+                <p className="mt-3 text-[13.5px] leading-[1.6] text-brand-ink-2">
+                  {industry.description}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      {/* Final CTA */}
+      <Section tone="paper" divided>
+        <Container size="narrow">
+          <TechnicalLabel index="06">Engage With Us</TechnicalLabel>
+          <h2 className="mt-8 font-display text-[32px] md:text-[48px] lg:text-[56px] font-semibold leading-[1.04] tracking-[-0.03em] text-brand-ink">
+            Bring multidisciplinary capability to your next{' '}
+            <span className="font-editorial italic font-medium text-brand-accent">
+              transformation programme
+            </span>.
           </h2>
-          <p className="text-white/60 text-lg mb-8">
-            Our multidisciplinary team can create tailored solutions that combine expertise from multiple service areas.
+          <p className="mt-7 max-w-2xl text-[16px] leading-[1.6] text-brand-ink-2">
+            Tell us about the institutional outcome you're working toward —
+            we'll assemble the right combination of strategy, engineering,
+            technology, and operations expertise around it.
           </p>
-          <Link
-            to="/contact"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] text-[#0B1F3A] font-semibold rounded-lg hover:shadow-xl hover:shadow-[#C8A44D]/25 transition-all duration-300"
-          >
-            Request Consultation <ArrowRight size={18} />
-          </Link>
-        </div>
-      </section>
+          <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-3">
+            <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+            <SecondaryCta to="#pillars">Explore Capability Areas</SecondaryCta>
+            <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
+          </div>
+        </Container>
+      </Section>
     </div>
   );
 };

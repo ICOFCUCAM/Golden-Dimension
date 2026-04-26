@@ -1,161 +1,169 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Send, Check, Globe2 } from 'lucide-react';
-import { toast } from 'sonner';
-import { supabase } from '@/lib/supabase';
+import { Mail, Phone, MapPin as MapPinIcon, Clock } from 'lucide-react';
+import { PageHeader, Container, Section, TechnicalLabel } from '@/components/section-primitives';
+import { Seo } from '@/components/Seo';
+import { EngagementIntakeForm } from '@/components/EngagementIntakeForm';
+import { WorldMap, type MapPin } from '@/components/diagrams';
 
 const offices = [
-  { city: 'London', country: 'United Kingdom', type: 'Headquarters', timezone: 'GMT' },
-  { city: 'New York', country: 'United States', type: 'Regional Office', timezone: 'EST' },
-  { city: 'Dubai', country: 'UAE', type: 'Regional Office', timezone: 'GST' },
-  { city: 'Singapore', country: 'Singapore', type: 'Asia Pacific', timezone: 'SGT' },
+  { city: 'London',     country: 'United Kingdom',         type: 'Headquarters',    timezone: 'GMT', coords: [-0.13,  51.51] as [number, number] },
+  { city: 'New York',   country: 'United States',          type: 'Regional Office', timezone: 'EST', coords: [-74.01, 40.71] as [number, number] },
+  { city: 'Dubai',      country: 'United Arab Emirates',   type: 'Regional Office', timezone: 'GST', coords: [55.27,  25.20] as [number, number] },
+  { city: 'Singapore',  country: 'Singapore',              type: 'Asia Pacific',    timezone: 'SGT', coords: [103.82,  1.35] as [number, number] },
 ];
 
+const officePins: MapPin[] = offices.map((o) => ({
+  id: o.city.toLowerCase().replace(/\s+/g, '-'),
+  label: `${o.city} · ${o.timezone}`,
+  coords: o.coords,
+}));
+
 const ContactPage: React.FC = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-
-  const validate = () => {
-    const newErrors: Record<string, string> = {};
-    if (!formData.name.trim()) newErrors.name = 'Name is required';
-    if (!formData.email.trim()) newErrors.email = 'Email is required';
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Invalid email address';
-    if (!formData.message.trim()) newErrors.message = 'Message is required';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
-
-    setIsSubmitting(true);
-    try {
-      const { error } = await supabase.from('contact_messages').insert({
-        name: formData.name.trim(),
-        email: formData.email.trim(),
-        message: formData.message.trim(),
-      });
-      if (error) throw error;
-      setSubmitted(true);
-      toast.success('Message sent successfully! We\'ll get back to you soon.');
-      setFormData({ name: '', email: '', message: '' });
-      setTimeout(() => setSubmitted(false), 4000);
-    } catch (err: any) {
-      toast.error('Failed to send message. Please try again.');
-      console.error(err);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
-    <div className="bg-[#0B1F3A]">
-      {/* Hero */}
-      <section className="relative pt-32 pb-16 overflow-hidden">
-        <div className="absolute top-20 right-0 w-96 h-96 bg-[#C8A44D]/5 rounded-full blur-3xl" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <span className="text-[#C8A44D] text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">Get in Touch</span>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            Contact <span className="bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] bg-clip-text text-transparent">Us</span>
-          </h1>
-          <p className="text-xl text-white/60 max-w-3xl leading-relaxed">
-            Ready to discuss how Golden Dimensions can help your organization? We'd love to hear from you.
+    <div className="bg-brand-ivory">
+      <Seo
+        title="Contact — discuss your next transformation programme"
+        description="Tell us about the institutional outcome you're working toward. A partner from the relevant practice area will respond within one business day."
+        path="/contact"
+      />
+      <PageHeader
+        eyebrow="Engagement Intake"
+        index="C.01"
+        title={<>Discuss your next <span className="font-editorial italic text-brand-accent">transformation</span> programme.</>}
+        subtitle="Four short steps. We use them to route your enquiry directly to the partner accountable for your sector — initial conversations are partner-led, not gated by a sales desk."
+      />
+
+      {/* Intake form + contact ledger */}
+      <Section tone="paper">
+        <Container>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+            {/* Multi-step intake */}
+            <div className="lg:col-span-7">
+              <TechnicalLabel index="01">Engagement Intake</TechnicalLabel>
+              <h2 className="mt-7 font-display text-[26px] md:text-[32px] font-medium tracking-[-0.015em] text-brand-ink leading-tight">
+                Start the intake
+              </h2>
+              <p className="mt-4 text-[15px] leading-[1.6] text-brand-ink-2 max-w-xl">
+                Sector → Capability → Timeline → Contact. Takes about 90 seconds.
+              </p>
+
+              <div className="mt-10 bg-brand-paper border border-brand-hair-strong p-7 md:p-9">
+                <EngagementIntakeForm />
+              </div>
+            </div>
+
+            {/* Contact ledger */}
+            <aside className="lg:col-span-5 lg:border-l lg:border-brand-hair lg:pl-12">
+              <TechnicalLabel index="02">Direct Contact</TechnicalLabel>
+              <h2 className="mt-7 font-display text-[26px] md:text-[32px] font-medium tracking-[-0.015em] text-brand-ink leading-tight">
+                Reach the firm directly
+              </h2>
+
+              <dl className="mt-10 divide-y divide-brand-hair border-y border-brand-hair">
+                <div className="grid grid-cols-[auto_1fr] gap-x-8 py-5 items-baseline">
+                  <dt className="label-technical text-brand-mute flex items-center gap-2">
+                    <Mail size={11} /> Email
+                  </dt>
+                  <dd>
+                    <a
+                      href="mailto:admin@golden-dimensions.org"
+                      className="text-[14.5px] tracking-tight text-brand-ink hover:text-brand-accent transition-colors border-b border-transparent hover:border-brand-accent"
+                    >
+                      admin@golden-dimensions.org
+                    </a>
+                  </dd>
+                </div>
+                <div className="grid grid-cols-[auto_1fr] gap-x-8 py-5 items-baseline">
+                  <dt className="label-technical text-brand-mute flex items-center gap-2">
+                    <Phone size={11} /> Phone
+                  </dt>
+                  <dd>
+                    <a
+                      href="tel:+442012345678"
+                      className="text-[14.5px] tracking-tight text-brand-ink hover:text-brand-accent transition-colors border-b border-transparent hover:border-brand-accent font-mono-tab"
+                    >
+                      +44 20 1234 5678
+                    </a>
+                  </dd>
+                </div>
+                <div className="grid grid-cols-[auto_1fr] gap-x-8 py-5 items-baseline">
+                  <dt className="label-technical text-brand-mute flex items-center gap-2">
+                    <Clock size={11} /> Hours
+                  </dt>
+                  <dd className="text-[14.5px] tracking-tight text-brand-ink">
+                    Mon – Fri · 09:00 – 18:00 GMT
+                  </dd>
+                </div>
+                <div className="grid grid-cols-[auto_1fr] gap-x-8 py-5 items-baseline">
+                  <dt className="label-technical text-brand-mute flex items-center gap-2">
+                    <MapPinIcon size={11} /> HQ
+                  </dt>
+                  <dd className="text-[14.5px] tracking-tight text-brand-ink leading-snug">
+                    Golden Dimensions Ltd<br />London, United Kingdom
+                  </dd>
+                </div>
+              </dl>
+
+              <p className="mt-8 text-[13px] leading-[1.6] text-brand-ink-2">
+                Engagements are routed by sector to the partner accountable
+                for that practice. Initial conversations are partner-led, not
+                gated by a sales desk.
+              </p>
+
+              <div className="mt-7 p-5 border-l-2 border-brand-accent bg-brand-stone">
+                <p className="font-editorial italic text-[14.5px] leading-[1.5] text-brand-ink">
+                  Prefer email? Write directly to{' '}
+                  <a href="mailto:admin@golden-dimensions.org" className="text-brand-accent hover:underline">
+                    admin@golden-dimensions.org
+                  </a>{' '}
+                  with a one-line description of the engagement. We'll route
+                  it the same way the intake form does.
+                </p>
+              </div>
+            </aside>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Global offices — map + ledger */}
+      <Section tone="ivory" divided>
+        <Container>
+          <TechnicalLabel index="03">Global Offices</TechnicalLabel>
+          <h2 className="mt-7 font-display text-[26px] md:text-[34px] font-medium tracking-[-0.015em] text-brand-ink leading-tight max-w-2xl">
+            Where the firm operates from
+          </h2>
+          <p className="mt-4 max-w-2xl text-[15px] leading-[1.6] text-brand-ink-2">
+            Four operating offices today. Engagements may be staffed from any combination depending on
+            sector, time zone, and language requirements.
           </p>
-        </div>
-      </section>
 
-      {/* Contact Section */}
-      <section className="py-16 pb-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-16">
-            {/* Contact Form */}
-            <div className="lg:col-span-3">
-              <h2 className="text-2xl font-bold text-white mb-8">Send Us a Message</h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label className="block text-white/70 text-sm font-medium mb-2">Full Name</label>
-                  <input type="text" value={formData.name} onChange={(e) => { setFormData({ ...formData, name: e.target.value }); if (errors.name) setErrors({ ...errors, name: '' }); }} placeholder="Enter your full name" className={`w-full px-5 py-4 bg-white/5 border rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#C8A44D]/50 focus:bg-white/[0.08] transition-all ${errors.name ? 'border-red-500/50' : 'border-white/10'}`} />
-                  {errors.name && <p className="mt-1 text-red-400 text-sm">{errors.name}</p>}
-                </div>
-                <div>
-                  <label className="block text-white/70 text-sm font-medium mb-2">Email Address</label>
-                  <input type="email" value={formData.email} onChange={(e) => { setFormData({ ...formData, email: e.target.value }); if (errors.email) setErrors({ ...errors, email: '' }); }} placeholder="Enter your email address" className={`w-full px-5 py-4 bg-white/5 border rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#C8A44D]/50 focus:bg-white/[0.08] transition-all ${errors.email ? 'border-red-500/50' : 'border-white/10'}`} />
-                  {errors.email && <p className="mt-1 text-red-400 text-sm">{errors.email}</p>}
-                </div>
-                <div>
-                  <label className="block text-white/70 text-sm font-medium mb-2">Message</label>
-                  <textarea value={formData.message} onChange={(e) => { setFormData({ ...formData, message: e.target.value }); if (errors.message) setErrors({ ...errors, message: '' }); }} placeholder="Tell us about your project or inquiry..." rows={6} className={`w-full px-5 py-4 bg-white/5 border rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#C8A44D]/50 focus:bg-white/[0.08] transition-all resize-none ${errors.message ? 'border-red-500/50' : 'border-white/10'}`} />
-                  {errors.message && <p className="mt-1 text-red-400 text-sm">{errors.message}</p>}
-                </div>
-                <button type="submit" disabled={isSubmitting} className="w-full sm:w-auto flex items-center justify-center gap-2 px-10 py-4 bg-gradient-to-r from-[#C8A44D] to-[#E8C96D] text-[#0B1F3A] font-semibold rounded-xl hover:shadow-xl hover:shadow-[#C8A44D]/25 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed">
-                  {isSubmitting ? <div className="w-5 h-5 border-2 border-[#0B1F3A]/30 border-t-[#0B1F3A] rounded-full animate-spin" /> : submitted ? <><Check size={18} /> Message Sent</> : <><Send size={18} /> Send Message</>}
-                </button>
-              </form>
-            </div>
-
-            {/* Contact Info Sidebar */}
-            <div className="lg:col-span-2 space-y-8">
-              <div>
-                <h2 className="text-2xl font-bold text-white mb-8">Contact Information</h2>
-                <div className="space-y-6">
-                  <a href="mailto:admin@golden-dimensions.org" className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-[#C8A44D]/20 transition-all group">
-                    <div className="w-12 h-12 rounded-xl bg-[#C8A44D]/10 flex items-center justify-center text-[#C8A44D] flex-shrink-0"><Mail size={20} /></div>
-                    <div><h4 className="text-white font-medium mb-1">Email</h4><span className="text-white/50 text-sm group-hover:text-[#C8A44D] transition-colors">admin@golden-dimensions.org</span></div>
-                  </a>
-                  <a href="tel:+442012345678" className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-[#C8A44D]/20 transition-all group">
-                    <div className="w-12 h-12 rounded-xl bg-[#C8A44D]/10 flex items-center justify-center text-[#C8A44D] flex-shrink-0"><Phone size={20} /></div>
-                    <div><h4 className="text-white font-medium mb-1">Phone</h4><span className="text-white/50 text-sm group-hover:text-[#C8A44D] transition-colors">+44 20 1234 5678</span></div>
-                  </a>
-                  <div className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-                    <div className="w-12 h-12 rounded-xl bg-[#C8A44D]/10 flex items-center justify-center text-[#C8A44D] flex-shrink-0"><Clock size={20} /></div>
-                    <div><h4 className="text-white font-medium mb-1">Business Hours</h4><span className="text-white/50 text-sm">Mon – Fri: 9:00 AM – 6:00 PM (GMT)</span></div>
-                  </div>
-                </div>
-              </div>
-              {/* Map Placeholder */}
-              <div className="rounded-2xl overflow-hidden border border-white/[0.06]">
-                <div className="h-48 bg-[#0a1a30] flex items-center justify-center relative">
-                  <div className="absolute inset-0 opacity-20">
-                    <svg viewBox="0 0 800 400" className="w-full h-full" fill="none" stroke="#C8A44D" strokeWidth="0.5">
-                      <ellipse cx="400" cy="200" rx="350" ry="150" opacity="0.3" />
-                      <ellipse cx="400" cy="200" rx="250" ry="100" opacity="0.2" />
-                      <line x1="50" y1="200" x2="750" y2="200" opacity="0.2" />
-                      <line x1="400" y1="50" x2="400" y2="350" opacity="0.2" />
-                    </svg>
-                  </div>
-                  <div className="relative text-center">
-                    <Globe2 size={32} className="text-[#C8A44D] mx-auto mb-2" />
-                    <p className="text-white/50 text-sm">Global Headquarters</p>
-                    <p className="text-white font-semibold">London, United Kingdom</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+          {/* Map */}
+          <div className="mt-12 bg-brand-paper border border-brand-hair-strong p-6 md:p-10">
+            <WorldMap tone="light" pins={officePins} scale={170} maxWidthClass="max-w-3xl" />
           </div>
-        </div>
-      </section>
 
-      {/* Global Offices */}
-      <section className="py-20 bg-[#0a1a30]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <span className="text-[#C8A44D] text-sm font-semibold uppercase tracking-[0.2em] mb-4 block">Global Presence</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Our Offices</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Office ledger */}
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-t border-l border-brand-hair">
             {offices.map((office, i) => (
-              <div key={i} className="p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-[#C8A44D]/20 transition-all duration-300 group text-center">
-                <div className="w-12 h-12 mx-auto rounded-xl bg-[#C8A44D]/10 flex items-center justify-center text-[#C8A44D] mb-4 group-hover:bg-[#C8A44D]/20 transition-colors"><MapPin size={20} /></div>
-                <h3 className="text-lg font-bold text-white mb-1">{office.city}</h3>
-                <p className="text-white/50 text-sm mb-2">{office.country}</p>
-                <span className="inline-block px-3 py-1 rounded-full bg-[#C8A44D]/10 text-[#C8A44D] text-xs font-medium">{office.type}</span>
+              <div key={office.city} className="border-r border-b border-brand-hair p-7 bg-brand-paper">
+                <div className="label-technical text-brand-accent mb-5 font-mono-tab">
+                  O.{String(i + 1).padStart(2, '0')}
+                </div>
+                <h3 className="font-display text-[22px] font-medium tracking-[-0.01em] text-brand-ink leading-tight">
+                  {office.city}
+                </h3>
+                <p className="mt-1.5 text-[13.5px] text-brand-ink-2">{office.country}</p>
+                <div className="mt-5 pt-4 border-t border-brand-hair grid grid-cols-2 gap-y-2.5">
+                  <span className="label-technical text-brand-mute">Role</span>
+                  <span className="text-[12.5px] text-brand-ink tracking-tight text-right">{office.type}</span>
+                  <span className="label-technical text-brand-mute">Time zone</span>
+                  <span className="text-[12.5px] text-brand-ink tracking-tight text-right font-mono-tab">{office.timezone}</span>
+                </div>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
     </div>
   );
 };
