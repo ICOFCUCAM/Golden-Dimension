@@ -29,6 +29,7 @@ const App = () => (
               <Route path="/industries/:sectorId" element={<Index />} />
               <Route path="/methodology" element={<Index />} />
               <Route path="/engagement-models" element={<Index />} />
+              <Route path="/engagement-models/configurator" element={<Index />} />
               <Route path="/leadership" element={<Index />} />
               <Route path="/leadership/team" element={<Index />} />
               <Route path="/case-studies" element={<Index />} />

@@ -361,10 +361,14 @@ const EngagementModelsPage: React.FC = () => {
             Discuss the right engagement model for your{' '}
             <span className="font-editorial italic text-brand-accent">mandate</span>.
           </h2>
+          <p className="mt-7 max-w-2xl text-[16px] leading-[1.65] text-brand-ink-2">
+            Not sure which model fits? Try the configurator — three short
+            questions and we'll suggest a starting point.
+          </p>
           <div className="mt-9 flex flex-col sm:flex-row sm:items-center gap-3">
             <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
-            <SecondaryCta to="/methodology">Delivery Methodology</SecondaryCta>
-            <TertiaryCta to="/leadership">Leadership Doctrine</TertiaryCta>
+            <SecondaryCta to="/engagement-models/configurator">Open the Configurator</SecondaryCta>
+            <TertiaryCta to="/methodology">Delivery Methodology</TertiaryCta>
           </div>
         </Container>
       </Section>

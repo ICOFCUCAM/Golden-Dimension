@@ -14,6 +14,7 @@ import {
 } from '@/components/section-primitives';
 import { CapabilityArchitecture, WorldMap } from '@/components/diagrams';
 import { Seo } from '@/components/Seo';
+import RevealOnScroll from '@/components/RevealOnScroll';
 import { pillars, industries, methodology, capabilityModel } from '@/data/servicesPage';
 import { useScrollAnimation, useCountUp } from '@/hooks/useScrollAnimation';
 
@@ -94,58 +95,73 @@ const HomePage: React.FC = () => {
         <Container size="wide">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
             <div className="lg:col-span-8">
-              <TechnicalLabel index="01">Multidisciplinary Consulting & Engineering</TechnicalLabel>
-              <h1 className="mt-8 font-display text-[40px] sm:text-[52px] md:text-[64px] lg:text-[76px] font-medium leading-[1.02] tracking-[-0.015em] text-brand-ink">
-                Integrated{' '}
-                <span className="font-editorial italic text-brand-accent">capability</span>{' '}
-                for{' '}
-                <span className="font-editorial italic text-brand-accent">institutions</span>,
-                enterprises, and{' '}
-                <span className="font-editorial italic text-brand-accent">governments</span>{' '}
-                worldwide.
-              </h1>
-              <p className="mt-8 max-w-2xl text-[17px] md:text-[19px] leading-[1.55] text-brand-ink-2">
-                Golden Dimensions Ltd brings strategy, engineering, technology,
-                and human-capital expertise into a single delivery framework —
-                supporting transformation across finance, infrastructure,
-                healthcare, education, and digital systems since 2003.
-              </p>
-              <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-3">
-                <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
-                <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
-                <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
-              </div>
+              <RevealOnScroll delayMs={0}>
+                <TechnicalLabel index="01">Multidisciplinary Consulting & Engineering</TechnicalLabel>
+              </RevealOnScroll>
 
-              {/* Micro credibility rail — the four institutional disciplines
-                  the firm operates across, immediately under hero CTAs. */}
-              <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 max-w-2xl border-t border-brand-hair pt-6">
-                {['Strategy', 'Engineering', 'Technology', 'Operations'].map((disc, idx) => (
-                  <div key={disc} className="flex items-baseline gap-3">
-                    <span className="font-mono-tab text-[10px] tracking-widest text-brand-accent">
-                      {String(idx + 1).padStart(2, '0')}
-                    </span>
-                    <span className="text-[14px] tracking-tight text-brand-ink">
-                      {disc}
-                    </span>
-                  </div>
-                ))}
-              </div>
+              <RevealOnScroll delayMs={80} as="h1">
+                <span className="block mt-8 font-display text-[40px] sm:text-[52px] md:text-[64px] lg:text-[76px] font-medium leading-[1.02] tracking-[-0.015em] text-brand-ink">
+                  Integrated{' '}
+                  <span className="font-editorial italic text-brand-accent">capability</span>{' '}
+                  for{' '}
+                  <span className="font-editorial italic text-brand-accent">institutions</span>,
+                  enterprises, and{' '}
+                  <span className="font-editorial italic text-brand-accent">governments</span>{' '}
+                  worldwide.
+                </span>
+              </RevealOnScroll>
 
-              {/* Institutional metadata strip */}
-              <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 max-w-2xl">
-                {[
-                  'Established 2003',
-                  'Public + private sector delivery',
-                  'Global multidisciplinary practice',
-                ].map((item, idx, arr) => (
-                  <React.Fragment key={item}>
-                    <span className="label-technical text-brand-mute">{item}</span>
-                    {idx < arr.length - 1 && (
-                      <span className="text-brand-hair-strong" aria-hidden>·</span>
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
+              <RevealOnScroll delayMs={180}>
+                <p className="mt-8 max-w-2xl text-[17px] md:text-[19px] leading-[1.55] text-brand-ink-2">
+                  Golden Dimensions Ltd brings strategy, engineering, technology,
+                  and human-capital expertise into a single delivery framework —
+                  supporting transformation across finance, infrastructure,
+                  healthcare, education, and digital systems since 2003.
+                </p>
+              </RevealOnScroll>
+
+              <RevealOnScroll delayMs={260}>
+                <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-3">
+                  <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+                  <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
+                  <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
+                </div>
+              </RevealOnScroll>
+
+              <RevealOnScroll delayMs={340}>
+                {/* Micro credibility rail — the four institutional disciplines
+                    the firm operates across, immediately under hero CTAs. */}
+                <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 max-w-2xl border-t border-brand-hair pt-6">
+                  {['Strategy', 'Engineering', 'Technology', 'Operations'].map((disc, idx) => (
+                    <div key={disc} className="flex items-baseline gap-3">
+                      <span className="font-mono-tab text-[10px] tracking-widest text-brand-accent">
+                        {String(idx + 1).padStart(2, '0')}
+                      </span>
+                      <span className="text-[14px] tracking-tight text-brand-ink">
+                        {disc}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </RevealOnScroll>
+
+              <RevealOnScroll delayMs={400}>
+                {/* Institutional metadata strip */}
+                <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 max-w-2xl">
+                  {[
+                    'Established 2003',
+                    'Public + private sector delivery',
+                    'Global multidisciplinary practice',
+                  ].map((item, idx, arr) => (
+                    <React.Fragment key={item}>
+                      <span className="label-technical text-brand-mute">{item}</span>
+                      {idx < arr.length - 1 && (
+                        <span className="text-brand-hair-strong" aria-hidden>·</span>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+              </RevealOnScroll>
             </div>
 
             <div className="lg:col-span-4 flex flex-col justify-end">

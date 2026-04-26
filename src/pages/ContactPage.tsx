@@ -3,13 +3,20 @@ import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 import { PageHeader, Container, Section, TechnicalLabel } from '@/components/section-primitives';
 import { Seo } from '@/components/Seo';
 import { EngagementIntakeForm } from '@/components/EngagementIntakeForm';
+import { WorldMap, type MapPin } from '@/components/diagrams';
 
 const offices = [
-  { city: 'London',     country: 'United Kingdom', type: 'Headquarters',  timezone: 'GMT' },
-  { city: 'New York',   country: 'United States',  type: 'Regional Office', timezone: 'EST' },
-  { city: 'Dubai',      country: 'United Arab Emirates', type: 'Regional Office', timezone: 'GST' },
-  { city: 'Singapore',  country: 'Singapore',      type: 'Asia Pacific',  timezone: 'SGT' },
+  { city: 'London',     country: 'United Kingdom',         type: 'Headquarters',    timezone: 'GMT', coords: [-0.13,  51.51] as [number, number] },
+  { city: 'New York',   country: 'United States',          type: 'Regional Office', timezone: 'EST', coords: [-74.01, 40.71] as [number, number] },
+  { city: 'Dubai',      country: 'United Arab Emirates',   type: 'Regional Office', timezone: 'GST', coords: [55.27,  25.20] as [number, number] },
+  { city: 'Singapore',  country: 'Singapore',              type: 'Asia Pacific',    timezone: 'SGT', coords: [103.82,  1.35] as [number, number] },
 ];
+
+const officePins: MapPin[] = offices.map((o) => ({
+  id: o.city.toLowerCase().replace(/\s+/g, '-'),
+  label: `${o.city} · ${o.timezone}`,
+  coords: o.coords,
+}));
 
 const ContactPage: React.FC = () => {
   return (
@@ -118,15 +125,25 @@ const ContactPage: React.FC = () => {
         </Container>
       </Section>
 
-      {/* Global offices */}
+      {/* Global offices — map + ledger */}
       <Section tone="ivory" divided>
         <Container>
           <TechnicalLabel index="03">Global Offices</TechnicalLabel>
           <h2 className="mt-7 font-display text-[26px] md:text-[34px] font-medium tracking-[-0.015em] text-brand-ink leading-tight max-w-2xl">
             Where the firm operates from
           </h2>
+          <p className="mt-4 max-w-2xl text-[15px] leading-[1.6] text-brand-ink-2">
+            Four operating offices today. Engagements may be staffed from any combination depending on
+            sector, time zone, and language requirements.
+          </p>
 
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-t border-l border-brand-hair">
+          {/* Map */}
+          <div className="mt-12 bg-brand-paper border border-brand-hair-strong p-6 md:p-10">
+            <WorldMap tone="light" pins={officePins} scale={170} maxWidthClass="max-w-3xl" />
+          </div>
+
+          {/* Office ledger */}
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-t border-l border-brand-hair">
             {offices.map((office, i) => (
               <div key={office.city} className="border-r border-b border-brand-hair p-7 bg-brand-paper">
                 <div className="label-technical text-brand-accent mb-5 font-mono-tab">

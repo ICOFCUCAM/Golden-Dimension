@@ -5,6 +5,7 @@
   <url><loc>https://golden-dimension.vercel.app/industries</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://golden-dimension.vercel.app/methodology</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://golden-dimension.vercel.app/engagement-models</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://golden-dimension.vercel.app/engagement-models/configurator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://golden-dimension.vercel.app/leadership</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://golden-dimension.vercel.app/leadership/team</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://golden-dimension.vercel.app/case-studies</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>

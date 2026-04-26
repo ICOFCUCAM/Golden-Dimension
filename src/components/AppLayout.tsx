@@ -17,6 +17,7 @@ const IndustriesPage        = lazy(() => import('@/pages/IndustriesPage'));
 const SectorPage            = lazy(() => import('@/pages/SectorPage'));
 const MethodologyPage       = lazy(() => import('@/pages/MethodologyPage'));
 const EngagementModelsPage  = lazy(() => import('@/pages/EngagementModelsPage'));
+const ConfiguratorPage      = lazy(() => import('@/pages/ConfiguratorPage'));
 const LeadershipPage        = lazy(() => import('@/pages/LeadershipPage'));
 const LeadershipTeamPage    = lazy(() => import('@/pages/LeadershipTeamPage'));
 const CaseStudiesPage       = lazy(() => import('@/pages/CaseStudiesPage'));
@@ -57,6 +58,7 @@ const AppLayout: React.FC = () => {
     if (path === '/industries') return <IndustriesPage />;
     if (path.startsWith('/industries/')) return <SectorPage />;
     if (path === '/methodology') return <MethodologyPage />;
+    if (path === '/engagement-models/configurator') return <ConfiguratorPage />;
     if (path === '/engagement-models') return <EngagementModelsPage />;
     if (path === '/leadership/team') return <LeadershipTeamPage />;
     if (path === '/leadership') return <LeadershipPage />;

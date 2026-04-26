@@ -26,6 +26,7 @@ const buildIndex = (): SearchEntry[] => {
     { id: 'inds',       group: 'Pages', label: 'Industries',          hint: 'Six regulated sectors',                 path: '/industries' },
     { id: 'method',     group: 'Pages', label: 'Delivery Methodology', hint: 'Six-phase lifecycle',                  path: '/methodology' },
     { id: 'eng',        group: 'Pages', label: 'Engagement Models',   hint: 'Four ways to engage',                   path: '/engagement-models' },
+    { id: 'eng-config', group: 'Pages', label: 'Engagement Configurator', hint: 'Three questions; recommended engagement shape', path: '/engagement-models/configurator' },
     { id: 'lead',       group: 'Pages', label: 'Leadership Doctrine', hint: 'Firm philosophy + transformation doctrine', path: '/leadership' },
     { id: 'team',       group: 'Pages', label: 'Practice Leads',      hint: 'Partners and practice leads',           path: '/leadership/team' },
     { id: 'cases',      group: 'Pages', label: 'Case Studies',        hint: 'Anonymised engagement evidence',         path: '/case-studies' },

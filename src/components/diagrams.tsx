@@ -183,13 +183,13 @@ import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps
 
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 
-interface RegionPin {
+export interface MapPin {
   id: string;
   label: string;
   coords: [number, number]; // [lng, lat]
 }
 
-const regionPins: RegionPin[] = [
+export const defaultRegionPins: MapPin[] = [
   { id: 'na',   label: 'North America',         coords: [-77.0, 38.9] },  // Washington DC
   { id: 'uk',   label: 'United Kingdom',        coords: [-0.13, 51.51] }, // London
   { id: 'eu',   label: 'European Union',        coords: [4.35, 50.85] },  // Brussels
@@ -201,16 +201,19 @@ const regionPins: RegionPin[] = [
 export const WorldMap: React.FC<{
   className?: string;
   tone?: 'light' | 'dark';
-}> = ({ className = '', tone = 'dark' }) => {
+  pins?: MapPin[];
+  scale?: number;
+  maxWidthClass?: string;
+}> = ({ className = '', tone = 'dark', pins = defaultRegionPins, scale = 175, maxWidthClass = 'max-w-4xl' }) => {
   const isDark = tone === 'dark';
   const landFill   = isDark ? '#26262B' : '#E7E1DA';
   const landStroke = isDark ? '#5A5A62' : '#7A7A7A';
 
   return (
-    <div className={`relative w-full max-w-4xl mx-auto ${className}`}>
+    <div className={`relative w-full ${maxWidthClass} mx-auto ${className}`}>
       <ComposableMap
         projection="geoEqualEarth"
-        projectionConfig={{ scale: 175 }}
+        projectionConfig={{ scale }}
         width={1000}
         height={460}
         style={{ width: '100%', height: 'auto', display: 'block' }}
@@ -234,7 +237,7 @@ export const WorldMap: React.FC<{
           }
         </Geographies>
 
-        {regionPins.map((pin) => (
+        {pins.map((pin) => (
           <Marker key={pin.id} coordinates={pin.coords}>
             {/* Outer pulse ring */}
             <circle r={14} fill="none" stroke="#B4532A" strokeWidth={1} opacity={0.4} />
@@ -247,13 +250,13 @@ export const WorldMap: React.FC<{
       </ComposableMap>
 
       {/* Legend rendered as HTML below SVG so labels stay readable on small screens. */}
-      <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 gap-px bg-white/10 border border-white/10">
-        {regionPins.map((pin, idx) => (
-          <div key={pin.id} className="bg-brand-ink p-4 flex items-baseline gap-3">
-            <span className="label-technical text-brand-accent-soft">
+      <div className={`mt-8 grid grid-cols-2 sm:grid-cols-3 gap-px ${isDark ? 'bg-white/10 border border-white/10' : 'bg-brand-hair border border-brand-hair'}`}>
+        {pins.map((pin, idx) => (
+          <div key={pin.id} className={`${isDark ? 'bg-brand-ink' : 'bg-brand-paper'} p-4 flex items-baseline gap-3`}>
+            <span className={`label-technical font-mono-tab ${isDark ? 'text-brand-accent-soft' : 'text-brand-accent'}`}>
               {String(idx + 1).padStart(2, '0')}
             </span>
-            <span className="text-[13px] tracking-tight text-brand-on-dark">
+            <span className={`text-[13px] tracking-tight ${isDark ? 'text-brand-on-dark' : 'text-brand-ink'}`}>
               {pin.label}
             </span>
           </div>
