@@ -8,6 +8,7 @@ import TransactionForm from '@/components/finance/TransactionForm';
 import ChartOfAccounts from '@/components/finance/ChartOfAccounts';
 import EngagementsTab from '@/components/finance/EngagementsTab';
 import ReportsTab from '@/components/finance/ReportsTab';
+import TransactionDetailPanel from '@/components/finance/TransactionDetailPanel';
 import { useAuth } from '@/contexts/AuthContext';
 import {
   fetchAccounts,
@@ -34,6 +35,7 @@ const AccountingInner: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<FinancialTransaction | null>(null);
+  const [inspecting, setInspecting] = useState<FinancialTransaction | null>(null);
 
   const refresh = async () => {
     setLoading(true);
@@ -65,13 +67,20 @@ const AccountingInner: React.FC = () => {
   );
 
   const onRowClick = (tx: FinancialTransaction) => {
-    if (tx.status !== 'draft') {
-      toast.info('Only draft transactions can be edited. Posted entries require an admin-approved void.');
-      return;
-    }
-    setEditing(tx);
-    setFormOpen(true);
+    setInspecting(tx);
   };
+
+  const accountById = useMemo(() => {
+    const map: Record<string, Account> = {};
+    for (const a of accounts) map[a.id] = a;
+    return map;
+  }, [accounts]);
+
+  const engagementById = useMemo(() => {
+    const map: Record<string, Engagement> = {};
+    for (const e of engagements) map[e.id] = e;
+    return map;
+  }, [engagements]);
 
   return (
     <>
@@ -161,6 +170,27 @@ const AccountingInner: React.FC = () => {
         engagements={engagements}
         rates={rates}
         editing={editing}
+      />
+
+      <TransactionDetailPanel
+        open={!!inspecting}
+        onClose={() => setInspecting(null)}
+        onChanged={refresh}
+        transaction={inspecting}
+        account={inspecting ? accountById[inspecting.account_id] ?? null : null}
+        engagement={
+          inspecting?.engagement_id ? engagementById[inspecting.engagement_id] ?? null : null
+        }
+        rates={rates}
+        display={display}
+        canEdit
+        onEdit={() => {
+          if (inspecting) {
+            setEditing(inspecting);
+            setInspecting(null);
+            setFormOpen(true);
+          }
+        }}
       />
     </>
   );
