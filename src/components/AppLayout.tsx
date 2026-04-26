@@ -83,7 +83,7 @@ const AppLayout: React.FC = () => {
         Skip to main content
       </a>
       {!isAdmin && <Navbar />}
-      <main id="main-content">
+      <main id="main-content" role="main" tabIndex={-1}>
         <Suspense fallback={<PageLoader />}>{renderPage()}</Suspense>
       </main>
       {!isAdmin && <Footer />}

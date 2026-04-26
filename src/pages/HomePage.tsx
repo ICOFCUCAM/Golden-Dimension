@@ -113,10 +113,10 @@ const HomePage: React.FC = () => {
 
               <RevealOnScroll delayMs={180}>
                 <p className="mt-8 max-w-2xl text-[17px] md:text-[19px] leading-[1.55] text-brand-ink-2">
-                  Golden Dimensions Ltd brings strategy, engineering, technology,
-                  and human-capital expertise into a single delivery framework —
-                  supporting transformation across finance, infrastructure,
-                  healthcare, education, and digital systems since 2003.
+                  One firm. Strategy, engineering, technology, and human-capital
+                  expertise delivered as a single accountable practice — across
+                  finance, infrastructure, healthcare, education, and digital
+                  systems, in over fifty countries since 2003.
                 </p>
               </RevealOnScroll>
 

@@ -178,7 +178,7 @@ export const EngagementIntakeForm: React.FC<EngagementIntakeFormProps> = ({ onCo
   }
 
   return (
-    <form onSubmit={submit}>
+    <form onSubmit={submit} aria-label="Engagement intake — four steps">
       {/* Step indicator */}
       <div className="mb-8 pb-5 border-b border-brand-hair-strong">
         <div className="flex items-baseline justify-between mb-3">

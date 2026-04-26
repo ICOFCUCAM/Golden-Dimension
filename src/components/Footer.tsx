@@ -20,7 +20,7 @@ const firmLinks = [
 const Footer: React.FC = () => {
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
   return (
-    <footer className="bg-brand-ink text-brand-on-dark border-t border-white/10">
+    <footer className="bg-brand-ink text-brand-on-dark border-t border-white/10" role="contentinfo">
       <div className="max-w-[88rem] mx-auto px-6 lg:px-10 pt-20 md:pt-24 pb-10">
         {/* Engagement banner */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 pb-16 mb-16 border-b border-white/10">

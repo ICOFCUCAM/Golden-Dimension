@@ -18,6 +18,7 @@ import {
   industries,
 } from '@/data/servicesPage';
 import { Seo } from '@/components/Seo';
+import { PillarIllustration } from '@/components/PillarIllustrations';
 
 const ServicesPage: React.FC = () => {
   return (
@@ -39,10 +40,9 @@ const ServicesPage: React.FC = () => {
             worldwide.
           </h1>
           <p className="mt-8 max-w-3xl text-[17px] md:text-[19px] leading-[1.55] text-brand-ink-2">
-            Strategy, engineering, technology, and human-capital expertise
-            unified into a single delivery framework — supporting
-            multidisciplinary transformation across finance, infrastructure,
-            healthcare, education, and digital systems since 2003.
+            Five consulting pillars and sixteen disciplines under one firm —
+            staffed jointly so engagements span strategy through systems
+            without vendor handoffs in between.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-3">
             <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
@@ -103,7 +103,10 @@ const ServicesPage: React.FC = () => {
                   <div className="md:col-span-1 label-technical text-brand-accent pt-2">
                     {pillar.index}
                   </div>
-                  <div className="md:col-span-5">
+                  <div className="md:col-span-5 flex items-start gap-5">
+                    <div className="hidden md:block shrink-0 text-brand-ink-2 pt-1">
+                      <PillarIllustration pillarId={pillar.id} size={88} />
+                    </div>
                     <h3 className="font-display text-[26px] md:text-[34px] font-semibold leading-[1.05] tracking-[-0.025em] text-brand-ink">
                       {pillar.name}
                     </h3>
