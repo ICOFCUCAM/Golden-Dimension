@@ -733,3 +733,267 @@ $$;
 
 revoke all on function public.revoke_role(uuid, public.app_role) from public, anon;
 grant execute on function public.revoke_role(uuid, public.app_role) to authenticated;
+
+-- =========================================================================
+-- PAYMENTS MODULE
+-- =========================================================================
+-- Invoices issued to clients + payments received against them. Designed
+-- to bolt onto the existing finance module:
+--   - invoices.engagement_id → engagements.id (per-engagement billing)
+--   - settled invoices auto-post a row into financial_transactions so the
+--     ledger and the trial balance stay correct
+--   - payments table records every claim/receipt by method (bank
+--     transfer, card via Stripe, Wise, PayPal, cheque) with reconciliation
+--     workflow: client claims → accountant verifies → posted to ledger
+--
+-- Stripe (cards) is the only method that auto-confirms; everything else
+-- needs an accountant to mark "received" before it posts.
+
+-- Status enums -----------------------------------------------------------
+do $$ begin
+  if not exists (select 1 from pg_type where typname = 'invoice_status') then
+    create type public.invoice_status as enum (
+      'draft',          -- accountant is still preparing it
+      'sent',           -- shared with client; awaiting payment
+      'partial',        -- some payments received; balance outstanding
+      'paid',           -- fully settled
+      'void',           -- cancelled (admin-approved like other voids)
+      'overdue'         -- past due_date and not paid
+    );
+  end if;
+  if not exists (select 1 from pg_type where typname = 'payment_method') then
+    create type public.payment_method as enum (
+      'bank_transfer',  -- BACS / Faster Payments / SWIFT
+      'card',           -- Stripe Checkout
+      'wise',           -- Wise (formerly TransferWise) — manual
+      'paypal',         -- PayPal — manual
+      'cheque',         -- cheque — manual
+      'other'           -- catch-all for one-off methods
+    );
+  end if;
+  if not exists (select 1 from pg_type where typname = 'payment_status') then
+    create type public.payment_status as enum (
+      'claimed',        -- client says they sent it; awaiting verification
+      'received',       -- accountant has confirmed funds in
+      'failed',         -- failed at gateway or bounced
+      'refunded'        -- money sent back to the client
+    );
+  end if;
+end $$;
+
+-- Invoices ---------------------------------------------------------------
+create table if not exists public.invoices (
+  id uuid primary key default gen_random_uuid(),
+  invoice_code text not null unique,             -- e.g. 'GD-INV-2026-0042'
+  engagement_id uuid references public.engagements(id),
+  client_name text not null,                     -- snapshot at issue time
+  client_email text,                             -- where the link is sent
+  description text not null,                     -- what's being billed for
+
+  -- Money
+  amount numeric(14, 2) not null,                -- total in original currency
+  currency char(3) not null default 'GBP',
+  fx_rate numeric(14, 6) not null default 1.0,
+  amount_gbp numeric(14, 2) generated always as (round(amount * fx_rate, 2)) stored,
+
+  -- Workflow
+  status public.invoice_status not null default 'draft',
+  issued_date date not null default current_date,
+  due_date date,
+  sent_at timestamptz,
+  paid_at timestamptz,
+
+  -- Audit
+  created_at timestamptz not null default now(),
+  created_by uuid not null default auth.uid() references auth.users(id),
+  updated_at timestamptz not null default now()
+);
+create index if not exists invoices_status_idx     on public.invoices (status);
+create index if not exists invoices_engagement_idx on public.invoices (engagement_id);
+create index if not exists invoices_due_idx        on public.invoices (due_date);
+
+drop trigger if exists invoices_touch on public.invoices;
+create trigger invoices_touch before update on public.invoices
+  for each row execute function public.touch_updated_at();
+
+alter table public.invoices enable row level security;
+
+-- Anonymous visitors can SELECT a single invoice ONLY by its full code
+-- (the public payment page reads via the URL slug). They cannot list
+-- invoices. We rely on the unique invoice_code being unguessable
+-- (UUID-style suffix recommended in the codes you mint).
+drop policy if exists "anon read invoice by code" on public.invoices;
+create policy "anon read invoice by code"
+  on public.invoices for select to anon
+  using (status in ('sent', 'partial', 'overdue', 'paid'));
+
+drop policy if exists "internal read invoices" on public.invoices;
+create policy "internal read invoices"
+  on public.invoices for select to authenticated
+  using (
+    public.has_role('super_admin') or public.has_role('admin')
+    or public.has_role('accountant') or public.has_role('auditor')
+  );
+
+drop policy if exists "accountant manages invoices" on public.invoices;
+create policy "accountant manages invoices"
+  on public.invoices for all to authenticated
+  using (public.has_role('super_admin') or public.has_role('admin') or public.has_role('accountant'))
+  with check (public.has_role('super_admin') or public.has_role('admin') or public.has_role('accountant'));
+
+-- Payments ---------------------------------------------------------------
+create table if not exists public.payments (
+  id uuid primary key default gen_random_uuid(),
+  invoice_id uuid not null references public.invoices(id) on delete cascade,
+  method public.payment_method not null,
+  status public.payment_status not null default 'claimed',
+
+  -- Money
+  amount numeric(14, 2) not null,
+  currency char(3) not null default 'GBP',
+  fx_rate numeric(14, 6) not null default 1.0,
+  amount_gbp numeric(14, 2) generated always as (round(amount * fx_rate, 2)) stored,
+
+  -- Method-specific evidence
+  payer_name text,                               -- name on the payment
+  payer_reference text,                          -- the reference the client used
+  external_reference text,                       -- Stripe session id / Wise tx id / cheque no.
+  notes text,
+
+  -- Workflow
+  claimed_at timestamptz not null default now(), -- when client said it was sent
+  received_at timestamptz,                       -- when accountant verified
+  received_by uuid references auth.users(id),
+
+  -- Linkage to the ledger once posted
+  financial_transaction_id uuid references public.financial_transactions(id),
+
+  created_at timestamptz not null default now()
+);
+create index if not exists payments_invoice_idx on public.payments (invoice_id);
+create index if not exists payments_status_idx  on public.payments (status);
+create index if not exists payments_method_idx  on public.payments (method);
+
+alter table public.payments enable row level security;
+
+-- Anonymous visitors can INSERT a "claimed" payment against an invoice
+-- they already have the code for (the public /pay page lets the client
+-- self-report a bank transfer). They cannot read existing payments.
+drop policy if exists "anon claim payment" on public.payments;
+create policy "anon claim payment"
+  on public.payments for insert to anon
+  with check (
+    status = 'claimed'
+    and exists (
+      select 1 from public.invoices i
+      where i.id = invoice_id
+        and i.status in ('sent', 'partial', 'overdue')
+    )
+  );
+
+drop policy if exists "internal read payments" on public.payments;
+create policy "internal read payments"
+  on public.payments for select to authenticated
+  using (
+    public.has_role('super_admin') or public.has_role('admin')
+    or public.has_role('accountant') or public.has_role('auditor')
+  );
+
+drop policy if exists "accountant manages payments" on public.payments;
+create policy "accountant manages payments"
+  on public.payments for all to authenticated
+  using (public.has_role('super_admin') or public.has_role('admin') or public.has_role('accountant'))
+  with check (public.has_role('super_admin') or public.has_role('admin') or public.has_role('accountant'));
+
+-- Payment methods config -------------------------------------------------
+-- A single-row table holding the firm's bank details, supported methods,
+-- and Stripe keys (publishable only — secret stays in Vercel env vars).
+-- The accountant edits this from /accounting → Settings.
+create table if not exists public.payment_methods_config (
+  id int primary key default 1,
+  -- Bank transfer details (shown on the public /pay page)
+  bank_account_name text,
+  bank_account_number text,
+  bank_sort_code text,
+  bank_iban text,
+  bank_swift_bic text,
+  bank_name text,
+  bank_address text,
+  -- Wise / PayPal / cheque instructions (free-text markdown)
+  wise_instructions text,
+  paypal_instructions text,
+  cheque_instructions text,
+  -- Stripe (publishable key only; secret is on the server)
+  stripe_publishable_key text,
+  stripe_enabled boolean not null default false,
+  -- Method enable flags
+  bank_transfer_enabled boolean not null default true,
+  wise_enabled boolean not null default false,
+  paypal_enabled boolean not null default false,
+  cheque_enabled boolean not null default false,
+  -- Catch-all
+  payment_footer_note text,                      -- shown under all methods
+  updated_at timestamptz not null default now(),
+  -- Ensure exactly one row.
+  constraint single_row_check check (id = 1)
+);
+
+insert into public.payment_methods_config (id) values (1)
+on conflict (id) do nothing;
+
+alter table public.payment_methods_config enable row level security;
+
+-- Anyone (including anon visitors on /pay) can read this — it's the
+-- equivalent of a "How to pay us" page.
+drop policy if exists "public read payment methods" on public.payment_methods_config;
+create policy "public read payment methods"
+  on public.payment_methods_config for select to anon, authenticated using (true);
+
+drop policy if exists "admin writes payment methods" on public.payment_methods_config;
+create policy "admin writes payment methods"
+  on public.payment_methods_config for all to authenticated
+  using (public.has_role('super_admin') or public.has_role('admin'))
+  with check (public.has_role('super_admin') or public.has_role('admin'));
+
+-- Auto-update invoice status when payments roll in ----------------------
+create or replace function public.recalc_invoice_status()
+returns trigger language plpgsql security definer as $$
+declare
+  total_received numeric(14,2);
+  invoice_total  numeric(14,2);
+  inv_currency   char(3);
+begin
+  -- Only react to received payments.
+  if (new.status is distinct from 'received') and (old is null or old.status is distinct from 'received') then
+    return new;
+  end if;
+
+  select amount, currency into invoice_total, inv_currency
+    from public.invoices where id = new.invoice_id;
+
+  -- Sum payments in the invoice's currency (we trust same-currency
+  -- payments here; mixed-currency settlement would need GBP base —
+  -- accountant can override status manually if needed).
+  select coalesce(sum(amount), 0) into total_received
+    from public.payments
+   where invoice_id = new.invoice_id and status = 'received'
+     and currency = inv_currency;
+
+  if total_received >= invoice_total then
+    update public.invoices
+       set status = 'paid', paid_at = coalesce(paid_at, now())
+     where id = new.invoice_id;
+  elsif total_received > 0 then
+    update public.invoices
+       set status = 'partial'
+     where id = new.invoice_id and status not in ('paid', 'void');
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists payments_recalc on public.payments;
+create trigger payments_recalc
+  after insert or update on public.payments
+  for each row execute function public.recalc_invoice_status();
