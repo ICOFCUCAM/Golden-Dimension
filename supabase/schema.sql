@@ -588,3 +588,51 @@ drop trigger if exists ft_audit on public.financial_transactions;
 create trigger ft_audit
   after insert or update on public.financial_transactions
   for each row execute function public.log_financial_change();
+
+-- =========================================================================
+-- Storage bucket for transaction attachments
+-- =========================================================================
+-- The accountant UI uploads receipts here from the New / Edit Transaction
+-- form. The bucket is private; access goes through RLS-aware Storage APIs
+-- with the same role-gated rules as the transaction_attachments table.
+--
+-- If you prefer to create the bucket via the Supabase dashboard instead
+-- (Storage → New bucket → "finance-attachments" → Private), you can
+-- skip the insert below — the policies will still attach to it.
+
+insert into storage.buckets (id, name, public)
+values ('finance-attachments', 'finance-attachments', false)
+on conflict (id) do nothing;
+
+drop policy if exists "internal read finance attachments" on storage.objects;
+create policy "internal read finance attachments"
+  on storage.objects for select to authenticated
+  using (
+    bucket_id = 'finance-attachments'
+    and (
+      public.has_role('super_admin') or public.has_role('admin')
+      or public.has_role('accountant') or public.has_role('auditor')
+    )
+  );
+
+drop policy if exists "accountant writes finance attachments" on storage.objects;
+create policy "accountant writes finance attachments"
+  on storage.objects for insert to authenticated
+  with check (
+    bucket_id = 'finance-attachments'
+    and (
+      public.has_role('super_admin') or public.has_role('admin')
+      or public.has_role('accountant')
+    )
+  );
+
+drop policy if exists "accountant deletes own finance attachments" on storage.objects;
+create policy "accountant deletes own finance attachments"
+  on storage.objects for delete to authenticated
+  using (
+    bucket_id = 'finance-attachments'
+    and (
+      public.has_role('super_admin') or public.has_role('admin')
+      or public.has_role('accountant')
+    )
+  );
