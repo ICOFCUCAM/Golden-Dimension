@@ -1,107 +1,102 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, BookOpen, FileSpreadsheet, LogOut, Receipt, Wallet } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 import RoleGate from '@/components/RoleGate';
+import AccountingShell from '@/components/finance/AccountingShell';
+import TransactionsTable from '@/components/finance/TransactionsTable';
 import { useAuth } from '@/contexts/AuthContext';
-import { ROLE_LABELS } from '@/lib/roles';
+import {
+  fetchAccounts,
+  fetchEngagements,
+  fetchFxRates,
+  fetchTransactions,
+  type Account,
+  type DisplayCurrency,
+  type Engagement,
+  type FinancialTransaction,
+} from '@/lib/finance';
+import { supabaseConfigured } from '@/lib/supabase';
 
-const ModuleCard: React.FC<{
-  icon: React.ReactNode;
-  title: string;
-  caption: string;
-  meta: string;
-}> = ({ icon, title, caption, meta }) => (
-  <div className="border border-brand-hair-strong bg-brand-paper p-6">
-    <div className="flex items-center justify-between mb-4">
-      <div className="w-10 h-10 border border-brand-hair-strong bg-brand-ivory text-brand-ink-2 flex items-center justify-center">
-        {icon}
-      </div>
-      <span className="label-technical text-brand-accent font-mono-tab">{meta}</span>
-    </div>
-    <h3 className="font-display text-[18px] md:text-[20px] font-medium tracking-[-0.015em] text-brand-ink leading-tight">
-      {title}
-    </h3>
-    <p className="mt-2 text-[13.5px] leading-[1.6] text-brand-ink-2">{caption}</p>
-    <div className="mt-4 pt-4 border-t border-brand-hair label-technical text-brand-mute">
-      Coming in next release
-    </div>
-  </div>
-);
+type TabId = 'transactions' | 'accounts' | 'engagements' | 'reports';
 
 const AccountingInner: React.FC = () => {
-  const { session, roles, signOut } = useAuth();
+  const { session } = useAuth();
+  const [activeTab, setActiveTab] = useState<TabId>('transactions');
+  const [display, setDisplay] = useState<DisplayCurrency>('GBP');
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [engagements, setEngagements] = useState<Engagement[]>([]);
+  const [transactions, setTransactions] = useState<FinancialTransaction[]>([]);
+  const [rates, setRates] = useState<Record<string, number>>({ GBP: 1 });
+  const [loading, setLoading] = useState(true);
+
+  const refresh = async () => {
+    setLoading(true);
+    try {
+      const [a, e, t, r] = await Promise.all([
+        fetchAccounts(),
+        fetchEngagements(),
+        fetchTransactions(),
+        fetchFxRates(),
+      ]);
+      setAccounts(a);
+      setEngagements(e);
+      setTransactions(t);
+      setRates(r);
+    } catch {
+      toast.error('Failed to load finance data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (session) void refresh();
+  }, [session]);
+
+  const draftCount = useMemo(
+    () => transactions.filter((t) => t.status === 'draft').length,
+    [transactions],
+  );
 
   return (
-    <div className="bg-brand-ivory min-h-screen pt-24 pb-16">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 pb-6 mb-10 border-b border-brand-hair-strong">
-          <div>
-            <Link
-              to="/"
-              className="group inline-flex items-center gap-1.5 text-[13px] text-brand-ink-2 hover:text-brand-accent mb-4 transition-colors"
-            >
-              <ArrowLeft size={13} className="group-hover:-translate-x-0.5 transition-transform" />
-              Back to site
-            </Link>
-            <div className="label-technical text-brand-mute mb-3">
-              <span className="text-brand-accent">§ FIN.AC</span> · Accountant Workspace
-            </div>
-            <h1 className="font-display text-[28px] md:text-[36px] font-medium tracking-[-0.015em] text-brand-ink leading-tight">
-              Internal financial ledger
-            </h1>
-            <p className="text-brand-ink-2 text-[14px] mt-2">
-              GBP base · UK GAAP chart of accounts · {session?.user.email} ·{' '}
-              {roles.map((r) => ROLE_LABELS[r]).join(', ')}
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={signOut}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-paper border border-brand-hair-strong text-brand-ink-2 text-[13px] font-medium hover:border-brand-ink hover:text-brand-ink transition-colors"
-            >
-              <LogOut size={13} /> Sign out
-            </button>
-          </div>
+    <AccountingShell
+      display={display}
+      onDisplayChange={setDisplay}
+      activeTab={activeTab}
+      onTabChange={(t) => setActiveTab(t as TabId)}
+      tabs={[
+        { id: 'transactions', label: 'Transactions', badge: draftCount },
+        { id: 'accounts', label: 'Chart of accounts' },
+        { id: 'engagements', label: 'Engagements' },
+        { id: 'reports', label: 'Reports' },
+      ]}
+    >
+      {!supabaseConfigured && (
+        <div className="mb-6 px-4 py-3 border border-amber-300 bg-amber-50 text-amber-900 text-[13px]">
+          Supabase is not configured. Set <code>VITE_SUPABASE_URL</code> and{' '}
+          <code>VITE_SUPABASE_ANON_KEY</code> on Vercel to load the ledger.
         </div>
+      )}
 
-        {/* Placeholder modules */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <ModuleCard
-            icon={<Receipt size={18} />}
-            meta="FIN.01"
-            title="Transactions"
-            caption="Record income and expense entries against the chart of accounts. Multi-currency with GBP base. Attach receipts and link to engagements."
-          />
-          <ModuleCard
-            icon={<BookOpen size={18} />}
-            meta="FIN.02"
-            title="Chart of accounts"
-            caption="UK GAAP-aligned professional services template. Browse account codes, see balances, and propose new accounts for admin approval."
-          />
-          <ModuleCard
-            icon={<Wallet size={18} />}
-            meta="FIN.03"
-            title="Engagements"
-            caption="Per-engagement profit and loss. Tag any transaction to a client engagement for project-level reporting."
-          />
-          <ModuleCard
-            icon={<FileSpreadsheet size={18} />}
-            meta="FIN.04"
-            title="Reports & exports"
-            caption="Trial balance, P&L, balance sheet. Export to CSV, PDF, and DOCX. Print-ready statements with firm letterhead."
-          />
+      {loading ? (
+        <div className="flex items-center justify-center py-20">
+          <div className="w-8 h-8 border-2 border-brand-accent/30 border-t-brand-accent rounded-full animate-spin" />
         </div>
-
-        <div className="mt-10 border-t border-brand-hair-strong pt-6">
-          <p className="label-technical text-brand-mute leading-relaxed normal-case tracking-normal max-w-2xl">
-            This workspace is provisioned and role-gated. Transaction entry,
-            chart of accounts, engagement linkages, and exports are scheduled
-            for the next release.
+      ) : activeTab === 'transactions' ? (
+        <TransactionsTable
+          transactions={transactions}
+          accounts={accounts}
+          engagements={engagements}
+          rates={rates}
+          display={display}
+        />
+      ) : (
+        <div className="border border-brand-hair-strong bg-brand-paper p-10">
+          <p className="text-[14px] text-brand-mute">
+            This tab is coming in the next release.
           </p>
         </div>
-      </div>
-    </div>
+      )}
+    </AccountingShell>
   );
 };
 
