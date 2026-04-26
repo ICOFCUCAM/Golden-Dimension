@@ -40,6 +40,8 @@ const App = () => (
               <Route path="/legal" element={<Index />} />
               <Route path="/contact" element={<Index />} />
               <Route path="/admin" element={<Index />} />
+              <Route path="/accounting" element={<Index />} />
+              <Route path="/audit" element={<Index />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             </BrowserRouter>

@@ -28,6 +28,8 @@ const InsightDetailPage     = lazy(() => import('@/pages/InsightDetailPage'));
 const LegalPage             = lazy(() => import('@/pages/LegalPage'));
 const ContactPage           = lazy(() => import('@/pages/ContactPage'));
 const AdminPage             = lazy(() => import('@/pages/AdminPage'));
+const AccountingPage        = lazy(() => import('@/pages/AccountingPage'));
+const AuditPage             = lazy(() => import('@/pages/AuditPage'));
 
 // Loading fallback — minimal so it doesn't flash.
 const PageLoader: React.FC = () => (
@@ -47,7 +49,10 @@ const AppLayout: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [location.pathname]);
 
-  const isAdmin = location.pathname === '/admin';
+  const isChromeless =
+    location.pathname === '/admin' ||
+    location.pathname === '/accounting' ||
+    location.pathname === '/audit';
 
   const renderPage = () => {
     const path = location.pathname;
@@ -70,6 +75,8 @@ const AppLayout: React.FC = () => {
     if (path === '/legal') return <LegalPage />;
     if (path === '/contact') return <ContactPage />;
     if (path === '/admin') return <AdminPage />;
+    if (path === '/accounting') return <AccountingPage />;
+    if (path === '/audit') return <AuditPage />;
     return <HomePage />;
   };
 
@@ -82,16 +89,16 @@ const AppLayout: React.FC = () => {
       >
         Skip to main content
       </a>
-      {!isAdmin && <Navbar />}
+      {!isChromeless && <Navbar />}
       <main id="main-content" role="main" tabIndex={-1}>
         <Suspense fallback={<PageLoader />}>{renderPage()}</Suspense>
       </main>
-      {!isAdmin && <Footer />}
+      {!isChromeless && <Footer />}
 
       {/* Site-wide overlays (consent banner + floating CTA pill).
           Both are dismissible and persist their state in localStorage. */}
-      {!isAdmin && <FloatingContactPill />}
-      {!isAdmin && <CookieConsent />}
+      {!isChromeless && <FloatingContactPill />}
+      {!isChromeless && <CookieConsent />}
     </div>
   );
 };
