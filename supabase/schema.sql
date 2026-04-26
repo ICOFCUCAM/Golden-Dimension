@@ -636,3 +636,100 @@ create policy "accountant deletes own finance attachments"
       or public.has_role('accountant')
     )
   );
+
+-- =========================================================================
+-- Super-admin: user + role management RPCs
+-- =========================================================================
+-- Admins and super-admins are created by inviting users via Supabase Auth
+-- and then assigning a role in public.user_roles. The functions below let
+-- the super-admin do the assignment from inside the app using only the
+-- anon key — they are SECURITY DEFINER + gated to has_role('super_admin').
+
+create or replace function public.list_users_with_roles()
+returns table (
+  user_id uuid,
+  email text,
+  created_at timestamptz,
+  last_sign_in_at timestamptz,
+  roles public.app_role[]
+)
+language sql
+stable
+security definer
+set search_path = public, auth
+as $$
+  select
+    u.id        as user_id,
+    u.email     as email,
+    u.created_at,
+    u.last_sign_in_at,
+    coalesce(
+      array_agg(ur.role order by ur.role) filter (where ur.role is not null),
+      array[]::public.app_role[]
+    ) as roles
+  from auth.users u
+  left join public.user_roles ur on ur.user_id = u.id
+  where public.has_role('super_admin')
+  group by u.id, u.email, u.created_at, u.last_sign_in_at
+  order by u.created_at desc;
+$$;
+
+revoke all on function public.list_users_with_roles() from public, anon;
+grant execute on function public.list_users_with_roles() to authenticated;
+
+-- Look up a user by email and grant them a role. Idempotent.
+create or replace function public.grant_role_by_email(target_email text, target_role public.app_role)
+returns boolean
+language plpgsql
+security definer
+set search_path = public, auth
+as $$
+declare
+  uid uuid;
+begin
+  if not public.has_role('super_admin') then
+    raise exception 'Only super_admin can grant roles';
+  end if;
+  select id into uid from auth.users where email = lower(target_email) limit 1;
+  if uid is null then
+    raise exception 'No user found for email %', target_email;
+  end if;
+  insert into public.user_roles (user_id, role, granted_by)
+  values (uid, target_role, auth.uid())
+  on conflict (user_id, role) do nothing;
+  return true;
+end;
+$$;
+
+revoke all on function public.grant_role_by_email(text, public.app_role) from public, anon;
+grant execute on function public.grant_role_by_email(text, public.app_role) to authenticated;
+
+-- Revoke a role from a user. Cannot revoke the last super_admin (safety net).
+create or replace function public.revoke_role(target_user_id uuid, target_role public.app_role)
+returns boolean
+language plpgsql
+security definer
+set search_path = public, auth
+as $$
+declare
+  remaining int;
+begin
+  if not public.has_role('super_admin') then
+    raise exception 'Only super_admin can revoke roles';
+  end if;
+  if target_role = 'super_admin' then
+    select count(*) into remaining
+    from public.user_roles
+    where role = 'super_admin' and user_id <> target_user_id;
+    if remaining = 0 then
+      raise exception 'Cannot revoke the last remaining super_admin';
+    end if;
+  end if;
+  delete from public.user_roles
+  where user_id = target_user_id and role = target_role;
+  return true;
+end;
+$$;
+
+revoke all on function public.revoke_role(uuid, public.app_role) from public, anon;
+grant execute on function public.revoke_role(uuid, public.app_role) to authenticated;

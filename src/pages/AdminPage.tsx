@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Truck, RefreshCw, CheckCircle, Eye, Clock, ArrowLeft, Inbox, LogOut, Database, ShieldCheck } from 'lucide-react';
+import { Mail, Truck, RefreshCw, CheckCircle, Eye, Clock, ArrowLeft, Inbox, LogOut, Database, ShieldCheck, Users } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
 import AdminLogin from '@/components/AdminLogin';
 import AdminCms from '@/components/AdminCms';
 import VoidRequestsList from '@/components/finance/VoidRequestsList';
+import UserRolesAdmin from '@/components/finance/UserRolesAdmin';
 import {
   fetchAccounts,
   fetchFxRates,
@@ -57,7 +58,7 @@ const StatTile: React.FC<{ value: number; label: string; accent?: boolean }> = (
 
 const AdminPage: React.FC = () => {
   const { session, loading: authLoading, roles, signOut } = useAuth();
-  const [activeTab, setActiveTab] = useState<'contacts' | 'shipments' | 'cms' | 'voids'>('contacts');
+  const [activeTab, setActiveTab] = useState<'contacts' | 'shipments' | 'cms' | 'voids' | 'users'>('contacts');
   const [contacts, setContacts] = useState<ContactMessage[]>([]);
   const [shipments, setShipments] = useState<ShipmentRequest[]>([]);
   const [loading, setLoading] = useState(true);
@@ -69,6 +70,7 @@ const AdminPage: React.FC = () => {
   const [financeRates, setFinanceRates] = useState<Record<string, number>>({ GBP: 1 });
   const [pendingVoidsCount, setPendingVoidsCount] = useState(0);
   const canApproveVoids = hasAnyRole(roles, ['admin', 'super_admin']);
+  const isSuperAdmin = hasAnyRole(roles, ['super_admin']);
 
   const refreshFinance = async () => {
     const [a, t, r] = await Promise.all([
@@ -281,11 +283,31 @@ const AdminPage: React.FC = () => {
               )}
             </button>
           )}
+          {isSuperAdmin && (
+            <button
+              onClick={() => setActiveTab('users')}
+              className={`inline-flex items-center gap-2 px-5 py-3 text-[13px] font-medium tracking-tight transition-colors ${
+                activeTab === 'users' ? 'bg-brand-ink text-brand-ivory' : 'bg-brand-paper text-brand-ink-2 hover:bg-brand-stone'
+              }`}
+            >
+              <Users size={13} /> Users & Roles
+            </button>
+          )}
         </div>
 
         {/* Content */}
         {activeTab === 'cms' ? (
           <AdminCms />
+        ) : activeTab === 'users' ? (
+          isSuperAdmin ? (
+            <UserRolesAdmin />
+          ) : (
+            <div className="border border-brand-hair-strong bg-brand-paper py-16 text-center">
+              <p className="text-[14px] text-brand-mute">
+                Only super-admins can manage users and roles.
+              </p>
+            </div>
+          )
         ) : activeTab === 'voids' ? (
           canApproveVoids ? (
             <VoidRequestsList
