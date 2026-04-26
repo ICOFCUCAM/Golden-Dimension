@@ -9,6 +9,9 @@ import ChartOfAccounts from '@/components/finance/ChartOfAccounts';
 import EngagementsTab from '@/components/finance/EngagementsTab';
 import ReportsTab from '@/components/finance/ReportsTab';
 import TransactionDetailPanel from '@/components/finance/TransactionDetailPanel';
+import InvoicesTab from '@/components/finance/InvoicesTab';
+import PaymentSettingsTab from '@/components/finance/PaymentSettingsTab';
+import { hasAnyRole } from '@/lib/roles';
 import { useAuth } from '@/contexts/AuthContext';
 import {
   fetchAccounts,
@@ -22,10 +25,11 @@ import {
 } from '@/lib/finance';
 import { supabaseConfigured } from '@/lib/supabase';
 
-type TabId = 'transactions' | 'accounts' | 'engagements' | 'reports';
+type TabId = 'transactions' | 'accounts' | 'engagements' | 'invoices' | 'reports' | 'settings';
 
 const AccountingInner: React.FC = () => {
-  const { session } = useAuth();
+  const { session, roles } = useAuth();
+  const canEditSettings = hasAnyRole(roles, ['admin', 'super_admin']);
   const [activeTab, setActiveTab] = useState<TabId>('transactions');
   const [display, setDisplay] = useState<DisplayCurrency>('GBP');
   const [accounts, setAccounts] = useState<Account[]>([]);
@@ -93,7 +97,9 @@ const AccountingInner: React.FC = () => {
           { id: 'transactions', label: 'Transactions', badge: draftCount },
           { id: 'accounts', label: 'Chart of accounts' },
           { id: 'engagements', label: 'Engagements' },
+          { id: 'invoices', label: 'Invoices' },
           { id: 'reports', label: 'Reports' },
+          ...(canEditSettings ? [{ id: 'settings', label: 'Payment settings' }] : []),
         ]}
       >
         {!supabaseConfigured && (
@@ -148,6 +154,23 @@ const AccountingInner: React.FC = () => {
             display={display}
             onChanged={refresh}
           />
+        ) : activeTab === 'invoices' ? (
+          <InvoicesTab
+            engagements={engagements}
+            rates={rates}
+            display={display}
+            onChanged={refresh}
+          />
+        ) : activeTab === 'settings' ? (
+          canEditSettings ? (
+            <PaymentSettingsTab />
+          ) : (
+            <div className="border border-brand-hair-strong bg-brand-paper py-16 text-center">
+              <p className="text-[14px] text-brand-mute">
+                Payment settings are admin / super-admin only.
+              </p>
+            </div>
+          )
         ) : (
           <ReportsTab
             transactions={transactions}
