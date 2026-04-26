@@ -6,6 +6,7 @@ import AccountingShell from '@/components/finance/AccountingShell';
 import TransactionsTable from '@/components/finance/TransactionsTable';
 import TransactionForm from '@/components/finance/TransactionForm';
 import ChartOfAccounts from '@/components/finance/ChartOfAccounts';
+import EngagementsTab from '@/components/finance/EngagementsTab';
 import { useAuth } from '@/contexts/AuthContext';
 import {
   fetchAccounts,
@@ -128,6 +129,14 @@ const AccountingInner: React.FC = () => {
             transactions={transactions}
             rates={rates}
             display={display}
+          />
+        ) : activeTab === 'engagements' ? (
+          <EngagementsTab
+            engagements={engagements}
+            transactions={transactions}
+            rates={rates}
+            display={display}
+            onChanged={refresh}
           />
         ) : (
           <div className="border border-brand-hair-strong bg-brand-paper p-10">
