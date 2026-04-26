@@ -30,6 +30,7 @@ const ContactPage           = lazy(() => import('@/pages/ContactPage'));
 const AdminPage             = lazy(() => import('@/pages/AdminPage'));
 const AccountingPage        = lazy(() => import('@/pages/AccountingPage'));
 const AuditPage             = lazy(() => import('@/pages/AuditPage'));
+const PayPage               = lazy(() => import('@/pages/PayPage'));
 
 // Loading fallback — minimal so it doesn't flash.
 const PageLoader: React.FC = () => (
@@ -92,6 +93,7 @@ const AppLayout: React.FC = () => {
     if (path === '/admin') return <AdminPage />;
     if (path === '/accounting') return <AccountingPage />;
     if (path === '/audit') return <AuditPage />;
+    if (path.startsWith('/pay/')) return <PayPage />;
     return <HomePage />;
   };
 
