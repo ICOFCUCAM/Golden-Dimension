@@ -1,25 +1,43 @@
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import CookieConsent from '@/components/CookieConsent';
+import FloatingContactPill from '@/components/FloatingContactPill';
+
+// HomePage loads eagerly so the landing page paint is fast.
 import HomePage from '@/pages/HomePage';
-import AboutPage from '@/pages/AboutPage';
-import ServicesPage from '@/pages/ServicesPage';
-import ServiceDetailPage from '@/pages/ServiceDetailPage';
-import IndustriesPage from '@/pages/IndustriesPage';
-import SectorPage from '@/pages/SectorPage';
-import InsightDetailPage from '@/pages/InsightDetailPage';
-import TransportPage from '@/pages/TransportPage';
-import MethodologyPage from '@/pages/MethodologyPage';
-import EngagementModelsPage from '@/pages/EngagementModelsPage';
-import LeadershipPage from '@/pages/LeadershipPage';
-import LeadershipTeamPage from '@/pages/LeadershipTeamPage';
-import CaseStudiesPage from '@/pages/CaseStudiesPage';
-import CaseStudyDetailPage from '@/pages/CaseStudyDetailPage';
-import NewsPage from '@/pages/NewsPage';
-import LegalPage from '@/pages/LegalPage';
-import ContactPage from '@/pages/ContactPage';
-import AdminPage from '@/pages/AdminPage';
+
+// All other pages lazy-loaded so they ship as separate JS chunks and
+// only download when the user navigates to them.
+const AboutPage             = lazy(() => import('@/pages/AboutPage'));
+const ServicesPage          = lazy(() => import('@/pages/ServicesPage'));
+const ServiceDetailPage     = lazy(() => import('@/pages/ServiceDetailPage'));
+const IndustriesPage        = lazy(() => import('@/pages/IndustriesPage'));
+const SectorPage            = lazy(() => import('@/pages/SectorPage'));
+const MethodologyPage       = lazy(() => import('@/pages/MethodologyPage'));
+const EngagementModelsPage  = lazy(() => import('@/pages/EngagementModelsPage'));
+const LeadershipPage        = lazy(() => import('@/pages/LeadershipPage'));
+const LeadershipTeamPage    = lazy(() => import('@/pages/LeadershipTeamPage'));
+const CaseStudiesPage       = lazy(() => import('@/pages/CaseStudiesPage'));
+const CaseStudyDetailPage   = lazy(() => import('@/pages/CaseStudyDetailPage'));
+const TransportPage         = lazy(() => import('@/pages/TransportPage'));
+const NewsPage              = lazy(() => import('@/pages/NewsPage'));
+const InsightDetailPage     = lazy(() => import('@/pages/InsightDetailPage'));
+const LegalPage             = lazy(() => import('@/pages/LegalPage'));
+const ContactPage           = lazy(() => import('@/pages/ContactPage'));
+const AdminPage             = lazy(() => import('@/pages/AdminPage'));
+
+// Loading fallback — minimal so it doesn't flash.
+const PageLoader: React.FC = () => (
+  <div className="min-h-[60vh] flex items-center justify-center">
+    <div
+      className="w-6 h-6 border-2 border-brand-hair-strong border-t-brand-accent rounded-full animate-spin"
+      role="status"
+      aria-label="Loading"
+    />
+  </div>
+);
 
 const AppLayout: React.FC = () => {
   const location = useLocation();
@@ -63,8 +81,15 @@ const AppLayout: React.FC = () => {
         Skip to main content
       </a>
       {!isAdmin && <Navbar />}
-      <main id="main-content">{renderPage()}</main>
+      <main id="main-content">
+        <Suspense fallback={<PageLoader />}>{renderPage()}</Suspense>
+      </main>
       {!isAdmin && <Footer />}
+
+      {/* Site-wide overlays (consent banner + floating CTA pill).
+          Both are dismissible and persist their state in localStorage. */}
+      {!isAdmin && <FloatingContactPill />}
+      {!isAdmin && <CookieConsent />}
     </div>
   );
 };

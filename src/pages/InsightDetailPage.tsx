@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useParams, Navigate } from 'react-router-dom';
 import { ArrowRight, ArrowLeft, ChevronRight, Clock } from 'lucide-react';
 import {
@@ -11,7 +11,16 @@ import {
   TertiaryCta,
 } from '@/components/section-primitives';
 import { Seo } from '@/components/Seo';
+import ReadingProgress from '@/components/ReadingProgress';
 import { newsArticles } from '@/data/news';
+
+// Slugify an h2 string into a stable id for in-page anchors.
+const slugifyHeading = (s: string): string =>
+  s
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-');
 
 const InsightDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -23,8 +32,38 @@ const InsightDetailPage: React.FC = () => {
     .map((s) => newsArticles.find((a) => a.slug === s))
     .filter((a): a is typeof newsArticles[number] => Boolean(a));
 
+  // Build a TOC from the article body's h2 blocks.
+  const toc = useMemo(
+    () =>
+      article.body
+        .filter((b) => b.type === 'h2' && b.text)
+        .map((b) => ({ id: slugifyHeading(b.text!), text: b.text! })),
+    [article]
+  );
+
+  // Track which h2 is currently in view for sticky-TOC highlight.
+  const [activeId, setActiveId] = useState<string | null>(null);
+  useEffect(() => {
+    if (!toc.length) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.target.getBoundingClientRect().top - b.target.getBoundingClientRect().top)[0];
+        if (visible) setActiveId(visible.target.id);
+      },
+      { rootMargin: '-20% 0px -65% 0px', threshold: 0 }
+    );
+    toc.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, [toc, slug]);
+
   return (
     <div className="bg-brand-ivory">
+      <ReadingProgress />
       <Seo
         title={article.title}
         description={article.excerpt}
@@ -80,6 +119,37 @@ const InsightDetailPage: React.FC = () => {
                     )}
                   </div>
                 )}
+
+                {toc.length > 0 && (
+                  <nav
+                    className="hidden lg:block pt-7 mt-2 border-t border-brand-hair"
+                    aria-label="On this page"
+                  >
+                    <div className="label-technical text-brand-mute mb-4">On this page</div>
+                    <ol className="space-y-2.5">
+                      {toc.map((item, idx) => {
+                        const active = activeId === item.id;
+                        return (
+                          <li key={item.id}>
+                            <a
+                              href={`#${item.id}`}
+                              className={`group flex items-baseline gap-3 text-[12.5px] leading-snug border-l-2 pl-3 -ml-px py-0.5 transition-colors ${
+                                active
+                                  ? 'border-brand-accent text-brand-ink'
+                                  : 'border-brand-hair text-brand-ink-2 hover:border-brand-ink hover:text-brand-ink'
+                              }`}
+                            >
+                              <span className="font-mono-tab text-[10px] text-brand-mute shrink-0 pt-px">
+                                {String(idx + 1).padStart(2, '0')}
+                              </span>
+                              <span>{item.text}</span>
+                            </a>
+                          </li>
+                        );
+                      })}
+                    </ol>
+                  </nav>
+                )}
               </div>
             </aside>
 
@@ -91,10 +161,12 @@ const InsightDetailPage: React.FC = () => {
                     return <p key={i}>{block.text}</p>;
                   }
                   if (block.type === 'h2') {
+                    const id = slugifyHeading(block.text || '');
                     return (
                       <h2
                         key={i}
-                        className="font-display text-[22px] md:text-[28px] font-medium tracking-[-0.015em] text-brand-ink leading-tight pt-6 mt-2"
+                        id={id}
+                        className="font-display text-[22px] md:text-[28px] font-medium tracking-[-0.015em] text-brand-ink leading-tight pt-6 mt-2 scroll-mt-24"
                       >
                         {block.text}
                       </h2>

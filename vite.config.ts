@@ -1,15 +1,83 @@
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
+import { writeFileSync } from "node:fs";
+
+const SITE_URL = "https://golden-dimension.vercel.app";
+const FIRM_NAME = "Golden Dimensions Ltd";
+
+const escapeXml = (s: string): string =>
+  s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+
+/**
+ * Vite plugin: generate /rss.xml at build time from src/data/news.ts.
+ * Emitted into dist/rss.xml so feed readers can subscribe at the
+ * canonical /rss.xml URL.
+ */
+function rssFeedPlugin(): Plugin {
+  return {
+    name: "golden-dimensions:rss-feed",
+    apply: "build",
+    async closeBundle() {
+      try {
+        const newsModule = await import("./src/data/news");
+        const articles = newsModule.newsArticles;
+
+        const items = articles
+          .map((a: any) => {
+            const link = `${SITE_URL}/news/${a.slug}`;
+            const pubDate = new Date(a.date);
+            return `    <item>
+      <title>${escapeXml(a.title)}</title>
+      <link>${link}</link>
+      <guid isPermaLink="true">${link}</guid>
+      <description>${escapeXml(a.excerpt)}</description>
+      <category>${escapeXml(a.category)}</category>
+      <pubDate>${(Number.isNaN(pubDate.getTime()) ? new Date() : pubDate).toUTCString()}</pubDate>${a.author ? `\n      <author>${escapeXml(a.author)}</author>` : ""}
+    </item>`;
+          })
+          .join("\n");
+
+        const rss = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${escapeXml(`${FIRM_NAME} · Insights`)}</title>
+    <link>${SITE_URL}/news</link>
+    <description>Practitioner perspectives across engineering, finance, technology, and institutional development.</description>
+    <language>en-GB</language>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml" />
+${items}
+  </channel>
+</rss>
+`;
+
+        writeFileSync(path.resolve(__dirname, "dist", "rss.xml"), rss, "utf-8");
+        // eslint-disable-next-line no-console
+        console.log(`✓ rss.xml generated (${articles.length} items)`);
+      } catch (err) {
+        // Non-fatal — site builds even if RSS generation fails.
+        // eslint-disable-next-line no-console
+        console.warn("RSS generation failed:", err);
+      }
+    },
+  };
+}
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(() => ({
   server: {
     host: "::",
     port: 8080,
   },
   plugins: [
-    react()
+    react(),
+    rssFeedPlugin(),
   ].filter(Boolean),
   resolve: {
     alias: {
