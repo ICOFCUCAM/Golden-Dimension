@@ -1,13 +1,15 @@
 import React, { useMemo, useState } from 'react';
-import { Download, FileSpreadsheet, Printer } from 'lucide-react';
+import { FileSpreadsheet, FileText, Printer } from 'lucide-react';
 import {
   type Account,
   type AccountType,
   type DisplayCurrency,
   type Engagement,
   type FinancialTransaction,
+  buildWordHtml,
   convertFromGbp,
   downloadFile,
+  escapeWordText,
   formatMoney,
   transactionsToCsv,
 } from '@/lib/finance';
@@ -93,6 +95,74 @@ const ReportsTab: React.FC<ReportsTabProps> = ({
     downloadFile(`golden-dimensions-ledger-${stamp}.csv`, csv, 'text/csv;charset=utf-8');
   };
 
+  const exportDocx = () => {
+    const stamp = new Date().toISOString().slice(0, 10);
+    const period = from || to ? `${from || '…'} → ${to || '…'}` : 'all-time';
+    const moneyDisp = (gbp: number) =>
+      escapeWordText(formatMoney(convertFromGbp(gbp, display, rates), display));
+
+    const summaryRows: [string, string][] = [
+      ['Income', moneyDisp(totals.income)],
+      ['Expenses', moneyDisp(totals.expense)],
+      ['Net result', moneyDisp(totals.net)],
+      ['Assets', moneyDisp(totals.assets)],
+      ['Liabilities', moneyDisp(totals.liabilities)],
+      ['Equity', moneyDisp(totals.equity)],
+    ];
+
+    const tbRows: string[] = [];
+    for (const type of TYPE_ORDER) {
+      const list = trialBalance[type];
+      if (!list || list.length === 0) continue;
+      tbRows.push(
+        `<tr><td colspan="4" class="group">${type.toUpperCase()}</td></tr>`,
+      );
+      for (const { account, balance } of list) {
+        const debit = balance >= 0 ? balance : 0;
+        const credit = balance < 0 ? -balance : 0;
+        tbRows.push(
+          `<tr>
+            <td>${escapeWordText(account.code)}</td>
+            <td>${escapeWordText(account.name)}</td>
+            <td class="num">${debit > 0 ? moneyDisp(debit) : ''}</td>
+            <td class="num">${credit > 0 ? moneyDisp(credit) : ''}</td>
+          </tr>`,
+        );
+      }
+    }
+
+    const body = `
+      <h1>Golden Dimensions Ltd</h1>
+      <p class="meta">Internal financial report · period ${escapeWordText(period)} · presented in ${escapeWordText(display)} · generated ${escapeWordText(stamp)}</p>
+      <h2>Summary</h2>
+      <table>
+        ${summaryRows.map(([k, v]) => `<tr><th style="width:40%">${escapeWordText(k)}</th><td class="num">${v}</td></tr>`).join('')}
+      </table>
+      <h2>Trial balance</h2>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:14%">Code</th>
+            <th>Account</th>
+            <th class="num" style="width:18%">Debit (${escapeWordText(display)})</th>
+            <th class="num" style="width:18%">Credit (${escapeWordText(display)})</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tbRows.join('')}
+        </tbody>
+      </table>
+      <p class="footer">Trial balance shows account-level net movement in the period (income, transfers, and journal adjustments aggregate positive; expenses aggregate negative). Display currency converts from the GBP base using the FX rates table; original transaction currencies are preserved in the ledger.</p>
+    `;
+
+    const html = buildWordHtml(`Golden Dimensions financial report ${stamp}`, body);
+    downloadFile(
+      `golden-dimensions-report-${stamp}.doc`,
+      html,
+      'application/msword;charset=utf-8',
+    );
+  };
+
   const showPeriod = from || to ? `${from || '…'} → ${to || '…'}` : 'all-time';
 
   return (
@@ -136,6 +206,13 @@ const ReportsTab: React.FC<ReportsTabProps> = ({
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-paper border border-brand-hair-strong text-brand-ink-2 text-[13px] font-medium hover:border-brand-ink hover:text-brand-ink transition-colors"
           >
             <FileSpreadsheet size={13} /> Export CSV
+          </button>
+          <button
+            type="button"
+            onClick={exportDocx}
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-paper border border-brand-hair-strong text-brand-ink-2 text-[13px] font-medium hover:border-brand-ink hover:text-brand-ink transition-colors"
+          >
+            <FileText size={13} /> Export Word
           </button>
           <button
             type="button"

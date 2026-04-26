@@ -233,6 +233,52 @@ export const downloadFile = (
   URL.revokeObjectURL(url);
 };
 
+// ----- Word-compatible HTML export ---------------------------------------
+
+/**
+ * Build a Word-compatible HTML document. Word opens .doc files that contain
+ * HTML, so saving the report as `<name>.doc` lets a user open it in Word
+ * (or LibreOffice) without us having to ship a full DOCX writer.
+ */
+export const buildWordHtml = (title: string, bodyHtml: string): string =>
+  `<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8"/>
+<title>${escapeHtml(title)}</title>
+<!--[if gte mso 9]><xml>
+<w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument>
+</xml><![endif]-->
+<style>
+  body { font-family: 'Calibri', 'Helvetica Neue', Arial, sans-serif; font-size: 11pt; color: #1f1f1f; }
+  h1 { font-size: 18pt; margin: 0 0 4pt 0; }
+  h2 { font-size: 13pt; margin: 16pt 0 6pt 0; border-bottom: 1pt solid #d4d0ca; padding-bottom: 3pt; }
+  p.meta { color: #666; font-size: 9pt; margin: 0 0 18pt 0; }
+  table { border-collapse: collapse; width: 100%; margin: 6pt 0; }
+  th { background: #ece7e0; text-align: left; padding: 5pt 6pt; font-size: 9pt; text-transform: uppercase; letter-spacing: 0.05em; }
+  td { padding: 4pt 6pt; border-top: 0.5pt solid #d4d0ca; font-size: 10pt; }
+  td.num, th.num { text-align: right; font-family: 'Consolas', 'Menlo', monospace; }
+  .group { background: #f7f5f2; font-weight: bold; color: #b4532a; text-transform: uppercase; letter-spacing: 0.05em; padding: 4pt 6pt; font-size: 9pt; }
+  .footer { margin-top: 18pt; color: #666; font-size: 8.5pt; }
+</style>
+</head>
+<body>
+${bodyHtml}
+</body>
+</html>`;
+
+const escapeHtml = (s: string): string =>
+  s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
+export const escapeWordText = escapeHtml;
+
 // ----- Reporting helpers -------------------------------------------------
 
 export interface TrialBalanceRow {
