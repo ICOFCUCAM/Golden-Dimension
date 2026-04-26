@@ -223,3 +223,21 @@ html { scroll-behavior: smooth; }
 }
 .markdown-preview ul,
 .markdown-preview ol { @apply my-4 ml-6; }
+
+/* ------------------------------------------------------------
+   Print styles — used by the Accounting Reports tab when the
+   user hits "Print / save PDF". Keep colours intact and hide
+   site chrome that's not relevant on paper.
+   ------------------------------------------------------------ */
+@media print {
+  @page { margin: 1.6cm; }
+  html, body { background: #ffffff !important; }
+  .print\:hidden { display: none !important; }
+  .print\:block { display: block !important; }
+  .print\:p-0 { padding: 0 !important; }
+  .print\:mt-4 { margin-top: 1rem !important; }
+  /* Avoid breaking ledger rows across pages where possible. */
+  table, thead, tbody, tr, th, td { page-break-inside: avoid; }
+  /* Force colour-accurate printing in Chromium-based browsers. */
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+}
