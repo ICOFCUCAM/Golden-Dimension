@@ -5,6 +5,7 @@ import RoleGate from '@/components/RoleGate';
 import AccountingShell from '@/components/finance/AccountingShell';
 import TransactionsTable from '@/components/finance/TransactionsTable';
 import TransactionForm from '@/components/finance/TransactionForm';
+import ChartOfAccounts from '@/components/finance/ChartOfAccounts';
 import { useAuth } from '@/contexts/AuthContext';
 import {
   fetchAccounts,
@@ -121,6 +122,13 @@ const AccountingInner: React.FC = () => {
               onRowClick={onRowClick}
             />
           </>
+        ) : activeTab === 'accounts' ? (
+          <ChartOfAccounts
+            accounts={accounts}
+            transactions={transactions}
+            rates={rates}
+            display={display}
+          />
         ) : (
           <div className="border border-brand-hair-strong bg-brand-paper p-10">
             <p className="text-[14px] text-brand-mute">
