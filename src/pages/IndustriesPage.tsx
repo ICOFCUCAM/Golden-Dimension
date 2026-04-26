@@ -40,7 +40,7 @@ const IndustriesPage: React.FC = () => {
             through complex transformation programmes.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-3">
-            <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+            <PrimaryCta to="/contact#request-consultation">Request Consultation</PrimaryCta>
             <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
             <TertiaryCta to="#sectors">Jump to Sectors</TertiaryCta>
           </div>
@@ -119,7 +119,7 @@ const IndustriesPage: React.FC = () => {
                       <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
                     </Link>
                     <Link
-                      to="/contact"
+                      to="/contact#request-consultation"
                       className="group inline-flex items-center gap-1.5 text-[13px] font-medium tracking-[-0.01em] text-brand-ink-2 hover:text-brand-accent transition-colors"
                     >
                       Or discuss an engagement
@@ -204,7 +204,7 @@ const IndustriesPage: React.FC = () => {
             outcome you're working toward.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-3">
-            <PrimaryCta to="/contact" tone="dark">Request Consultation</PrimaryCta>
+            <PrimaryCta to="/contact#request-consultation" tone="dark">Request Consultation</PrimaryCta>
             <SecondaryCta to="/services" tone="dark">Explore Capabilities</SecondaryCta>
           </div>
         </Container>

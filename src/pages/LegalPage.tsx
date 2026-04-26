@@ -130,7 +130,7 @@ const LegalPage: React.FC = () => {
                           {topic.content}
                         </p>
                         <Link
-                          to="/contact"
+                          to="/contact#request-consultation"
                           className="group inline-flex items-center gap-2 mt-6 text-[13px] font-medium tracking-tight text-brand-ink border-b border-brand-ink pb-1 hover:text-brand-accent hover:border-brand-accent transition-colors"
                         >
                           Discuss this practice
@@ -200,7 +200,7 @@ const LegalPage: React.FC = () => {
               one business day. All initial consultations are confidential.
             </p>
             <div className="mt-9 flex flex-col sm:flex-row sm:items-center gap-3">
-              <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+              <PrimaryCta to="/contact#request-consultation">Request Consultation</PrimaryCta>
               <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
             </div>
           </div>

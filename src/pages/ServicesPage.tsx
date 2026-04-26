@@ -45,7 +45,7 @@ const ServicesPage: React.FC = () => {
             without vendor handoffs in between.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-3">
-            <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+            <PrimaryCta to="/contact#request-consultation">Request Consultation</PrimaryCta>
             <SecondaryCta to="#pillars">Explore Capability Areas</SecondaryCta>
             <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
           </div>
@@ -243,7 +243,7 @@ const ServicesPage: React.FC = () => {
             technology, and operations expertise around it.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-3">
-            <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+            <PrimaryCta to="/contact#request-consultation">Request Consultation</PrimaryCta>
             <SecondaryCta to="#pillars">Explore Capability Areas</SecondaryCta>
             <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
           </div>

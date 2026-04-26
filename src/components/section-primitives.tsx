@@ -158,7 +158,7 @@ export const CtaCluster: React.FC<{ tone?: Tone; className?: string }> = ({
   className = '',
 }) => (
   <div className={`flex flex-col sm:flex-row sm:items-center gap-3 ${className}`}>
-    <PrimaryCta to="/contact" tone={tone}>Request Consultation</PrimaryCta>
+    <PrimaryCta to="/contact#request-consultation" tone={tone}>Request Consultation</PrimaryCta>
     <SecondaryCta to="/services" tone={tone}>Explore Capabilities</SecondaryCta>
     <TertiaryCta to="/industries" tone={tone}>View Industries Served</TertiaryCta>
   </div>

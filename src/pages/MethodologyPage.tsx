@@ -308,7 +308,7 @@ const MethodologyPage: React.FC = () => {
             sits.
           </h2>
           <div className="mt-9 flex flex-col sm:flex-row sm:items-center gap-3">
-            <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+            <PrimaryCta to="/contact#request-consultation">Request Consultation</PrimaryCta>
             <SecondaryCta to="/engagement-models">Engagement Models</SecondaryCta>
             <TertiaryCta to="/services">Explore Capabilities</TertiaryCta>
           </div>

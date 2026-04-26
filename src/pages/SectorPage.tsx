@@ -345,7 +345,7 @@ const SectorPage: React.FC = () => {
               <span className="font-editorial italic text-brand-accent">engagement</span>.
             </h2>
             <div className="mt-9 flex flex-col sm:flex-row sm:items-center gap-3">
-              <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+              <PrimaryCta to="/contact#request-consultation">Request Consultation</PrimaryCta>
               <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
               <TertiaryCta to="/industries">All Industries</TertiaryCta>
             </div>

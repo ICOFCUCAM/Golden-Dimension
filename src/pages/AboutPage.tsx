@@ -306,7 +306,7 @@ const AboutPage: React.FC = () => {
             <span className="font-editorial italic font-medium text-brand-accent">next mandate</span>.
           </h2>
           <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-3">
-            <PrimaryCta to="/contact">Request Consultation</PrimaryCta>
+            <PrimaryCta to="/contact#request-consultation">Request Consultation</PrimaryCta>
             <SecondaryCta to="/services">Explore Capabilities</SecondaryCta>
             <TertiaryCta to="/industries">View Industries Served</TertiaryCta>
           </div>

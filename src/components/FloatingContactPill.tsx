@@ -65,7 +65,7 @@ const FloatingContactPill: React.FC = () => {
     >
       <div className="flex items-center gap-2">
         <Link
-          to="/contact"
+          to="/contact#request-consultation"
           className={`group inline-flex items-center gap-2.5 ${
             collapsed ? 'px-3 py-3' : 'px-4 py-3'
           } bg-brand-ink text-brand-ivory shadow-xl shadow-black/20 hover:bg-brand-accent transition-all border border-brand-ink`}

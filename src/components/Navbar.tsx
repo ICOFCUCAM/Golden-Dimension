@@ -121,7 +121,7 @@ const Navbar: React.FC = () => {
                 </kbd>
               </button>
               <Link
-                to="/contact"
+                to="/contact#request-consultation"
                 className="ml-2 group inline-flex items-center gap-2 px-5 py-2.5 bg-brand-ink text-brand-ivory text-[13px] font-medium tracking-[-0.01em] hover:bg-brand-accent transition-colors"
               >
                 Request Consultation
@@ -168,7 +168,7 @@ const Navbar: React.FC = () => {
             })}
           </div>
           <Link
-            to="/contact"
+            to="/contact#request-consultation"
             className="mt-6 inline-flex items-center justify-center gap-2 w-full px-5 py-3 bg-brand-ink text-brand-ivory text-[14px] font-medium hover:bg-brand-accent transition-colors"
           >
             Request Consultation
