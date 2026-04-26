@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Truck, RefreshCw, CheckCircle, Eye, Clock, ArrowLeft, Inbox, LogOut, Database } from 'lucide-react';
+import { Mail, Truck, RefreshCw, CheckCircle, Eye, Clock, ArrowLeft, Inbox, LogOut, Database, ShieldCheck } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
 import AdminLogin from '@/components/AdminLogin';
 import AdminCms from '@/components/AdminCms';
+import VoidRequestsList from '@/components/finance/VoidRequestsList';
+import {
+  fetchAccounts,
+  fetchFxRates,
+  fetchTransactions,
+  type Account,
+  type FinancialTransaction,
+} from '@/lib/finance';
+import { hasAnyRole } from '@/lib/roles';
 
 interface ContactMessage {
   id: string;
@@ -47,12 +56,39 @@ const StatTile: React.FC<{ value: number; label: string; accent?: boolean }> = (
 );
 
 const AdminPage: React.FC = () => {
-  const { session, loading: authLoading, signOut } = useAuth();
-  const [activeTab, setActiveTab] = useState<'contacts' | 'shipments' | 'cms'>('contacts');
+  const { session, loading: authLoading, roles, signOut } = useAuth();
+  const [activeTab, setActiveTab] = useState<'contacts' | 'shipments' | 'cms' | 'voids'>('contacts');
   const [contacts, setContacts] = useState<ContactMessage[]>([]);
   const [shipments, setShipments] = useState<ShipmentRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  // Finance data needed for the Void Approvals tab.
+  const [financeAccounts, setFinanceAccounts] = useState<Account[]>([]);
+  const [financeTx, setFinanceTx] = useState<FinancialTransaction[]>([]);
+  const [financeRates, setFinanceRates] = useState<Record<string, number>>({ GBP: 1 });
+  const [pendingVoidsCount, setPendingVoidsCount] = useState(0);
+  const canApproveVoids = hasAnyRole(roles, ['admin', 'super_admin']);
+
+  const refreshFinance = async () => {
+    const [a, t, r] = await Promise.all([
+      fetchAccounts(),
+      fetchTransactions(),
+      fetchFxRates(),
+    ]);
+    setFinanceAccounts(a);
+    setFinanceTx(t);
+    setFinanceRates(r);
+    const { count } = await supabase
+      .from('void_requests')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'pending');
+    setPendingVoidsCount(count ?? 0);
+  };
+
+  useEffect(() => {
+    if (session && canApproveVoids) void refreshFinance();
+  }, [session, canApproveVoids]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -230,11 +266,43 @@ const AdminPage: React.FC = () => {
           >
             <Database size={13} /> CMS
           </button>
+          {canApproveVoids && (
+            <button
+              onClick={() => setActiveTab('voids')}
+              className={`inline-flex items-center gap-2 px-5 py-3 text-[13px] font-medium tracking-tight transition-colors ${
+                activeTab === 'voids' ? 'bg-brand-ink text-brand-ivory' : 'bg-brand-paper text-brand-ink-2 hover:bg-brand-stone'
+              }`}
+            >
+              <ShieldCheck size={13} /> Void Approvals
+              {pendingVoidsCount > 0 && (
+                <span className="ml-1 px-1.5 py-0.5 bg-brand-accent text-brand-ivory text-[10px] font-mono-tab">
+                  {pendingVoidsCount}
+                </span>
+              )}
+            </button>
+          )}
         </div>
 
         {/* Content */}
         {activeTab === 'cms' ? (
           <AdminCms />
+        ) : activeTab === 'voids' ? (
+          canApproveVoids ? (
+            <VoidRequestsList
+              canDecide
+              transactions={financeTx}
+              accounts={financeAccounts}
+              rates={financeRates}
+              display="GBP"
+              onDecided={refreshFinance}
+            />
+          ) : (
+            <div className="border border-brand-hair-strong bg-brand-paper py-16 text-center">
+              <p className="text-[14px] text-brand-mute">
+                Approving voids requires the admin or super-admin role.
+              </p>
+            </div>
+          )
         ) : loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="w-8 h-8 border-2 border-brand-accent/30 border-t-brand-accent rounded-full animate-spin" />
